@@ -1,0 +1,26 @@
+---
+title: "Hands-on Exercise 1"
+author: "Cao Jinming"
+date: "17 April 2026"
+date-modified: "last-modified"
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+format: html
+---
+
+## Loading Tidyverse
+
+this code chunk use pacman's p_load() to load tidyverse faimly of package into R environment
+
+```{r}
+pacman::p_load(tidyerse)
+
+```
+
+```{r}
+exam_data = read.csv("data/wk1/Exam_data.csv")
+```
+
