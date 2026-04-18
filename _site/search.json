@@ -12,5 +12,26 @@
     "title": "About",
     "section": "",
     "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "Untitled.html",
+    "href": "Untitled.html",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "123"
+  },
+  {
+    "objectID": "HO_Ex1.html",
+    "href": "HO_Ex1.html",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "this code chunk use pacman’s p_load() to load tidyverse faimly of package into R environment\n\npacman::p_load(tidyerse)\n\n\nexam_data = read.csv(\"data/wk1/Exam_data.csv\")"
+  },
+  {
+    "objectID": "HO_Ex1.html#loading-tidyverse",
+    "href": "HO_Ex1.html#loading-tidyverse",
+    "title": "Hands-on Exercise 1",
+    "section": "",
+    "text": "this code chunk use pacman’s p_load() to load tidyverse faimly of package into R environment\n\npacman::p_load(tidyerse)\n\n\nexam_data = read.csv(\"data/wk1/Exam_data.csv\")"
   }
 ]

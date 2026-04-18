@@ -1,0 +1,15 @@
+{
+  "hash": "42423cec3f8eb474de544632574db8b2",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Hands-on Exercise 1\"\nauthor: \"Cao Jinming\"\ndate: \"17 April 2026\"\ndate-modified: \"last-modified\"\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\nformat: html\n---\n\n## Loading Tidyverse\n\nthis code chunk use pacman's p_load() to load tidyverse faimly of package into R environment\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyerse)\n```\n:::\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nexam_data = read.csv(\"data/wk1/Exam_data.csv\")\n```\n:::\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
