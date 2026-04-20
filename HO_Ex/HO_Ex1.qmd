@@ -27,8 +27,7 @@ This chapter shows the basic building blocks of ggplot2 and how to combine them 
 pacman::p_load(tidyverse)
 ```
 
-Layman explanation:
-Line 1: `pacman::p_load(tidyverse)` — Loads the tidyverse package family in one step so R is ready for data work and plotting.
+Layman explanation: Line 1: `pacman::p_load(tidyverse)` — Loads the tidyverse package family in one step so R is ready for data work and plotting.
 
 ### 1.2.2 Importing data
 
@@ -38,8 +37,7 @@ The exam file contains student scores plus basic categories such as class, gende
 exam_data <- read_csv("../data/wk1/Exam_data.csv")
 ```
 
-Layman explanation:
-Line 1: `exam_data <- read_csv("../data/wk1/Exam_data.csv")` — Reads the CSV file into a table called exam_data so we can use it later.
+Layman explanation: Line 1: `exam_data <- read_csv("../data/wk1/Exam_data.csv")` — Reads the CSV file into a table called exam_data so we can use it later.
 
 ## 1.3 Introducing ggplot
 
@@ -51,8 +49,7 @@ Base R gives a quick one-shot chart, while ggplot2 builds the chart in layers an
 hist(exam_data$MATHS)
 ```
 
-Layman explanation:
-Line 1: `hist(exam_data$MATHS)` — Uses base R to draw a quick histogram of the Maths scores.
+Layman explanation: Line 1: `hist(exam_data$MATHS)` — Uses base R to draw a quick histogram of the Maths scores.
 
 ```{r}
 ggplot(data=exam_data, aes(x = MATHS)) +
@@ -63,13 +60,7 @@ ggplot(data=exam_data, aes(x = MATHS)) +
   ggtitle("Distribution of Maths scores")
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data, aes(x = MATHS)) +` — Starts a ggplot using the exam data and maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 2: `geom_histogram(bins=10,` — This splits the Maths scores into 10 bins so the histogram has 10 groups.
-Line 3: `boundary = 100,` — This sets the bin boundary around 100 so the histogram starts at a sensible edge.
-Line 4: `color="black",` — This gives the bars a black outline.
-Line 5: `fill="grey") +` — This fills the bars with grey. The plus sign means another layer follows.
-Line 6: `ggtitle("Distribution of Maths scores")` — Adds a title to the plot.
+Layman explanation: Line 1: `ggplot(data=exam_data, aes(x = MATHS)) +` — Starts a ggplot using the exam data and maps MATHS to the x-axis. The plus sign means another layer follows. Line 2: `geom_histogram(bins=10,` — This splits the Maths scores into 10 bins so the histogram has 10 groups. Line 3: `boundary = 100,` — This sets the bin boundary around 100 so the histogram starts at a sensible edge. Line 4: `color="black",` — This gives the bars a black outline. Line 5: `fill="grey") +` — This fills the bars with grey. The plus sign means another layer follows. Line 6: `ggtitle("Distribution of Maths scores")` — Adds a title to the plot.
 
 ## 1.4 Grammar of Graphics
 
@@ -87,8 +78,7 @@ A ggplot object starts with the data table, even before any shape is drawn.
 ggplot(data=exam_data)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data)` — Starts a ggplot using the exam data as a blank plotting canvas.
+Layman explanation: Line 1: `ggplot(data=exam_data)` — Starts a ggplot using the exam data as a blank plotting canvas.
 
 ## 1.6 Essential Grammatical Elements in ggplot2: Aesthetic mappings
 
@@ -99,9 +89,7 @@ ggplot(data=exam_data,
        aes(x= MATHS))
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS))` — Maps MATHS to the x-axis.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS))` — Maps MATHS to the x-axis.
 
 ## 1.7 Essential Grammatical Elements in ggplot2: geom
 
@@ -115,10 +103,7 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_bar()` — Counts how many students are in each category and draws one bar per category.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows. Line 3: `geom_bar()` — Counts how many students are in each category and draws one bar per category.
 
 ### 1.7.2 Geometric Objects: geom_dotplot
 
@@ -128,10 +113,7 @@ ggplot(data=exam_data,
   geom_dotplot(dotsize = 0.5)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_dotplot(dotsize = 0.5)` — This keeps the points small.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows. Line 3: `geom_dotplot(dotsize = 0.5)` — This keeps the points small.
 
 ```{r}
 ggplot(data=exam_data,
@@ -142,13 +124,7 @@ ggplot(data=exam_data,
                      breaks = NULL)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_dotplot(binwidth=2.5,` — This groups the dots in 2.5-point chunks so values that are close together stay together.
-Line 4: `dotsize = 0.5) +` — This keeps the points small. The plus sign means another layer follows.
-Line 5: `scale_y_continuous(NULL,` — This hides the y-axis title and tick marks so the dotplot looks cleaner.
-Line 6: `breaks = NULL)` — This removes the y-axis tick marks so the dotplot looks cleaner.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows. Line 3: `geom_dotplot(binwidth=2.5,` — This groups the dots in 2.5-point chunks so values that are close together stay together. Line 4: `dotsize = 0.5) +` — This keeps the points small. The plus sign means another layer follows. Line 5: `scale_y_continuous(NULL,` — This hides the y-axis title and tick marks so the dotplot looks cleaner. Line 6: `breaks = NULL)` — This removes the y-axis tick marks so the dotplot looks cleaner.
 
 ### 1.7.3 Geometric Objects: geom_histogram()
 
@@ -158,10 +134,7 @@ ggplot(data=exam_data,
   geom_histogram()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_histogram()` — Draws a histogram using ggplot2’s default bin settings.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows. Line 3: `geom_histogram()` — Draws a histogram using ggplot2’s default bin settings.
 
 ### 1.7.4 Modifying a geometric object by changing geom()
 
@@ -173,12 +146,7 @@ ggplot(data=exam_data,
                  fill="light blue")
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_histogram(bins=20,` — This splits the values into 20 bins so the histogram becomes more detailed.
-Line 4: `color="black",` — This gives the bars a black outline.
-Line 5: `fill="light blue")` — This fills the bars with light blue.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows. Line 3: `geom_histogram(bins=20,` — This splits the values into 20 bins so the histogram becomes more detailed. Line 4: `color="black",` — This gives the bars a black outline. Line 5: `fill="light blue")` — This fills the bars with light blue.
 
 ### 1.7.5 Modifying a geometric object by changing aes()
 
@@ -190,12 +158,7 @@ ggplot(data=exam_data,
                  color="grey30")
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS,` — Maps MATHS to the x-axis.
-Line 3: `fill = GENDER)) +` — Uses Gender to fill the histogram bars so the groups are easier to compare. The plus sign means another layer follows.
-Line 4: `geom_histogram(bins=20,` — This splits the values into 20 bins so the histogram becomes more detailed.
-Line 5: `color="grey30")` — This gives the bars a grey outline.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS,` — Maps MATHS to the x-axis. Line 3: `fill = GENDER)) +` — Uses Gender to fill the histogram bars so the groups are easier to compare. The plus sign means another layer follows. Line 4: `geom_histogram(bins=20,` — This splits the values into 20 bins so the histogram becomes more detailed. Line 5: `color="grey30")` — This gives the bars a grey outline.
 
 ### 1.7.6 Geometric Objects: geom-density()
 
@@ -205,10 +168,7 @@ ggplot(data=exam_data,
   geom_density()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_density()` — Draws a smooth density curve instead of bars to show where the values are concentrated.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x = MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows. Line 3: `geom_density()` — Draws a smooth density curve instead of bars to show where the values are concentrated.
 
 ```{r}
 ggplot(data=exam_data,
@@ -217,11 +177,7 @@ ggplot(data=exam_data,
   geom_density()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x = MATHS,` — Maps MATHS to the x-axis.
-Line 3: `colour = GENDER)) +` — Uses Gender to colour the curves so the groups are easy to tell apart. The plus sign means another layer follows.
-Line 4: `geom_density()` — Draws a smooth density curve instead of bars to show where the values are concentrated.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x = MATHS,` — Maps MATHS to the x-axis. Line 3: `colour = GENDER)) +` — Uses Gender to colour the curves so the groups are easy to tell apart. The plus sign means another layer follows. Line 4: `geom_density()` — Draws a smooth density curve instead of bars to show where the values are concentrated.
 
 ### 1.7.7 Geometric Objects: geom_boxplot
 
@@ -232,11 +188,7 @@ ggplot(data=exam_data,
   geom_boxplot()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis.
-Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows.
-Line 4: `geom_boxplot()` — Summarises each group with a boxplot that shows the median, spread, and possible outliers.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis. Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows. Line 4: `geom_boxplot()` — Summarises each group with a boxplot that shows the median, spread, and possible outliers.
 
 ```{r}
 ggplot(data=exam_data,
@@ -245,11 +197,7 @@ ggplot(data=exam_data,
   geom_boxplot(notch=TRUE)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis.
-Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows.
-Line 4: `geom_boxplot(notch=TRUE)` — Adds notches to the boxplot so we can compare the medians more easily.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis. Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows. Line 4: `geom_boxplot(notch=TRUE)` — Adds notches to the boxplot so we can compare the medians more easily.
 
 ### 1.7.8 Geometric Objects: geom_violin
 
@@ -260,11 +208,7 @@ ggplot(data=exam_data,
   geom_violin()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis.
-Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows.
-Line 4: `geom_violin()` — Draws a violin plot, which shows the distribution shape in a wider-or-narrower form.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis. Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows. Line 4: `geom_violin()` — Draws a violin plot, which shows the distribution shape in a wider-or-narrower form.
 
 ### 1.7.9 Geometric Objects: geom_point()
 
@@ -275,11 +219,7 @@ ggplot(data=exam_data,
   geom_point()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS,` — Maps MATHS to the x-axis.
-Line 3: `y=ENGLISH)) +` — Maps ENGLISH to the y-axis. The plus sign means another layer follows.
-Line 4: `geom_point()` — Draws each student as a point so we can see the relationship between two numeric variables.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS,` — Maps MATHS to the x-axis. Line 3: `y=ENGLISH)) +` — Maps ENGLISH to the y-axis. The plus sign means another layer follows. Line 4: `geom_point()` — Draws each student as a point so we can see the relationship between two numeric variables.
 
 ### 1.7.10 geom objects can be combined
 
@@ -292,13 +232,7 @@ ggplot(data=exam_data,
              size = 0.5)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis.
-Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows.
-Line 4: `geom_boxplot() +` — Summarises each group with a boxplot that shows the median, spread, and possible outliers. The plus sign means another layer follows.
-Line 5: `geom_point(position="jitter",` — Adds small random offsets to the points so overlapping values are easier to see, and keeps the points small.
-Line 6: `size = 0.5)` — This keeps the points small.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(y = MATHS,` — Maps MATHS to the y-axis. Line 3: `x= GENDER)) +` — Maps GENDER to the x-axis. The plus sign means another layer follows. Line 4: `geom_boxplot() +` — Summarises each group with a boxplot that shows the median, spread, and possible outliers. The plus sign means another layer follows. Line 5: `geom_point(position="jitter",` — Adds small random offsets to the points so overlapping values are easier to see, and keeps the points small. Line 6: `size = 0.5)` — This keeps the points small.
 
 ## 1.8 Essential Grammatical Elements in ggplot2: stat
 
@@ -312,10 +246,7 @@ ggplot(data=exam_data,
   geom_boxplot()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(y = MATHS, x= GENDER)) +` — Maps MATHS to the y-axis and maps GENDER to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_boxplot()` — Summarises each group with a boxplot that shows the median, spread, and possible outliers.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(y = MATHS, x= GENDER)) +` — Maps MATHS to the y-axis and maps GENDER to the x-axis. The plus sign means another layer follows. Line 3: `geom_boxplot()` — Summarises each group with a boxplot that shows the median, spread, and possible outliers.
 
 ### 1.8.2 Working with stat - the stat_summary() method
 
@@ -329,14 +260,7 @@ ggplot(data=exam_data,
                size=4)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(y = MATHS, x= GENDER)) +` — Maps MATHS to the y-axis and maps GENDER to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_boxplot() +` — Summarises each group with a boxplot that shows the median, spread, and possible outliers. The plus sign means another layer follows.
-Line 4: `stat_summary(geom = "point",` — Calculates a summary value, here the mean, and draws it as a point on top of the boxplot.
-Line 5: `fun = "mean",` — This tells ggplot to calculate the mean as the summary value.
-Line 6: `colour ="red",` — This makes the summary point red so it stands out.
-Line 7: `size=4)` — This makes the summary point larger so it is easier to notice.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(y = MATHS, x= GENDER)) +` — Maps MATHS to the y-axis and maps GENDER to the x-axis. The plus sign means another layer follows. Line 3: `geom_boxplot() +` — Summarises each group with a boxplot that shows the median, spread, and possible outliers. The plus sign means another layer follows. Line 4: `stat_summary(geom = "point",` — Calculates a summary value, here the mean, and draws it as a point on top of the boxplot. Line 5: `fun = "mean",` — This tells ggplot to calculate the mean as the summary value. Line 6: `colour ="red",` — This makes the summary point red so it stands out. Line 7: `size=4)` — This makes the summary point larger so it is easier to notice.
 
 ### 1.8.3 Working with stat - the geom() method
 
@@ -350,14 +274,7 @@ ggplot(data=exam_data,
              size=4)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(y = MATHS, x= GENDER)) +` — Maps MATHS to the y-axis and maps GENDER to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_boxplot() +` — Summarises each group with a boxplot that shows the median, spread, and possible outliers. The plus sign means another layer follows.
-Line 4: `geom_point(stat="summary",` — Uses a point geom to show a summary value, here the mean, for each group.
-Line 5: `fun="mean",` — This tells ggplot to calculate the mean as the summary value.
-Line 6: `colour="red",` — This makes the summary point red so it stands out.
-Line 7: `size=4)` — This makes the summary point larger so it is easier to notice.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(y = MATHS, x= GENDER)) +` — Maps MATHS to the y-axis and maps GENDER to the x-axis. The plus sign means another layer follows. Line 3: `geom_boxplot() +` — Summarises each group with a boxplot that shows the median, spread, and possible outliers. The plus sign means another layer follows. Line 4: `geom_point(stat="summary",` — Uses a point geom to show a summary value, here the mean, for each group. Line 5: `fun="mean",` — This tells ggplot to calculate the mean as the summary value. Line 6: `colour="red",` — This makes the summary point red so it stands out. Line 7: `size=4)` — This makes the summary point larger so it is easier to notice.
 
 ### 1.8.4 Adding a best fit curve on a scatterplot?
 
@@ -368,11 +285,7 @@ ggplot(data=exam_data,
   geom_smooth(size=0.5)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS, y=ENGLISH)) +` — Maps MATHS to the x-axis and maps ENGLISH to the y-axis. The plus sign means another layer follows.
-Line 3: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows.
-Line 4: `geom_smooth(size=0.5)` — This keeps the line thin.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS, y=ENGLISH)) +` — Maps MATHS to the x-axis and maps ENGLISH to the y-axis. The plus sign means another layer follows. Line 3: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows. Line 4: `geom_smooth(size=0.5)` — This keeps the line thin.
 
 ```{r}
 ggplot(data=exam_data,
@@ -383,13 +296,7 @@ ggplot(data=exam_data,
               linewidth=0.5)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS,` — Maps MATHS to the x-axis.
-Line 3: `y=ENGLISH)) +` — Maps ENGLISH to the y-axis. The plus sign means another layer follows.
-Line 4: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows.
-Line 5: `geom_smooth(method=lm,` — Fits a straight regression line to show the best linear trend in the data.
-Line 6: `linewidth=0.5)` — This keeps the regression line thin.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS,` — Maps MATHS to the x-axis. Line 3: `y=ENGLISH)) +` — Maps ENGLISH to the y-axis. The plus sign means another layer follows. Line 4: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows. Line 5: `geom_smooth(method=lm,` — Fits a straight regression line to show the best linear trend in the data. Line 6: `linewidth=0.5)` — This keeps the regression line thin.
 
 ## 1.9 Essential Grammatical Elements in ggplot2: Facets
 
@@ -404,11 +311,7 @@ ggplot(data=exam_data,
     facet_wrap(~ CLASS)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_histogram(bins=20) +` — This splits the values into 20 bins so the histogram becomes more detailed. The plus sign means another layer follows.
-Line 4: `facet_wrap(~ CLASS)` — Splits the plot into separate small panels, one for each class.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows. Line 3: `geom_histogram(bins=20) +` — This splits the values into 20 bins so the histogram becomes more detailed. The plus sign means another layer follows. Line 4: `facet_wrap(~ CLASS)` — Splits the plot into separate small panels, one for each class.
 
 ### 1.9.2 facet_grid() function
 
@@ -419,11 +322,7 @@ ggplot(data=exam_data,
     facet_grid(~ CLASS)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_histogram(bins=20) +` — This splits the values into 20 bins so the histogram becomes more detailed. The plus sign means another layer follows.
-Line 4: `facet_grid(~ CLASS)` — Splits the plot into a grid of panels, one for each class.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS)) +` — Maps MATHS to the x-axis. The plus sign means another layer follows. Line 3: `geom_histogram(bins=20) +` — This splits the values into 20 bins so the histogram becomes more detailed. The plus sign means another layer follows. Line 4: `facet_grid(~ CLASS)` — Splits the plot into a grid of panels, one for each class.
 
 ## 1.10 Essential Grammatical Elements in ggplot2: Coordinates
 
@@ -437,10 +336,7 @@ ggplot(data=exam_data,
   geom_bar()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_bar()` — Counts how many students are in each category and draws one bar per category.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows. Line 3: `geom_bar()` — Counts how many students are in each category and draws one bar per category.
 
 ```{r}
 ggplot(data=exam_data,
@@ -449,11 +345,7 @@ ggplot(data=exam_data,
   coord_flip()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows.
-Line 4: `coord_flip()` — Flips the axes so the plot becomes horizontal instead of vertical.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows. Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows. Line 4: `coord_flip()` — Flips the axes so the plot becomes horizontal instead of vertical.
 
 ### 1.10.2 Changing the y- and x-axis range
 
@@ -464,11 +356,7 @@ ggplot(data=exam_data,
   geom_smooth(method=lm, size=0.5)
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS, y=ENGLISH)) +` — Maps MATHS to the x-axis and maps ENGLISH to the y-axis. The plus sign means another layer follows.
-Line 3: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows.
-Line 4: `geom_smooth(method=lm, size=0.5)` — This keeps the line thin.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS, y=ENGLISH)) +` — Maps MATHS to the x-axis and maps ENGLISH to the y-axis. The plus sign means another layer follows. Line 3: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows. Line 4: `geom_smooth(method=lm, size=0.5)` — This keeps the line thin.
 
 ```{r}
 ggplot(data=exam_data,
@@ -480,14 +368,7 @@ ggplot(data=exam_data,
                   ylim=c(0,100))
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x= MATHS, y=ENGLISH)) +` — Maps MATHS to the x-axis and maps ENGLISH to the y-axis. The plus sign means another layer follows.
-Line 3: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows.
-Line 4: `geom_smooth(method=lm,` — Fits a straight regression line to show the best linear trend in the data.
-Line 5: `size=0.5) +` — This keeps the line thin. The plus sign means another layer follows.
-Line 6: `coord_cartesian(xlim=c(0,100),` — Zooms the view to the chosen x and y ranges without dropping the data.
-Line 7: `ylim=c(0,100))` — This sets the y-axis range from 0 to 100.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x= MATHS, y=ENGLISH)) +` — Maps MATHS to the x-axis and maps ENGLISH to the y-axis. The plus sign means another layer follows. Line 3: `geom_point() +` — Draws each student as a point so we can see the relationship between two numeric variables. The plus sign means another layer follows. Line 4: `geom_smooth(method=lm,` — Fits a straight regression line to show the best linear trend in the data. Line 5: `size=0.5) +` — This keeps the line thin. The plus sign means another layer follows. Line 6: `coord_cartesian(xlim=c(0,100),` — Zooms the view to the chosen x and y ranges without dropping the data. Line 7: `ylim=c(0,100))` — This sets the y-axis range from 0 to 100.
 
 ## 1.11 Essential Grammatical Elements in ggplot2: themes
 
@@ -503,12 +384,7 @@ ggplot(data=exam_data,
   theme_gray()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows.
-Line 4: `coord_flip() +` — Flips the axes so the plot becomes horizontal instead of vertical. The plus sign means another layer follows.
-Line 5: `theme_gray()` — Uses ggplot2’s default gray theme.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows. Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows. Line 4: `coord_flip() +` — Flips the axes so the plot becomes horizontal instead of vertical. The plus sign means another layer follows. Line 5: `theme_gray()` — Uses ggplot2’s default gray theme.
 
 ```{r}
 ggplot(data=exam_data,
@@ -518,12 +394,7 @@ ggplot(data=exam_data,
   theme_classic()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows.
-Line 4: `coord_flip() +` — Flips the axes so the plot becomes horizontal instead of vertical. The plus sign means another layer follows.
-Line 5: `theme_classic()` — Switches to a clean classic theme with a white background.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows. Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows. Line 4: `coord_flip() +` — Flips the axes so the plot becomes horizontal instead of vertical. The plus sign means another layer follows. Line 5: `theme_classic()` — Switches to a clean classic theme with a white background.
 
 ```{r}
 ggplot(data=exam_data,
@@ -533,12 +404,7 @@ ggplot(data=exam_data,
   theme_minimal()
 ```
 
-Layman explanation:
-Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping.
-Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows.
-Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows.
-Line 4: `coord_flip() +` — Flips the axes so the plot becomes horizontal instead of vertical. The plus sign means another layer follows.
-Line 5: `theme_minimal()` — Uses a simple minimal theme with fewer visual distractions.
+Layman explanation: Line 1: `ggplot(data=exam_data,` — Starts a ggplot using the exam data; the next line will define the visual mapping. Line 2: `aes(x=RACE)) +` — Maps RACE to the x-axis. The plus sign means another layer follows. Line 3: `geom_bar() +` — Counts how many students are in each category and draws one bar per category. The plus sign means another layer follows. Line 4: `coord_flip() +` — Flips the axes so the plot becomes horizontal instead of vertical. The plus sign means another layer follows. Line 5: `theme_minimal()` — Uses a simple minimal theme with fewer visual distractions.
 
 ## 1.12 Reference
 
