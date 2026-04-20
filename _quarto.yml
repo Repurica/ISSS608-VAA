@@ -9,6 +9,12 @@ website:
         text: Home
       - about.qmd
 
+  sidebar:
+    style: docked
+    search: true
+    contents:
+      - HO_Ex
+
 format:
   html:
     theme:
@@ -18,4 +24,3 @@ format:
     toc: true
 
 editor: visual
-

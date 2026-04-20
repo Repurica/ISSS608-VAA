@@ -23,4 +23,3 @@ pacman::p_load(tidyerse)
 ```{r}
 exam_data = read.csv("data/wk1/Exam_data.csv")
 ```
-
