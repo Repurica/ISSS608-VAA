@@ -13,7 +13,9 @@ website:
     style: docked
     search: true
     contents:
-      - HO_Ex
+      - section: "HO_Ex"
+        contents:
+          - auto: "HO_Ex/*.qmd"
 
 format:
   html:
