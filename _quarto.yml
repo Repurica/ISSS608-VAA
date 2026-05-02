@@ -17,8 +17,6 @@ website:
         contents:
           - href: HO_Ex/HO_Ex1.qmd
             text: "Hands-on Exercise 1"
-          - href: HO_Ex/HO_Ex1_submission.qmd
-            text: "Hands-on Exercise 1 (Student Submission)"
           - href: HO_Ex/HO_Ex2.qmd
             text: "Hands-on Exercise 2"
           - href: HO_Ex/HO_Ex3.qmd
