@@ -4,7 +4,7 @@ author: "Cao Jinming"
 date: "02 May 2026"
 date-modified: "last-modified"
 execute:
-  eval: false
+  eval: true
   echo: true
   warning: false
 format: html
@@ -19,7 +19,7 @@ pacman::p_load(readxl, gifski, gapminder,
 col <- c("Country", "Continent")
 globalPop <- read_xls("../data/wk4/GlobalPopulation.xls",
                       sheet="Data") %>%
-  mutate_each_(funs(factor(.)), col) %>%
+  mutate(across(all_of(col), as.factor)) %>%
   mutate(Year = as.integer(Year))
 ```
 
