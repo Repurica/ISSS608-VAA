@@ -1,5 +1,161 @@
 [
   {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#contents",
+    "href": "TH_Ex/TH_Ex1_slides.html#contents",
+    "title": "Take-home Exercise 1",
+    "section": "Contents",
+    "text": "Contents\n\nAnalytical objective\nData and derived measures\nUnivariate discovery\nBivariate findings\nStatistical validation\nImplications and next steps\n\n\nThis presentation summarises the technical report. The focus is not only on dashboard-style reporting, but on using visual analytics to discover distributional patterns and potential drivers of profitability and volatility.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#analytical-objective",
+    "href": "TH_Ex/TH_Ex1_slides.html#analytical-objective",
+    "title": "Take-home Exercise 1",
+    "section": "Analytical objective",
+    "text": "Analytical objective\n\nExplore numerical and categorical distributions.\nInvestigate factors associated with profitability.\nUse visual evidence and statistical validation together.\nTreat extreme losses as part of volatility, not noise to ignore.\n\n\nThe assignment asks for both univariate and bivariate visual analytics. I define profitability through profit and loss ratio, and volatility through spread, claim occurrence, and extreme incurred-loss behaviour.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#data-and-sandbox",
+    "href": "TH_Ex/TH_Ex1_slides.html#data-and-sandbox",
+    "title": "Take-home Exercise 1",
+    "section": "Data and sandbox",
+    "text": "Data and sandbox\n\n\n\n\n\nmeasure\nvalue\n\n\n\n\nRecords\n354140\n\n\nDistinct insured IDs\n185678\n\n\nPeriod\n2022-2023-2024\n\n\nOriginal variables\n47\n\n\n\n\n\n\nSource: Mendeley Data motor insurance portfolio.\nTools: tidyverse, ggplot2, readxl, patchwork.\nDerived measures: profit, loss ratio, claim flag, frequency, severity.\n\n\nThe dataset is large enough for both descriptive and statistical analysis. I use reproducible R code so the results can be regenerated from the raw Mendeley files.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#portfolio-trend",
+    "href": "TH_Ex/TH_Ex1_slides.html#portfolio-trend",
+    "title": "Take-home Exercise 1",
+    "section": "Portfolio trend",
+    "text": "Portfolio trend\n\n\nPremium and incurred losses both increase from 2022 to 2024. The key question is whether premium growth is sufficient to absorb the increasing loss burden.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#loss-ratio-worsened-in-2024",
+    "href": "TH_Ex/TH_Ex1_slides.html#loss-ratio-worsened-in-2024",
+    "title": "Take-home Exercise 1",
+    "section": "Loss ratio worsened in 2024",
+    "text": "Loss ratio worsened in 2024\n\n\nThe 2024 loss ratio is visibly higher than 2022 and 2023. This points to declining profitability, assuming expenses are not separately modelled here.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#univariate-numerical-skewness",
+    "href": "TH_Ex/TH_Ex1_slides.html#univariate-numerical-skewness",
+    "title": "Take-home Exercise 1",
+    "section": "Univariate: numerical skewness",
+    "text": "Univariate: numerical skewness\n\n\nThe most important univariate pattern is claim zero-inflation and right skewness. Many records have no incurred loss, but a small number of records have very large loss ratios.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#univariate-categorical-concentration",
+    "href": "TH_Ex/TH_Ex1_slides.html#univariate-categorical-concentration",
+    "title": "Take-home Exercise 1",
+    "section": "Univariate: categorical concentration",
+    "text": "Univariate: categorical concentration\n\n\nPolicy mix and bonus-score mix are concentrated. This affects interpretation: a smaller category can have a high loss ratio, but it must be evaluated against exposure size.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#policy-type-and-profitability",
+    "href": "TH_Ex/TH_Ex1_slides.html#policy-type-and-profitability",
+    "title": "Take-home Exercise 1",
+    "section": "Policy type and profitability",
+    "text": "Policy type and profitability\n\n\nComprehensive products, especially COMP_N, have the highest aggregate loss ratios. Third-party-only coverage has the lowest ratio in this comparison.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#volatility-by-policy-type",
+    "href": "TH_Ex/TH_Ex1_slides.html#volatility-by-policy-type",
+    "title": "Take-home Exercise 1",
+    "section": "Volatility by policy type",
+    "text": "Volatility by policy type\n\n\nThe boxplot uses capped loss ratio to make the spread visible. The large right tail confirms that volatility is a material feature of this portfolio.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#other-risk-related-segments",
+    "href": "TH_Ex/TH_Ex1_slides.html#other-risk-related-segments",
+    "title": "Take-home Exercise 1",
+    "section": "Other risk-related segments",
+    "text": "Other risk-related segments\n\n\nBonus score, fuel type, and circulation area all show visible differences in aggregate loss ratio. These are useful candidates for underwriting or pricing review.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#statistical-validation",
+    "href": "TH_Ex/TH_Ex1_slides.html#statistical-validation",
+    "title": "Take-home Exercise 1",
+    "section": "Statistical validation",
+    "text": "Statistical validation\n\n\n\n\n\nvariable\nKruskal\nChi-square\n\n\n\n\npolicy_type\n&lt;2e-16\n&lt;2e-16\n\n\nbonus_score\n&lt;2e-16\n&lt;2e-16\n\n\ndriver_age_band\n&lt;2e-16\n&lt;2e-16\n\n\nvehicle_age_band\n&lt;2e-16\n&lt;2e-16\n\n\nfuel_type\n&lt;2e-16\n&lt;2e-16\n\n\ncirculation_area\n&lt;2e-16\n&lt;2e-16\n\n\nyear\n&lt;2e-16\n&lt;2e-16\n\n\n\n\n\n\nThe tests show statistically significant differences across the selected segments. Because the dataset is large, I interpret these results together with visual effect size and exposure.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#brand-level-screen",
+    "href": "TH_Ex/TH_Ex1_slides.html#brand-level-screen",
+    "title": "Take-home Exercise 1",
+    "section": "Brand-level screen",
+    "text": "Brand-level screen\n\n\nThe brand chart is exploratory. It helps identify candidates for follow-up analysis, but it should not be treated as a final causal conclusion.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_slides.html#implications",
+    "href": "TH_Ex/TH_Ex1_slides.html#implications",
+    "title": "Take-home Exercise 1",
+    "section": "Implications",
+    "text": "Implications\n\nReview premium adequacy for comprehensive products.\nInvestigate 2024 deterioration in loss ratio.\nUse bonus score, fuel type, and circulation area as segmentation checks.\nExamine extreme losses separately from typical-policy behaviour.\nValidate any pricing action with exposure and mix-adjusted modelling.\n\n\nThe visual analytics process identifies where to investigate next. It does not replace actuarial modelling, but it provides a clear evidence trail for prioritising portfolio questions.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Slides"
+    ]
+  },
+  {
     "objectID": "HO_Ex/HO_Ex3.html",
     "href": "HO_Ex/HO_Ex3.html",
     "title": "Hands-on Exercise 3",
@@ -273,6 +429,90 @@
       "Home",
       "HO_Ex",
       "Hands-on Exercise 4"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_report.html",
+    "href": "TH_Ex/TH_Ex1_report.html",
+    "title": "Take-home Exercise 1: Visual Analytics for Data Discovery",
+    "section": "",
+    "text": "Academic-use note. This is a working technical-report draft and reproducible analysis scaffold. Before submission, review the charts, refine the wording in your own voice, and keep only findings you can explain.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Report"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_report.html#overview",
+    "href": "TH_Ex/TH_Ex1_report.html#overview",
+    "title": "Take-home Exercise 1: Visual Analytics for Data Discovery",
+    "section": "1 Overview",
+    "text": "1 Overview\nThis report applies visual analytics to a real-world Spanish motor insurance portfolio dataset from Mendeley Data. The portfolio contains policy-level transactions from 2022 to 2024, including policy attributes, premium components, claim counts, incurred losses, and exposure.\nThe analysis addresses two required tasks:\n\nUnivariate visual analytics: explore the distributions and characteristics of numerical and categorical variables.\nBivariate visual analytics: investigate and statistically validate factors associated with portfolio profitability and volatility.\n\nFor this report:\n\nProfitability is represented by profit = total_premium - total_incurred and the aggregate loss ratio total_incurred / total_premium.\nVolatility is represented by the spread and upper tail of individual policy loss ratios, claim occurrence, and high-incurred outliers.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Report"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_report.html#analytical-sandbox",
+    "href": "TH_Ex/TH_Ex1_report.html#analytical-sandbox",
+    "title": "Take-home Exercise 1: Visual Analytics for Data Discovery",
+    "section": "2 Analytical sandbox",
+    "text": "2 Analytical sandbox\n\n2.1 Packages and helper functions\n\nlibrary(tidyverse)\nlibrary(readxl)\nlibrary(scales)\nlibrary(patchwork)\nlibrary(knitr)\nif (file.exists(\"TH_Ex/th_ex1_common.R\")) {\n  source(\"TH_Ex/th_ex1_common.R\")\n} else {\n  source(\"th_ex1_common.R\")\n}\n\n\n\n2.2 Data acquisition and import\nThe raw data is downloaded from the public Mendeley Data API if it is not already available locally. The CSV file uses semicolons as delimiters.\n\nmotor &lt;- load_th1_motor()\ndict &lt;- read_excel(th1_dict_path)\n\nglimpse(motor)\n\nRows: 354,140\nColumns: 55\n$ insured_id                  &lt;dbl&gt; 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, …\n$ year                        &lt;fct&gt; 2022, 2022, 2023, 2024, 2022, 2023, 2024, …\n$ policy_type                 &lt;chr&gt; \"COMP_E\", \"COMP_E\", \"COMP_E\", \"COMP_E\", \"C…\n$ policy_status               &lt;chr&gt; \"C\", \"A\", \"A\", \"A\", \"A\", \"A\", \"A\", \"A\", \"A…\n$ business_type               &lt;chr&gt; \"NB\", \"P\", \"P\", \"P\", \"NB\", \"P\", \"P\", \"NB\",…\n$ payment_frequency           &lt;chr&gt; \"A\", \"A\", \"A\", \"A\", \"S\", \"S\", \"S\", \"A\", \"A…\n$ bonus_score                 &lt;chr&gt; \"G\", \"G\", \"G\", \"G\", \"G\", \"G\", \"G\", \"G\", \"G…\n$ driver_age                  &lt;dbl&gt; 48, 43, 44, 45, 45, 46, 47, 32, 33, 34, 39…\n$ vehicle_age                 &lt;dbl&gt; 22, 24, 25, 26, 26, 27, 28, 12, 13, 14, 20…\n$ age_driving_licence         &lt;dbl&gt; 26, 19, 19, 18, 19, 19, 19, 19, 19, 19, 19…\n$ fuel_type                   &lt;chr&gt; \"G\", \"D\", \"D\", \"D\", \"D\", \"D\", \"D\", \"D\", \"D…\n$ vehicle_value               &lt;dbl&gt; 149511.44, 65065.12, 65065.12, 65065.12, 5…\n$ seats                       &lt;dbl&gt; 4, 8, 8, 8, 7, 7, 7, 5, 5, 5, 5, 5, 5, 5, …\n$ power_to_weight_ratio       &lt;dbl&gt; 3.92, 10.15, 10.15, 10.15, 9.19, 9.19, 9.1…\n$ vehicle_brand               &lt;chr&gt; \"PORSCHE\", \"MERCEDES\", \"MERCEDES\", \"MERCED…\n$ municipality_type           &lt;chr&gt; \"I\", \"I\", \"I\", \"I\", \"I\", \"I\", \"I\", \"I\", \"I…\n$ circulation_area            &lt;chr&gt; \"U\", \"U\", \"U\", \"U\", \"R\", \"R\", \"R\", \"R\", \"R…\n$ total_premium               &lt;dbl&gt; 279.5576, 546.6234, 548.7526, 584.6324, 68…\n$ liability_premium           &lt;dbl&gt; 30.60232, 114.33336, 110.66689, 122.09253,…\n$ property_damage_premium     &lt;dbl&gt; 121.9127, 303.1060, 304.9560, 305.2251, 35…\n$ theft_premium               &lt;dbl&gt; 112.361489, 80.784824, 83.521384, 107.8868…\n$ fire_premium                &lt;dbl&gt; 3.832441, 7.826861, 6.151465, 5.842892, 7.…\n$ glass_premium               &lt;dbl&gt; 8.305788, 30.091751, 32.861626, 31.101584,…\n$ legal_protection_premium    &lt;dbl&gt; 2.043622, 7.812747, 7.655637, 10.084173, 6…\n$ occupants_premium           &lt;dbl&gt; 0.4992053, 2.6679084, 2.9395659, 2.3992827…\n$ total_claims                &lt;dbl&gt; 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, …\n$ liability_claims            &lt;dbl&gt; 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ liability_property_claims   &lt;dbl&gt; 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ liability_injury_claims     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ property_claims             &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, …\n$ theft_claims                &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ fire_claims                 &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ glass_claims                &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ legal_protection_claims     &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ occupants_claims            &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ total_incurred              &lt;dbl&gt; 0.000, 0.000, 233.013, 2586.361, 0.000, 0.…\n$ liability_incurred          &lt;dbl&gt; 0.000, 0.000, 233.013, 1035.000, 0.000, 0.…\n$ liability_property_incurred &lt;dbl&gt; 0.000, 0.000, 233.013, 1035.000, 0.000, 0.…\n$ liability_injury_incurred   &lt;dbl&gt; 0.000, 0.000, 0.000, 0.000, 0.000, 0.000, …\n$ property_incurred           &lt;dbl&gt; 0.000, 0.000, 0.000, 1551.361, 0.000, 0.00…\n$ theft_incurred              &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ fire_incurred               &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ glass_incurred              &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ legal_protection_incurred   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ occupants_incurred          &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …\n$ total_exposure              &lt;dbl&gt; 0.09863014, 1.00000000, 1.00000000, 1.0000…\n$ liability_exposure          &lt;dbl&gt; 0.09863014, 1.00000000, 1.00000000, 1.0000…\n$ claim_flag                  &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FA…\n$ profit                      &lt;dbl&gt; 279.5576, 546.6234, 315.7396, -2001.7291, …\n$ loss_ratio                  &lt;dbl&gt; 0.0000000, 0.0000000, 0.4246231, 4.4239104…\n$ loss_ratio_cap              &lt;dbl&gt; 0.0000000, 0.0000000, 0.4246231, 4.4239104…\n$ claim_frequency             &lt;dbl&gt; 0, 0, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, …\n$ severity                    &lt;dbl&gt; NA, NA, 233.0130, 1293.1807, NA, NA, NA, N…\n$ driver_age_band             &lt;fct&gt; 46-55, 36-45, 36-45, 36-45, 36-45, 46-55, …\n$ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-12, 1…\n\n\n\n\n2.3 Derived analytical variables\nThe key derived variables are created in TH_Ex/th_ex1_common.R:\n\nprofit = total_premium - total_incurred\nloss_ratio = total_incurred / total_premium\nloss_ratio_cap: loss ratio capped at the 99th percentile for robust visual comparison\nclaim_flag = total_claims &gt; 0\nclaim_frequency = total_claims / total_exposure\nseverity = total_incurred / total_claims, only for claim records\ndriver_age_band and vehicle_age_band for segment-level comparison\n\n\nportfolio_size &lt;- tibble(\n  measure = c(\"Records\", \"Distinct insured IDs\", \"Years\", \"Variables after derivation\"),\n  value = c(nrow(motor), n_distinct(motor$insured_id), paste(levels(motor$year), collapse = \", \"), ncol(motor))\n)\n\nkable(portfolio_size)\n\n\n\n\nmeasure\nvalue\n\n\n\n\nRecords\n354140\n\n\nDistinct insured IDs\n185678\n\n\nYears\n2022, 2023, 2024\n\n\nVariables after derivation\n55\n\n\n\n\n\n\n\n2.4 Data quality checks\n\nmissing_tbl &lt;- motor |&gt;\n  summarise(across(everything(), ~sum(is.na(.x)))) |&gt;\n  pivot_longer(everything(), names_to = \"variable\", values_to = \"missing_records\") |&gt;\n  filter(missing_records &gt; 0) |&gt;\n  arrange(desc(missing_records))\n\nkable(missing_tbl)\n\n\n\n\nvariable\nmissing_records\n\n\n\n\nseverity\n303333\n\n\nfuel_type\n1287\n\n\nvehicle_value\n513\n\n\nloss_ratio\n49\n\n\nclaim_frequency\n49\n\n\nvehicle_age\n2\n\n\nage_driving_licence\n2\n\n\nvehicle_age_band\n2\n\n\n\n\n\nDraft interpretation to customise: Missingness is limited for core profitability fields. The largest missing count is expected for severity because severity is only meaningful when at least one claim occurred. A small amount of missingness appears in vehicle-related fields and should be noted, but it is unlikely to dominate portfolio-level results.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Report"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_report.html#task-1-univariate-visual-analytics",
+    "href": "TH_Ex/TH_Ex1_report.html#task-1-univariate-visual-analytics",
+    "title": "Take-home Exercise 1: Visual Analytics for Data Discovery",
+    "section": "3 Task 1: Univariate visual analytics",
+    "text": "3 Task 1: Univariate visual analytics\n\n3.1 Numerical variables\n\nnum_profile &lt;- motor |&gt;\n  summarise(across(\n    c(driver_age, vehicle_age, age_driving_licence, vehicle_value, power_to_weight_ratio,\n      total_premium, total_claims, total_incurred, total_exposure, profit, loss_ratio),\n    list(\n      min = ~min(.x, na.rm = TRUE),\n      q25 = ~quantile(.x, 0.25, na.rm = TRUE),\n      median = ~median(.x, na.rm = TRUE),\n      mean = ~mean(.x, na.rm = TRUE),\n      q75 = ~quantile(.x, 0.75, na.rm = TRUE),\n      max = ~max(.x, na.rm = TRUE)\n    ),\n    .names = \"{.col}_{.fn}\"\n  )) |&gt;\n  pivot_longer(everything(), names_to = c(\"variable\", \".value\"), names_pattern = \"(.+)_(min|q25|median|mean|q75|max)\")\n\nkable(num_profile, digits = 2)\n\n\n\n\n\n\n\n\n\n\n\n\n\nvariable\nmin\nq25\nmedian\nmean\nq75\nmax\n\n\n\n\ndriver_age\n18.00\n39.00\n48.00\n49.01\n58.00\n90.00\n\n\nvehicle_age\n0.00\n17.00\n25.00\n25.92\n35.00\n68.00\n\n\nage_driving_licence\n0.00\n19.00\n20.00\n22.99\n25.00\n80.00\n\n\nvehicle_value\n1630.12\n18607.58\n24729.60\n26977.44\n32252.32\n374034.21\n\n\npower_to_weight_ratio\n0.00\n10.74\n12.05\n12.33\n13.73\n64.81\n\n\ntotal_premium\n0.00\n146.14\n257.90\n296.72\n384.98\n5107.64\n\n\ntotal_claims\n0.00\n0.00\n0.00\n0.22\n0.00\n18.00\n\n\ntotal_incurred\n0.00\n0.00\n0.00\n208.58\n0.00\n571128.32\n\n\ntotal_exposure\n0.00\n0.44\n0.84\n0.71\n1.00\n1.00\n\n\nprofit\n-571077.99\n94.92\n229.90\n88.14\n346.67\n5107.64\n\n\nloss_ratio\n0.00\n0.00\n0.00\n0.79\n0.00\n11348.86\n\n\n\n\n\n\nmotor |&gt;\n  select(driver_age, vehicle_age, vehicle_value, total_premium, total_incurred, loss_ratio_cap) |&gt;\n  pivot_longer(everything(), names_to = \"variable\", values_to = \"value\") |&gt;\n  ggplot(aes(x = value)) +\n  geom_histogram(bins = 40, colour = \"white\", fill = \"#2c7fb8\") +\n  facet_wrap(~ variable, scales = \"free\", ncol = 3) +\n  labs(\n    title = \"Distribution of selected numerical variables\",\n    subtitle = \"Loss ratio is capped at the 99th percentile for readability.\",\n    x = NULL, y = \"Number of records\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nDraft interpretation to customise: The portfolio has many zero-claim records, so incurred losses and loss ratios are highly right-skewed. Premiums and vehicle values are also skewed, but less extremely than incurred losses. This means median and percentile summaries are more informative than means alone.\n\n\n3.2 Categorical variables\n\ncat_vars &lt;- c(\"policy_type\", \"policy_status\", \"business_type\", \"payment_frequency\", \"bonus_score\", \"fuel_type\", \"municipality_type\", \"circulation_area\")\n\nmotor |&gt;\n  select(all_of(cat_vars)) |&gt;\n  pivot_longer(everything(), names_to = \"variable\", values_to = \"category\") |&gt;\n  mutate(category = fct_explicit_na(as.factor(category), na_level = \"Missing\")) |&gt;\n  count(variable, category) |&gt;\n  group_by(variable) |&gt;\n  mutate(pct = n / sum(n), category = fct_reorder(category, pct)) |&gt;\n  ungroup() |&gt;\n  ggplot(aes(x = category, y = pct)) +\n  geom_col(fill = \"#41ab5d\") +\n  coord_flip() +\n  scale_y_continuous(labels = pct) +\n  facet_wrap(~ variable, scales = \"free_y\", ncol = 2) +\n  labs(\n    title = \"Distribution of selected categorical variables\",\n    x = NULL, y = \"Share of records\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nDraft interpretation to customise: CC and COMP_E dominate the coverage mix. The portfolio is also strongly concentrated in annual payment frequency and good bonus score. This concentration matters because small categories can have unstable loss-ratio estimates even when they appear extreme.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Report"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_report.html#task-2-bivariate-visual-analytics-and-validation",
+    "href": "TH_Ex/TH_Ex1_report.html#task-2-bivariate-visual-analytics-and-validation",
+    "title": "Take-home Exercise 1: Visual Analytics for Data Discovery",
+    "section": "4 Task 2: Bivariate visual analytics and validation",
+    "text": "4 Task 2: Bivariate visual analytics and validation\n\n4.1 Portfolio trend by year\n\nyearly &lt;- portfolio_summary(motor, year)\nkable(yearly, digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nyear\nrecords\nexposure\npremium\nincurred\nclaims\nprofit\nloss_ratio\nclaim_frequency\navg_premium\navg_severity\nhigh_loss_rate\np95_loss_ratio\n\n\n\n\n2022\n67172\n41912.50\n18697928\n12270105\n12665\n6427823\n0.656\n0.302\n446.118\n968.820\n0\n0.656\n\n\n2023\n118835\n82399.04\n35344308\n23488354\n25158\n11855954\n0.665\n0.305\n428.941\n933.634\n0\n0.665\n\n\n2024\n168133\n126014.36\n51037433\n38106351\n39276\n12931082\n0.747\n0.312\n405.013\n970.220\n0\n0.747\n\n\n\n\n\n\nyearly |&gt;\n  select(year, premium, incurred, profit) |&gt;\n  pivot_longer(-year, names_to = \"measure\", values_to = \"amount\") |&gt;\n  ggplot(aes(x = year, y = amount, colour = measure, group = measure)) +\n  geom_line(linewidth = 1) +\n  geom_point(size = 2) +\n  scale_y_continuous(labels = money) +\n  labs(\n    title = \"Premium, incurred loss, and profit by year\",\n    x = NULL, y = \"Aggregate amount\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nyearly |&gt;\n  ggplot(aes(x = year, y = loss_ratio, group = 1)) +\n  geom_line(linewidth = 1, colour = \"#d95f0e\") +\n  geom_point(size = 3, colour = \"#d95f0e\") +\n  scale_y_continuous(labels = pct) +\n  labs(\n    title = \"Aggregate loss ratio increased in 2024\",\n    x = NULL, y = \"Loss ratio\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nDraft interpretation to customise: Premium volume and incurred losses both increase over time, but the aggregate loss ratio rises most clearly in 2024. This suggests that growth in premium did not fully offset growth in incurred losses.\n\n\n4.2 Profitability by policy type\n\npolicy_tbl &lt;- portfolio_summary(motor, policy_type) |&gt;\n  arrange(desc(loss_ratio))\n\nkable(policy_tbl, digits = 3)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\npolicy_type\nrecords\nexposure\npremium\nincurred\nclaims\nprofit\nloss_ratio\nclaim_frequency\navg_premium\navg_severity\nhigh_loss_rate\np95_loss_ratio\n\n\n\n\nCOMP_N\n16181\n12342.351\n10344550\n9709280.8\n12907\n635269.3\n0.939\n1.046\n838.135\n752.249\n0\n0.939\n\n\nCOMP_E\n91199\n65040.337\n35712392\n26367075.6\n26687\n9345316.3\n0.738\n0.410\n549.081\n988.012\n0\n0.738\n\n\nTPG\n36367\n24905.351\n8201409\n5671461.2\n5156\n2529947.8\n0.692\n0.207\n329.303\n1099.973\n0\n0.692\n\n\nCC\n204636\n144235.186\n49801769\n31563558.5\n31842\n18238210.8\n0.634\n0.221\n345.282\n991.256\n0\n0.634\n\n\nTP\n5757\n3802.674\n1019549\n553434.5\n507\n466114.6\n0.543\n0.133\n268.114\n1091.587\n0\n0.543\n\n\n\n\n\n\npolicy_tbl |&gt;\n  mutate(policy_type = fct_reorder(policy_type, loss_ratio)) |&gt;\n  ggplot(aes(x = policy_type, y = loss_ratio, fill = policy_type)) +\n  geom_col(show.legend = FALSE) +\n  geom_hline(yintercept = 1, linetype = \"dashed\", colour = \"red\") +\n  coord_flip() +\n  scale_y_continuous(labels = pct) +\n  labs(\n    title = \"Aggregate loss ratio by policy type\",\n    subtitle = \"Dashed line marks break-even loss ratio before expenses.\",\n    x = NULL, y = \"Loss ratio\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nmotor |&gt;\n  filter(!is.na(policy_type), !is.na(loss_ratio_cap)) |&gt;\n  ggplot(aes(x = fct_reorder(policy_type, loss_ratio_cap, .fun = median), y = loss_ratio_cap)) +\n  geom_boxplot(fill = \"#9ecae1\", outlier.alpha = 0.08) +\n  coord_flip() +\n  scale_y_continuous(labels = pct) +\n  labs(\n    title = \"Individual policy loss-ratio volatility by policy type\",\n    subtitle = \"Loss ratio capped at 99th percentile to reveal group spread.\",\n    x = NULL, y = \"Capped individual loss ratio\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nDraft interpretation to customise: Comprehensive products have higher aggregate loss ratios than third-party products, especially COMP_N. The boxplot shows that much of the risk comes from a long right tail rather than from the typical policy record.\n\n\n4.3 Bonus score, fuel type, and circulation area\n\nseg_long &lt;- bind_rows(\n  portfolio_summary(motor, bonus_score) |&gt; mutate(segment = \"bonus_score\", category = as.character(bonus_score)),\n  portfolio_summary(motor, fuel_type) |&gt; mutate(segment = \"fuel_type\", category = fct_explicit_na(as.factor(fuel_type), \"Missing\") |&gt; as.character()),\n  portfolio_summary(motor, circulation_area) |&gt; mutate(segment = \"circulation_area\", category = as.character(circulation_area))\n)\n\nseg_long |&gt;\n  mutate(category = fct_reorder(category, loss_ratio)) |&gt;\n  ggplot(aes(x = category, y = loss_ratio)) +\n  geom_col(fill = \"#756bb1\") +\n  geom_hline(yintercept = 1, linetype = \"dashed\", colour = \"red\") +\n  coord_flip() +\n  scale_y_continuous(labels = pct) +\n  facet_wrap(~ segment, scales = \"free_y\") +\n  labs(\n    title = \"Loss ratio differs across risk-related categories\",\n    x = NULL, y = \"Aggregate loss ratio\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nDraft interpretation to customise: Non-good bonus scores, diesel vehicles, and urban circulation show higher loss ratios in this portfolio. These differences should be interpreted with business context because category mix and exposure size differ.\n\n\n4.4 Age segments\n\nage_driver &lt;- portfolio_summary(motor, driver_age_band) |&gt; mutate(segment = \"Driver age\", category = as.character(driver_age_band))\nage_vehicle &lt;- portfolio_summary(motor, vehicle_age_band) |&gt; mutate(segment = \"Vehicle age\", category = as.character(vehicle_age_band))\n\nbind_rows(age_driver, age_vehicle) |&gt;\n  filter(!is.na(category)) |&gt;\n  ggplot(aes(x = category, y = loss_ratio, group = segment, colour = segment)) +\n  geom_line(linewidth = 1) +\n  geom_point(size = 2) +\n  scale_y_continuous(labels = pct) +\n  facet_wrap(~ segment, scales = \"free_x\") +\n  labs(\n    title = \"Loss ratio by driver-age and vehicle-age bands\",\n    x = NULL, y = \"Aggregate loss ratio\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nDraft interpretation to customise: Loss ratio is not monotonic by age. Mid-age drivers and very old drivers show elevated aggregate ratios, while vehicle-age bands from 4 to 20 years appear less favourable than the oldest vehicle band. This indicates that underwriting interpretation should account for product mix and exposure, not age alone.\n\n\n4.5 Brand-level volatility screen\n\nbrand_tbl &lt;- motor |&gt;\n  group_by(vehicle_brand) |&gt;\n  summarise(\n    records = n(),\n    exposure = sum(total_exposure, na.rm = TRUE),\n    premium = sum(total_premium, na.rm = TRUE),\n    incurred = sum(total_incurred, na.rm = TRUE),\n    claims = sum(total_claims, na.rm = TRUE),\n    loss_ratio = incurred / premium,\n    claim_frequency = claims / exposure,\n    p95_loss_ratio = quantile(loss_ratio, 0.95, na.rm = TRUE),\n    .groups = \"drop\"\n  ) |&gt;\n  filter(exposure &gt;= 1000)\n\nbrand_tbl |&gt;\n  ggplot(aes(x = claim_frequency, y = loss_ratio, size = exposure)) +\n  geom_hline(yintercept = 1, linetype = \"dashed\", colour = \"red\") +\n  geom_point(alpha = 0.65, colour = \"#08519c\") +\n  geom_text(\n    data = brand_tbl |&gt; slice_max(loss_ratio, n = 8),\n    aes(label = vehicle_brand), vjust = -0.8, size = 3, check_overlap = TRUE\n  ) +\n  scale_x_continuous(labels = number_format(accuracy = 0.01)) +\n  scale_y_continuous(labels = pct) +\n  scale_size_continuous(labels = comma) +\n  labs(\n    title = \"Brand-level screen for high loss ratio and claim frequency\",\n    subtitle = \"Only brands with exposure &gt;= 1,000 are shown.\",\n    x = \"Claim frequency\", y = \"Aggregate loss ratio\", size = \"Exposure\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nDraft interpretation to customise: This chart is a screening device rather than a final underwriting decision. Brands in the upper-right area combine higher claim frequency and higher loss ratio, making them candidates for deeper investigation.\n\n\n4.6 Statistical validation\nBecause individual loss ratio is highly skewed and zero-inflated, non-parametric tests are used for group differences. The Kruskal-Wallis test is applied to the 99th-percentile-capped loss ratio. Chi-square tests are used to validate whether claim occurrence differs by segment.\n\ntest_vars &lt;- c(\"policy_type\", \"bonus_score\", \"driver_age_band\", \"vehicle_age_band\", \"fuel_type\", \"circulation_area\", \"year\")\n\nkw_tbl &lt;- map_dfr(test_vars, \\(v) {\n  kt &lt;- kruskal.test(as.formula(paste(\"loss_ratio_cap ~\", v)), data = motor)\n  tibble(test = \"Kruskal-Wallis\", variable = v, statistic = unname(kt$statistic), p_value = kt$p.value)\n})\n\nchi_tbl &lt;- map_dfr(test_vars, \\(v) {\n  ct &lt;- chisq.test(table(motor[[v]], motor$claim_flag))\n  tibble(test = \"Chi-square\", variable = v, statistic = unname(ct$statistic), p_value = ct$p.value)\n})\n\nvalidation_tbl &lt;- bind_rows(kw_tbl, chi_tbl) |&gt;\n  mutate(p_value_label = format.pval(p_value, digits = 3)) |&gt;\n  select(test, variable, statistic, p_value_label)\n\nkable(validation_tbl, digits = 2)\n\n\n\n\ntest\nvariable\nstatistic\np_value_label\n\n\n\n\nKruskal-Wallis\npolicy_type\n7287.56\n&lt;2e-16\n\n\nKruskal-Wallis\nbonus_score\n286.90\n&lt;2e-16\n\n\nKruskal-Wallis\ndriver_age_band\n266.94\n&lt;2e-16\n\n\nKruskal-Wallis\nvehicle_age_band\n303.78\n&lt;2e-16\n\n\nKruskal-Wallis\nfuel_type\n800.33\n&lt;2e-16\n\n\nKruskal-Wallis\ncirculation_area\n210.69\n&lt;2e-16\n\n\nKruskal-Wallis\nyear\n207.18\n&lt;2e-16\n\n\nChi-square\npolicy_type\n6638.42\n&lt;2e-16\n\n\nChi-square\nbonus_score\n297.19\n&lt;2e-16\n\n\nChi-square\ndriver_age_band\n463.27\n&lt;2e-16\n\n\nChi-square\nvehicle_age_band\n437.03\n&lt;2e-16\n\n\nChi-square\nfuel_type\n817.15\n&lt;2e-16\n\n\nChi-square\ncirculation_area\n225.88\n&lt;2e-16\n\n\nChi-square\nyear\n197.87\n&lt;2e-16\n\n\n\n\n\n\ncorr_tbl &lt;- map_dfr(\n  c(\"driver_age\", \"vehicle_age\", \"age_driving_licence\", \"vehicle_value\", \"seats\", \"power_to_weight_ratio\", \"total_premium\"),\n  \\(v) {\n    ct &lt;- suppressWarnings(cor.test(motor[[v]], motor$loss_ratio_cap, method = \"spearman\", exact = FALSE))\n    tibble(variable = v, spearman_rho = unname(ct$estimate), p_value = ct$p.value)\n  }\n) |&gt;\n  mutate(p_value_label = format.pval(p_value, digits = 3)) |&gt;\n  arrange(desc(abs(spearman_rho)))\n\nkable(corr_tbl |&gt; select(variable, spearman_rho, p_value_label), digits = 3)\n\n\n\n\nvariable\nspearman_rho\np_value_label\n\n\n\n\ntotal_premium\n0.205\n&lt;2e-16\n\n\nvehicle_value\n0.070\n&lt;2e-16\n\n\npower_to_weight_ratio\n-0.035\n&lt;2e-16\n\n\nvehicle_age\n-0.029\n&lt;2e-16\n\n\ndriver_age\n-0.025\n&lt;2e-16\n\n\nseats\n0.017\n&lt;2e-16\n\n\nage_driving_licence\n0.001\n0.703\n\n\n\n\n\nDraft interpretation to customise: Most group-difference tests are statistically significant because the dataset is large. Practical significance should therefore be judged using effect size, exposure, loss ratio, and business interpretability. The Spearman correlations are statistically significant for several numerical variables, but most coefficients are small; total premium has the strongest monotonic relationship with capped loss ratio among the tested numerical fields.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Report"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_report.html#key-analytical-findings-to-review",
+    "href": "TH_Ex/TH_Ex1_report.html#key-analytical-findings-to-review",
+    "title": "Take-home Exercise 1: Visual Analytics for Data Discovery",
+    "section": "5 Key analytical findings to review",
+    "text": "5 Key analytical findings to review\n\nThe portfolio is highly zero-inflated in claims and incurred losses, producing strongly right-skewed loss ratios.\nAggregate loss ratio rises in 2024, suggesting worsening profitability relative to premium.\nPolicy type is a strong segmentation variable: comprehensive covers, especially COMP_N, have higher aggregate loss ratios.\nBonus score, fuel type, and circulation area show statistically significant and practically visible differences in loss ratio.\nBrand-level screening identifies candidates for deeper investigation, but exposure size and mix effects must be considered before drawing underwriting conclusions.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Report"
+    ]
+  },
+  {
+    "objectID": "TH_Ex/TH_Ex1_report.html#recommended-next-steps",
+    "href": "TH_Ex/TH_Ex1_report.html#recommended-next-steps",
+    "title": "Take-home Exercise 1: Visual Analytics for Data Discovery",
+    "section": "6 Recommended next steps",
+    "text": "6 Recommended next steps\n\nReplace the draft interpretation notes with your own final writing.\nAdd 1–2 business-context paragraphs explaining why selected variables are relevant to insurance profitability.\nConsider a bonus extension, such as an interactive plotly view or a segmentation heatmap, if time permits.\nRe-render the report and presentation before publishing to the coursework webpage.",
+    "crumbs": [
+      "Home",
+      "TH_Ex",
+      "Take-home Exercise 1 Report"
     ]
   }
 ]

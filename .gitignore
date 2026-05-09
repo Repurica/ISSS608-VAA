@@ -6,3 +6,6 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Large downloaded source data for TH_Ex1; the Quarto files can re-download it.
+data/th_ex1/

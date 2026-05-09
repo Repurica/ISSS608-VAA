@@ -23,6 +23,12 @@ website:
             text: "Hands-on Exercise 3"
           - href: HO_Ex/HO_Ex4.qmd
             text: "Hands-on Exercise 4"
+      - section: "TH_Ex"
+        contents:
+          - href: TH_Ex/TH_Ex1_report.qmd
+            text: "Take-home Exercise 1 Report"
+          - href: TH_Ex/TH_Ex1_slides.qmd
+            text: "Take-home Exercise 1 Slides"
 
 format:
   html:
