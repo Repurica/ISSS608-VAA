@@ -69,27 +69,48 @@ ggstatsplot::ggcorrmat(
 ```
 
 ```{r}
-ggplot.component = list(
-    theme(text=element_text(size=5),
-      axis.text.x = element_text(size = 8),
-      axis.text.y = element_text(size = 8)))
+# Shorter display labels make the grouped correlogram readable in HTML.
+wine_corr_display <- wine |>
+  rename(
+    `fixed acid` = `fixed acidity`,
+    `volatile acid` = `volatile acidity`,
+    `free SO2` = `free sulfur dioxide`,
+    `total SO2` = `total sulfur dioxide`
+  )
+
+ggplot_component <- list(
+  theme(
+    plot.title = element_text(size = 14, face = "bold"),
+    plot.subtitle = element_text(size = 9, lineheight = 1.1),
+    plot.caption = element_text(size = 8),
+    axis.text.x = element_text(size = 7, angle = 45, hjust = 1),
+    axis.text.y = element_text(size = 7)
+  )
+)
 ```
 
 ```{r}
+#| fig-width: 10
+#| fig-height: 14
+#| out-width: "100%"
 grouped_ggcorrmat(
-  data = wine,
+  data = wine_corr_display,
   cor.vars = 1:11,
   grouping.var = type,
   type = "robust",
   p.adjust.method = "holm",
-  plotgrid.args = list(ncol = 2),
-  ggcorrplot.args = list(outline.color = "black", 
-                         hc.order = TRUE,
-                         tl.cex = 10),
+  plotgrid.args = list(ncol = 1),
+  ggcorrplot.args = list(
+    outline.color = "black",
+    hc.order = TRUE,
+    tl.cex = 8,
+    pch.cex = 2
+  ),
+  ggplot.component = ggplot_component,
   annotation.args = list(
     tag_levels = "a",
     title = "Correlogram for wine dataset",
-    subtitle = "The measures are: alcohol, sulphates, fixed acidity, citric acid, chlorides, residual sugar, density, free sulfur dioxide and volatile acidity",
+    subtitle = "Measures: alcohol, sulphates, fixed acid, volatile acid, citric acid, chlorides, residual sugar, density, free SO2, total SO2, and pH",
     caption = "Dataset: UCI Machine Learning Repository"
   )
 )
