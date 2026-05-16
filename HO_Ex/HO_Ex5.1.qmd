@@ -12,6 +12,7 @@ format: html
 
 ```{r}
 pacman::p_load(plotly, ggtern, tidyverse)
+knitr::opts_chunk$set(fig.width = 8, fig.height = 7, out.width = "100%")
 ```
 
 ```{r}
@@ -42,7 +43,7 @@ ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
 #Building the static ternary plot
 ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
   geom_point() +
-  labs(title="Population structure, 2015") +
+  labs(title="Population structure, 2018") +
   theme_rgbw()
 ```
 
@@ -51,9 +52,10 @@ ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
 label <- function(txt) {
   list(
     text = txt, 
-    x = 0.1, y = 1,
+    x = 0.5, y = 1.08,
     ax = 0, ay = 0,
-    xref = "paper", yref = "paper", 
+    xref = "paper", yref = "paper",
+    xanchor = "center",
     align = "center",
     font = list(family = "serif", size = 15, color = "white"),
     bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
@@ -84,6 +86,9 @@ plot_ly(
 ) %>%
   layout(
     annotations = label("Ternary Markers"), 
-    ternary = ternaryAxes
+    ternary = ternaryAxes,
+    width = 750,
+    height = 650,
+    margin = list(l = 20, r = 20, b = 20, t = 80)
   )
 ```

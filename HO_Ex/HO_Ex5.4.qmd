@@ -16,80 +16,132 @@ pacman::p_load(GGally, parallelPlot, tidyverse)
 
 ```{r}
 wh <- read_csv("../data/r4va/WHData-2018.csv")
+
+# Shorter display names keep the parallel-coordinate axes readable.
+wh_parallel <- wh %>%
+  transmute(
+    Region,
+    Score = `Happiness score`,
+    GDP = `GDP per capita`,
+    Social = `Social support`,
+    `Life exp.` = `Healthy life expectancy`,
+    Freedom = `Freedom to make life choices`,
+    Generosity,
+    Corruption = `Perceptions of corruption`
+  )
+
+parallel_theme <- theme_minimal(base_size = 9) +
+  theme(
+    axis.text.x = element_text(angle = 35, hjust = 1),
+    legend.position = "bottom",
+    legend.text = element_text(size = 7),
+    legend.title = element_text(size = 8),
+    strip.text = element_text(size = 7),
+    plot.title = element_text(size = 12, face = "bold")
+  )
 ```
 
 ```{r}
-ggparcoord(data = wh, 
-           columns = c(7:12))
+#| fig-width: 10
+#| fig-height: 6
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8) +
+  parallel_theme
 ```
 
 ```{r}
-ggparcoord(data = wh, 
-           columns = c(7:12), 
-           groupColumn = 2,
+#| fig-width: 10
+#| fig-height: 7
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
            scale = "uniminmax",
-           alphaLines = 0.2,
+           alphaLines = 0.25,
            boxplot = TRUE, 
-           title = "Parallel Coordinates Plot of World Happines Variables")
+           title = "Parallel Coordinates Plot of World Happiness Variables") +
+  parallel_theme
 ```
 
 ```{r}
-ggparcoord(data = wh, 
-           columns = c(7:12), 
-           groupColumn = 2,
+#| fig-width: 12
+#| fig-height: 10
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
            scale = "uniminmax",
-           alphaLines = 0.2,
+           alphaLines = 0.25,
            boxplot = TRUE, 
-           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
-  facet_wrap(~ Region)
+           title = "World Happiness Variables by Region") +
+  facet_wrap(~ Region, ncol = 2, labeller = label_wrap_gen(width = 20)) +
+  guides(color = "none") +
+  parallel_theme
 ```
 
 ```{r}
-ggparcoord(data = wh, 
-           columns = c(7:12), 
-           groupColumn = 2,
+#| fig-width: 12
+#| fig-height: 10
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
            scale = "uniminmax",
-           alphaLines = 0.2,
+           alphaLines = 0.25,
            boxplot = TRUE, 
-           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
-  facet_wrap(~ Region) + 
-  theme(axis.text.x = element_text(angle = 30))
+           title = "World Happiness Variables by Region") +
+  facet_wrap(~ Region, ncol = 2, labeller = label_wrap_gen(width = 20)) +
+  guides(color = "none") +
+  parallel_theme
 ```
 
 ```{r}
-ggparcoord(data = wh, 
-           columns = c(7:12), 
-           groupColumn = 2,
+#| fig-width: 12
+#| fig-height: 10
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
            scale = "uniminmax",
-           alphaLines = 0.2,
+           alphaLines = 0.25,
            boxplot = TRUE, 
-           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
-  facet_wrap(~ Region) + 
-  theme(axis.text.x = element_text(angle = 30, hjust=1))
+           title = "World Happiness Variables by Region") +
+  facet_wrap(~ Region, ncol = 2, labeller = label_wrap_gen(width = 20)) +
+  guides(color = "none") +
+  parallel_theme
 ```
 
 ```{r}
-wh <- wh %>%
-  select("Happiness score", c(7:12))
-parallelPlot(wh,
-             width = 320,
-             height = 250)
-```
+wh_parallel_interactive <- wh_parallel %>%
+  select(-Region)
 
-```{r}
-parallelPlot(wh,
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
              rotateTitle = TRUE)
 ```
 
 ```{r}
-parallelPlot(wh,
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
+             rotateTitle = TRUE)
+```
+
+```{r}
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
              continuousCS = "YlOrRd",
              rotateTitle = TRUE)
 ```
 
 ```{r}
-histoVisibility <- rep(TRUE, ncol(wh))
-parallelPlot(wh,
+histoVisibility <- rep(TRUE, ncol(wh_parallel_interactive))
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
              rotateTitle = TRUE,
              histoVisibility = histoVisibility)
 ```

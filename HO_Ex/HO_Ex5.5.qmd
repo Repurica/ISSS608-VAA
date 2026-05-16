@@ -12,6 +12,7 @@ format: html
 
 ```{r}
 pacman::p_load(treemap, treemapify, tidyverse)
+knitr::opts_chunk$set(fig.width = 10, fig.height = 7, out.width = "100%")
 ```
 
 ```{r}
@@ -51,7 +52,7 @@ treemap(realis2018_selected,
         index=c("Planning Region", "Planning Area", "Project Name"),
         vSize="Total Unit Sold",
         vColor="Median Unit Price ($ psm)",
-        title="Resale Condominium by Planning Region and Area, 2017",
+        title="Resale Condominium by Planning Region and Area, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
@@ -62,7 +63,7 @@ treemap(realis2018_selected,
         vSize="Total Unit Sold",
         vColor="Median Unit Price ($ psm)",
         type = "value",
-        title="Resale Condominium by Planning Region and Area, 2017",
+        title="Resale Condominium by Planning Region and Area, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
@@ -74,7 +75,7 @@ treemap(realis2018_selected,
         vColor="Median Unit Price ($ psm)",
         type="value",
         palette="RdYlBu", 
-        title="Resale Condominium by Planning Region and Area, 2017",
+        title="Resale Condominium by Planning Region and Area, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
@@ -86,7 +87,7 @@ treemap(realis2018_selected,
         vColor="Median Unit Price ($ psm)",
         type="manual",
         palette="RdYlBu", 
-        title="Resale Condominium by Planning Region and Area, 2017",
+        title="Resale Condominium by Planning Region and Area, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
@@ -98,7 +99,7 @@ treemap(realis2018_selected,
         vColor="Median Unit Price ($ psm)",
         type="manual",
         palette="Blues", 
-        title="Resale Condominium by Planning Region and Area, 2017",
+        title="Resale Condominium by Planning Region and Area, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
@@ -111,7 +112,7 @@ treemap(realis2018_selected,
         type="manual",
         palette="Blues", 
         algorithm = "squarified",
-        title="Resale Condominium by Planning Region and Area, 2017",
+        title="Resale Condominium by Planning Region and Area, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
@@ -125,7 +126,7 @@ treemap(realis2018_selected,
         palette="Blues", 
         algorithm = "pivotSize",
         sortID = "Median Transacted Price",
-        title="Resale Condominium by Planning Region and Area, 2017",
+        title="Resale Condominium by Planning Region and Area, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```
@@ -189,7 +190,7 @@ tm <- treemap(realis2018_summarised,
         vSize="Total Unit Sold",
         vColor="Median Unit Price ($ psm)",
         type="value",
-        title="Private Residential Property Sold, 2017",
+        title="Private Residential Property Sold, 2018",
         title.legend = "Median Unit Price (S$ per sq. m)"
         )
 ```

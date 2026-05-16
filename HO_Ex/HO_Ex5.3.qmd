@@ -12,6 +12,7 @@ format: html
 
 ```{r}
 pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
+knitr::opts_chunk$set(fig.width = 10, fig.height = 8, out.width = "100%")
 ```
 
 ```{r}
@@ -25,19 +26,26 @@ row.names(wh) <- wh$Country
 ```{r}
 wh1 <- dplyr::select(wh, c(3, 7:12))
 wh_matrix <- data.matrix(wh)
+
+# Shorter display names improve heatmap label readability.
+wh_heatmap_matrix <- wh_matrix[, -c(1, 2, 4, 5)]
+colnames(wh_heatmap_matrix) <- c(
+  "Score", "Dystopia", "GDP", "Social",
+  "Life exp.", "Freedom", "Generosity", "Corruption"
+)
 ```
 
 ```{r}
-wh_heatmap <- heatmap(wh_matrix,
+wh_heatmap <- heatmap(wh_heatmap_matrix,
                       Rowv=NA, Colv=NA)
 ```
 
 ```{r}
-wh_heatmap <- heatmap(wh_matrix)
+wh_heatmap <- heatmap(wh_heatmap_matrix)
 ```
 
 ```{r}
-wh_heatmap <- heatmap(wh_matrix,
+wh_heatmap <- heatmap(wh_heatmap_matrix,
                       scale="column",
                       cexRow = 0.6, 
                       cexCol = 0.8,
@@ -49,30 +57,30 @@ heatmaply(mtcars)
 ```
 
 ```{r}
-heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
+heatmaply(wh_heatmap_matrix)
 ```
 
 ```{r}
-heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
+heatmaply(wh_heatmap_matrix,
           scale = "column")
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
+heatmaply(normalize(wh_heatmap_matrix))
 ```
 
 ```{r}
-heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
+heatmaply(percentize(wh_heatmap_matrix))
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+heatmaply(normalize(wh_heatmap_matrix),
           dist_method = "euclidean",
           hclust_method = "ward.D")
 ```
 
 ```{r}
-wh_d <- dist(normalize(wh_matrix[, -c(1, 2, 4, 5)]), method = "euclidean")
+wh_d <- dist(normalize(wh_heatmap_matrix), method = "euclidean")
 stats::as.dendrogram(hclust(wh_d, method = "average"))
 ```
 
@@ -83,48 +91,50 @@ plot(num_k)
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+heatmaply(normalize(wh_heatmap_matrix),
           dist_method = "euclidean",
           hclust_method = "average",
           k_row = 3)
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+heatmaply(normalize(wh_heatmap_matrix),
           seriate = "OLO")
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+heatmaply(normalize(wh_heatmap_matrix),
           seriate = "GW")
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+heatmaply(normalize(wh_heatmap_matrix),
           seriate = "mean")
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+heatmaply(normalize(wh_heatmap_matrix),
           seriate = "none")
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+heatmaply(normalize(wh_heatmap_matrix),
           seriate = "none",
           colors = Blues)
 ```
 
 ```{r}
-heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
-          Colv=NA,
+heatmaply(normalize(wh_heatmap_matrix),
+          Colv = NA,
           seriate = "none",
           colors = Blues,
           k_row = 5,
-          margins = c(NA,200,60,NA),
-          fontsize_row = 4,
-          fontsize_col = 5,
-          main="World Happiness Score and Variables by Country, 2018 \nDataTransformation using Normalise Method",
+          margins = c(80, 200, 60, 120),
+          fontsize_row = 6,
+          fontsize_col = 9,
+          width = 900,
+          height = 900,
+          main = "World Happiness Score and Variables by Country, 2018\nData Transformation using Normalise Method",
           xlab = "World Happiness Indicators",
           ylab = "World Countries"
           )
