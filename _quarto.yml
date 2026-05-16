@@ -7,7 +7,32 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
+      - text: "HO_Ex"
+        menu:
+          - href: HO_Ex/HO_Ex1.qmd
+            text: "Hands-on Exercise 1"
+          - href: HO_Ex/HO_Ex2.qmd
+            text: "Hands-on Exercise 2"
+          - href: HO_Ex/HO_Ex3.qmd
+            text: "Hands-on Exercise 3"
+          - href: HO_Ex/HO_Ex4.qmd
+            text: "Hands-on Exercise 4"
+          - href: HO_Ex/HO_Ex5.1.qmd
+            text: "Hands-on Exercise 5.1"
+          - href: HO_Ex/HO_Ex5.2.qmd
+            text: "Hands-on Exercise 5.2"
+          - href: HO_Ex/HO_Ex5.3.qmd
+            text: "Hands-on Exercise 5.3"
+          - href: HO_Ex/HO_Ex5.4.qmd
+            text: "Hands-on Exercise 5.4"
+          - href: HO_Ex/HO_Ex5.5.qmd
+            text: "Hands-on Exercise 5.5"
+      - text: "TH_Ex"
+        menu:
+          - href: TH_Ex/TH_Ex1.qmd
+            text: "Take-home Exercise 1"
+      - href: about.qmd
+        text: About
 
   sidebar:
     style: docked
@@ -15,7 +40,34 @@ website:
     contents:
       - section: "HO_Ex"
         contents:
-          - auto: "HO_Ex/*.qmd"
+          - href: HO_Ex/HO_Ex1.qmd
+            text: "Hands-on Exercise 1"
+          - href: HO_Ex/HO_Ex2.qmd
+            text: "Hands-on Exercise 2"
+          - href: HO_Ex/HO_Ex3.qmd
+            text: "Hands-on Exercise 3"
+          - href: HO_Ex/HO_Ex4.qmd
+            text: "Hands-on Exercise 4"
+          - href: HO_Ex/HO_Ex5.1.qmd
+            text: "Hands-on Exercise 5.1"
+          - href: HO_Ex/HO_Ex5.2.qmd
+            text: "Hands-on Exercise 5.2"
+          - href: HO_Ex/HO_Ex5.3.qmd
+            text: "Hands-on Exercise 5.3"
+          - href: HO_Ex/HO_Ex5.4.qmd
+            text: "Hands-on Exercise 5.4"
+          - href: HO_Ex/HO_Ex5.5.qmd
+            text: "Hands-on Exercise 5.5"
+      - section: "TH_Ex"
+        contents:
+          - section: "Take-home Exercise 1"
+            contents:
+              - href: TH_Ex/TH_Ex1.qmd
+                text: "Overview"
+              - href: TH_Ex/TH_Ex1_report.qmd
+                text: "Report"
+              - href: TH_Ex/TH_Ex1_slides.qmd
+                text: "Slides"
 
 format:
   html:

@@ -1,0 +1,147 @@
+---
+title: "Hands-on Exercise 5.4: Visual Multivariate Analysis with Parallel Coordinates Plot"
+author: "Cao Jinming"
+date: "16 May 2026"
+date-modified: "last-modified"
+execute:
+  eval: true
+  echo: true
+  warning: false
+format: html
+---
+
+```{r}
+pacman::p_load(GGally, parallelPlot, tidyverse)
+```
+
+```{r}
+wh <- read_csv("../data/r4va/WHData-2018.csv")
+
+# Shorter display names keep the parallel-coordinate axes readable.
+wh_parallel <- wh %>%
+  transmute(
+    Region,
+    Score = `Happiness score`,
+    GDP = `GDP per capita`,
+    Social = `Social support`,
+    `Life exp.` = `Healthy life expectancy`,
+    Freedom = `Freedom to make life choices`,
+    Generosity,
+    Corruption = `Perceptions of corruption`
+  )
+
+parallel_theme <- theme_minimal(base_size = 9) +
+  theme(
+    axis.text.x = element_text(angle = 35, hjust = 1),
+    legend.position = "bottom",
+    legend.text = element_text(size = 7),
+    legend.title = element_text(size = 8),
+    strip.text = element_text(size = 7),
+    plot.title = element_text(size = 12, face = "bold")
+  )
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 6
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8) +
+  parallel_theme
+```
+
+```{r}
+#| fig-width: 10
+#| fig-height: 7
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
+           scale = "uniminmax",
+           alphaLines = 0.25,
+           boxplot = TRUE, 
+           title = "Parallel Coordinates Plot of World Happiness Variables") +
+  parallel_theme
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
+           scale = "uniminmax",
+           alphaLines = 0.25,
+           boxplot = TRUE, 
+           title = "World Happiness Variables by Region") +
+  facet_wrap(~ Region, ncol = 2, labeller = label_wrap_gen(width = 20)) +
+  guides(color = "none") +
+  parallel_theme
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
+           scale = "uniminmax",
+           alphaLines = 0.25,
+           boxplot = TRUE, 
+           title = "World Happiness Variables by Region") +
+  facet_wrap(~ Region, ncol = 2, labeller = label_wrap_gen(width = 20)) +
+  guides(color = "none") +
+  parallel_theme
+```
+
+```{r}
+#| fig-width: 12
+#| fig-height: 10
+#| out-width: "100%"
+ggparcoord(data = wh_parallel, 
+           columns = 2:8, 
+           groupColumn = "Region",
+           scale = "uniminmax",
+           alphaLines = 0.25,
+           boxplot = TRUE, 
+           title = "World Happiness Variables by Region") +
+  facet_wrap(~ Region, ncol = 2, labeller = label_wrap_gen(width = 20)) +
+  guides(color = "none") +
+  parallel_theme
+```
+
+```{r}
+wh_parallel_interactive <- wh_parallel %>%
+  select(-Region)
+
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
+             rotateTitle = TRUE)
+```
+
+```{r}
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
+             rotateTitle = TRUE)
+```
+
+```{r}
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
+             continuousCS = "YlOrRd",
+             rotateTitle = TRUE)
+```
+
+```{r}
+histoVisibility <- rep(TRUE, ncol(wh_parallel_interactive))
+parallelPlot(wh_parallel_interactive,
+             width = 900,
+             height = 520,
+             rotateTitle = TRUE,
+             histoVisibility = histoVisibility)
+```
