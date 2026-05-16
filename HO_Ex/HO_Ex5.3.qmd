@@ -1,58 +1,40 @@
 ---
-title: "Hands-on Exercise 7: Visual Multivariate Analysis with Heatmap"
+title: "Hands-on Exercise 5.3: Visual Multivariate Analysis with Heatmap"
 author: "Cao Jinming"
 date: "16 May 2026"
 date-modified: "last-modified"
 execute:
-  eval: false
+  eval: true
   echo: true
   warning: false
 format: html
 ---
 
-Source chapter: [Visual Multivariate Analysis with Heatmap](https://r4va.netlify.app/chap14).
-
-The code below follows the source chapter order. Data paths are rewritten for this repository because the exercise file lives inside `HO_Ex/`.
-
-## Code block 1
-
 ```{r}
 pacman::p_load(seriation, dendextend, heatmaply, tidyverse)
 ```
-
-## Code block 2
 
 ```{r}
 wh <- read_csv("../data/r4va/WHData-2018.csv")
 ```
 
-## Code block 3
-
 ```{r}
 row.names(wh) <- wh$Country
 ```
-
-## Code block 4
 
 ```{r}
 wh1 <- dplyr::select(wh, c(3, 7:12))
 wh_matrix <- data.matrix(wh)
 ```
 
-## Code block 5
-
 ```{r}
 wh_heatmap <- heatmap(wh_matrix,
                       Rowv=NA, Colv=NA)
 ```
 
-## Code block 6
-
 ```{r}
 wh_heatmap <- heatmap(wh_matrix)
 ```
-
-## Code block 7
 
 ```{r}
 wh_heatmap <- heatmap(wh_matrix,
@@ -62,38 +44,26 @@ wh_heatmap <- heatmap(wh_matrix,
                       margins = c(10, 4))
 ```
 
-## Code block 8
-
 ```{r}
 heatmaply(mtcars)
 ```
 
-## Code block 9
-
 ```{r}
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 ```
-
-## Code block 10
 
 ```{r}
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
           scale = "column")
 ```
 
-## Code block 11
-
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
 
-## Code block 12
-
 ```{r}
 heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
 ```
-
-## Code block 13
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -101,22 +71,16 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           hclust_method = "ward.D")
 ```
 
-## Code block 14
-
 ```{r}
 wh_d <- dist(normalize(wh_matrix[, -c(1, 2, 4, 5)]), method = "euclidean")
-dend_expend(wh_d)[[3]]
+stats::as.dendrogram(hclust(wh_d, method = "average"))
 ```
-
-## Code block 15
 
 ```{r}
 wh_clust <- hclust(wh_d, method = "average")
 num_k <- find_k(wh_clust)
 plot(num_k)
 ```
-
-## Code block 16
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
@@ -125,43 +89,31 @@ heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           k_row = 3)
 ```
 
-## Code block 17
-
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "OLO")
 ```
-
-## Code block 18
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "GW")
 ```
 
-## Code block 19
-
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "mean")
 ```
-
-## Code block 20
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "none")
 ```
 
-## Code block 21
-
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
           seriate = "none",
           colors = Blues)
 ```
-
-## Code block 22
 
 ```{r}
 heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),

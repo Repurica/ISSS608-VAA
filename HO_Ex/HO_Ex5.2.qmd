@@ -1,56 +1,38 @@
 ---
-title: "Hands-on Exercise 6: Visual Correlation Analysis"
+title: "Hands-on Exercise 5.2: Visual Correlation Analysis"
 author: "Cao Jinming"
 date: "16 May 2026"
 date-modified: "last-modified"
 execute:
-  eval: false
+  eval: true
   echo: true
   warning: false
 format: html
 ---
 
-Source chapter: [Visual Correlation Analysis](https://r4va.netlify.app/chap06).
-
-The code below follows the source chapter order. Data paths are rewritten for this repository because the exercise file lives inside `HO_Ex/`.
-
-## Code block 1
-
 ```{r}
 pacman::p_load(corrplot, ggstatsplot, tidyverse)
 ```
-
-## Code block 2
 
 ```{r}
 wine <- read_csv("../data/r4va/wine_quality.csv")
 ```
 
-## Code block 3
-
 ```{r}
 pairs(wine[,1:11])
 ```
-
-## Code block 4
 
 ```{r}
 pairs(wine[,2:12])
 ```
 
-## Code block 5
-
 ```{r}
 pairs(wine[,2:12], upper.panel = NULL)
 ```
 
-## Code block 6
-
 ```{r}
 pairs(wine[,2:12], lower.panel = NULL)
 ```
-
-## Code block 7
 
 ```{r}
 panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...) {
@@ -68,15 +50,11 @@ pairs(wine[,2:12],
       upper.panel = panel.cor)
 ```
 
-## Code block 8
-
 ```{r}
 ggstatsplot::ggcorrmat(
   data = wine, 
   cor.vars = 1:11)
 ```
-
-## Code block 9
 
 ```{r}
 ggstatsplot::ggcorrmat(
@@ -90,16 +68,12 @@ ggstatsplot::ggcorrmat(
 )
 ```
 
-## Code block 10
-
 ```{r}
 ggplot.component = list(
     theme(text=element_text(size=5),
       axis.text.x = element_text(size = 8),
       axis.text.y = element_text(size = 8)))
 ```
-
-## Code block 11
 
 ```{r}
 grouped_ggcorrmat(
@@ -121,34 +95,24 @@ grouped_ggcorrmat(
 )
 ```
 
-## Code block 12
-
 ```{r}
 wine.cor <- cor(wine[, 1:11])
 ```
 
-## Code block 13
-
 ```{r}
 corrplot(wine.cor)
 ```
-
-## Code block 14
 
 ```{r}
 corrplot(wine.cor, 
          method = "ellipse")
 ```
 
-## Code block 15
-
 ```{r}
 corrplot(wine.cor, 
          method = "ellipse", 
          type="lower")
 ```
-
-## Code block 16
 
 ```{r}
 corrplot(wine.cor, 
@@ -158,7 +122,14 @@ corrplot(wine.cor,
          tl.col = "black")
 ```
 
-## Code block 17
+```{r}
+corrplot.mixed(wine.cor, 
+               lower = "ellipse", 
+               upper = "number",
+               tl.pos = "lt",
+               diag = "l",
+               tl.col = "black")
+```
 
 ```{r}
 corrplot.mixed(wine.cor, 
@@ -169,24 +140,9 @@ corrplot.mixed(wine.cor,
                tl.col = "black")
 ```
 
-## Code block 18
-
 ```{r}
-corrplot.mixed(wine.cor, 
-               lower = "ellipse", 
-               upper = "number",
-               tl.pos = "lt",
-               diag = "l",
-               tl.col = "black")
+wine.sig = cor.mtest(wine[, 1:11], conf.level= .95)
 ```
-
-## Code block 19
-
-```{r}
-wine.sig = cor.mtest(wine.cor, conf.level= .95)
-```
-
-## Code block 20
 
 ```{r}
 corrplot(wine.cor,
@@ -199,8 +155,6 @@ corrplot(wine.cor,
          sig.level = .05)
 ```
 
-## Code block 21
-
 ```{r}
 corrplot.mixed(wine.cor, 
                lower = "ellipse", 
@@ -210,8 +164,6 @@ corrplot.mixed(wine.cor,
                order="AOE",
                tl.col = "black")
 ```
-
-## Code block 22
 
 ```{r}
 corrplot(wine.cor, 

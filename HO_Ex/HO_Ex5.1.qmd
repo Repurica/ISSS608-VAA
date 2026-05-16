@@ -1,33 +1,23 @@
 ---
-title: "Hands-on Exercise 5: Building Ternary Plot with R"
+title: "Hands-on Exercise 5.1: Building Ternary Plot with R"
 author: "Cao Jinming"
 date: "16 May 2026"
 date-modified: "last-modified"
 execute:
-  eval: false
+  eval: true
   echo: true
   warning: false
 format: html
 ---
 
-Source chapter: [Building Ternary Plot with R](https://r4va.netlify.app/chap13).
-
-The code below follows the source chapter order. Data paths are rewritten for this repository because the exercise file lives inside `HO_Ex/`.
-
-## Code block 1
-
 ```{r}
 pacman::p_load(plotly, ggtern, tidyverse)
 ```
-
-## Code block 2
 
 ```{r}
 #Reading the data into R environment
 pop_data <- read_csv("../data/r4va/respopagsex2000to2018_tidy.csv")
 ```
-
-## Code block 3
 
 ```{r}
 #Deriving the young, economy active and old measures
@@ -42,15 +32,11 @@ agpop_mutated <- pop_data %>%
   filter(TOTAL > 0)
 ```
 
-## Code block 4
-
 ```{r}
 #Building the static ternary plot
 ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
   geom_point()
 ```
-
-## Code block 5
 
 ```{r}
 #Building the static ternary plot
@@ -59,8 +45,6 @@ ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
   labs(title="Population structure, 2015") +
   theme_rgbw()
 ```
-
-## Code block 6
 
 ```{r}
 # reusable function for creating annotation object
