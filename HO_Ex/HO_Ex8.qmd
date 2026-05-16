@@ -1,0 +1,121 @@
+---
+title: "Hands-on Exercise 8: Visual Multivariate Analysis with Parallel Coordinates Plot"
+author: "Cao Jinming"
+date: "16 May 2026"
+date-modified: "last-modified"
+execute:
+  eval: false
+  echo: true
+  warning: false
+format: html
+---
+
+Source chapter: [Visual Multivariate Analysis with Parallel Coordinates Plot](https://r4va.netlify.app/chap15).
+
+The code below follows the source chapter order. Data paths are rewritten for this repository because the exercise file lives inside `HO_Ex/`.
+
+## Code block 1
+
+```{r}
+pacman::p_load(GGally, parallelPlot, tidyverse)
+```
+
+## Code block 2
+
+```{r}
+wh <- read_csv("../data/r4va/WHData-2018.csv")
+```
+
+## Code block 3
+
+```{r}
+ggparcoord(data = wh, 
+           columns = c(7:12))
+```
+
+## Code block 4
+
+```{r}
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Parallel Coordinates Plot of World Happines Variables")
+```
+
+## Code block 5
+
+```{r}
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region)
+```
+
+## Code block 6
+
+```{r}
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30))
+```
+
+## Code block 7
+
+```{r}
+ggparcoord(data = wh, 
+           columns = c(7:12), 
+           groupColumn = 2,
+           scale = "uniminmax",
+           alphaLines = 0.2,
+           boxplot = TRUE, 
+           title = "Multiple Parallel Coordinates Plots of World Happines Variables by Region") +
+  facet_wrap(~ Region) + 
+  theme(axis.text.x = element_text(angle = 30, hjust=1))
+```
+
+## Code block 8
+
+```{r}
+wh <- wh %>%
+  select("Happiness score", c(7:12))
+parallelPlot(wh,
+             width = 320,
+             height = 250)
+```
+
+## Code block 9
+
+```{r}
+parallelPlot(wh,
+             rotateTitle = TRUE)
+```
+
+## Code block 10
+
+```{r}
+parallelPlot(wh,
+             continuousCS = "YlOrRd",
+             rotateTitle = TRUE)
+```
+
+## Code block 11
+
+```{r}
+histoVisibility <- rep(TRUE, ncol(wh))
+parallelPlot(wh,
+             rotateTitle = TRUE,
+             histoVisibility = histoVisibility)
+```

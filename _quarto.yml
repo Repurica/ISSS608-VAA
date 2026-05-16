@@ -17,6 +17,16 @@ website:
             text: "Hands-on Exercise 3"
           - href: HO_Ex/HO_Ex4.qmd
             text: "Hands-on Exercise 4"
+          - href: HO_Ex/HO_Ex5.qmd
+            text: "Hands-on Exercise 5"
+          - href: HO_Ex/HO_Ex6.qmd
+            text: "Hands-on Exercise 6"
+          - href: HO_Ex/HO_Ex7.qmd
+            text: "Hands-on Exercise 7"
+          - href: HO_Ex/HO_Ex8.qmd
+            text: "Hands-on Exercise 8"
+          - href: HO_Ex/HO_Ex9.qmd
+            text: "Hands-on Exercise 9"
       - text: "TH_Ex"
         menu:
           - href: TH_Ex/TH_Ex1.qmd
@@ -38,6 +48,16 @@ website:
             text: "Hands-on Exercise 3"
           - href: HO_Ex/HO_Ex4.qmd
             text: "Hands-on Exercise 4"
+          - href: HO_Ex/HO_Ex5.qmd
+            text: "Hands-on Exercise 5"
+          - href: HO_Ex/HO_Ex6.qmd
+            text: "Hands-on Exercise 6"
+          - href: HO_Ex/HO_Ex7.qmd
+            text: "Hands-on Exercise 7"
+          - href: HO_Ex/HO_Ex8.qmd
+            text: "Hands-on Exercise 8"
+          - href: HO_Ex/HO_Ex9.qmd
+            text: "Hands-on Exercise 9"
       - section: "TH_Ex"
         contents:
           - section: "Take-home Exercise 1"
