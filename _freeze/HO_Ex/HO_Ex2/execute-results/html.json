@@ -1,0 +1,15 @@
+{
+  "hash": "73c3d0dda50ab0efd4e30eb72e3a686a",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"HO_Ex2 - Beyond ggplot2 Fundamentals\"\ndate: \"25 April 2026\"\ndate-modified: \"last-modified\"\nformat: html\nexecute: \n  echo: true\n  eval: true\n  warning: false\n  freeze: true\n---\n\n\n:::: panel-tabset\n## the plot\n123\n\n::: {.cell}\n\n```{.r .cell-code}\n321\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 321\n```\n\n\n:::\n:::\n\n## the code\n::: {style=\"font-size: 1.4em\"}\n\n123\n:::\n:::: panel-tabset\n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
