@@ -1,36 +1,4 @@
 ---
-<<<<<<< HEAD
-title: "HO_Ex2 - Beyond ggplot2 Fundamentals"
-date: "25 April 2026"
-date-modified: "last-modified"
-format: html
-execute: 
-  echo: true
-  eval: true
-  warning: false
-  freeze: true
----
-
-
-:::: panel-tabset
-## the plot
-123
-```{r}
-
-321
-
-```
-## the code
-::: {style="font-size: 1.4em"}
-
-123
-:::
-:::: panel-tabset
-
-
-
-
-=======
 title: "Hands-on Exercise 2"
 author: "Cao Jinming"
 date: "02 May 2026"
@@ -186,4 +154,3 @@ p3 + inset_element(p2,
 patchwork <- (p1 / p2) | p3
 patchwork & theme_economist()
 ```
->>>>>>> 57e3ae1338b62265a66bf0172754f84868d9d01d

@@ -53,7 +53,11 @@ load_th1_motor <- function() {
       claim_flag = total_claims > 0,
       profit = total_premium - total_incurred,
       loss_ratio = if_else(total_premium > 0, total_incurred / total_premium, NA_real_),
-      loss_ratio_cap = pmin(loss_ratio, quantile(loss_ratio, 0.99, na.rm = TRUE), na.rm = TRUE),
+      loss_ratio_cap = if_else(
+        is.na(loss_ratio),
+        NA_real_,
+        pmin(loss_ratio, quantile(loss_ratio, 0.99, na.rm = TRUE))
+      ),
       claim_frequency = if_else(total_exposure > 0, total_claims / total_exposure, NA_real_),
       severity = if_else(total_claims > 0, total_incurred / total_claims, NA_real_),
       driver_age_band = cut(driver_age, breaks = c(17, 25, 35, 45, 55, 65, Inf),
@@ -73,12 +77,12 @@ portfolio_summary <- function(df, group_var) {
       incurred = sum(total_incurred, na.rm = TRUE),
       claims = sum(total_claims, na.rm = TRUE),
       profit = sum(profit, na.rm = TRUE),
+      high_loss_rate = mean(loss_ratio > 1, na.rm = TRUE),
+      p95_loss_ratio = quantile(loss_ratio, 0.95, na.rm = TRUE),
       loss_ratio = incurred / premium,
       claim_frequency = claims / exposure,
       avg_premium = premium / exposure,
-      avg_severity = incurred / claims,
-      high_loss_rate = mean(loss_ratio > 1, na.rm = TRUE),
-      p95_loss_ratio = quantile(loss_ratio, 0.95, na.rm = TRUE),
+      avg_severity = if_else(claims > 0, incurred / claims, NA_real_),
       .groups = "drop"
     )
 }
