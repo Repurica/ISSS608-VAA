@@ -31,6 +31,8 @@ website:
         menu:
           - href: TH_Ex/TH_Ex1.qmd
             text: "Take-home Exercise 1"
+      - text: "VAST"
+        href: VAST/kickstarter.qmd
       - href: about.qmd
         text: About
 

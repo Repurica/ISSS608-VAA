@@ -633,5 +633,89 @@
       "Take-home Exercise 1",
       "Report"
     ]
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html",
+    "href": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html",
+    "title": "MC2 Data description",
+    "section": "",
+    "text": "This folder contains the data for the anomalous postings originating from Tenant Thread.\nThis data is based on the actions taken by the employees and personal agents inside of Tenant Thread.\n\n\nThe anomalous posting is sent to SaidIt by John Windward on May 17, 2046 at 4:21am.\n\n\n\nMC2_Data.json – A timeline of events gathered by the internal systems. org_chart.json – The organization chart of Tenant Thread including people and departments. Compatible with networkX node_link_graph.\n\n\n\nDerived from data:\n{\n   \"description\": \"string\",\n   \"events\": [\n      {\n         \"short_name\": \"string\",\n         \"parties\": \"array\",\n         \"when\": \"float\",\n         \"details\": \"object\",\n         \"id\": \"int\"\n      }\n   ]\n}\n\n\n\nThe data is structured as a timeline. The events are ordered and indicate the operations performed by people, autonomous agents and office systems.\nField meanings: - short_name: The action taken - parties: Which people/agents/systems were involved. - when: Unix timestamp. The challenge occurs in May 2046, and timestamps should be in that month. - details: Additional information about the action taken. The contents vary by the contents of short_name. - id: A unique id for each record."
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#key-event",
+    "href": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#key-event",
+    "title": "MC2 Data description",
+    "section": "",
+    "text": "The anomalous posting is sent to SaidIt by John Windward on May 17, 2046 at 4:21am."
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#files",
+    "href": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#files",
+    "title": "MC2 Data description",
+    "section": "",
+    "text": "MC2_Data.json – A timeline of events gathered by the internal systems. org_chart.json – The organization chart of Tenant Thread including people and departments. Compatible with networkX node_link_graph."
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#schema",
+    "href": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#schema",
+    "title": "MC2 Data description",
+    "section": "",
+    "text": "Derived from data:\n{\n   \"description\": \"string\",\n   \"events\": [\n      {\n         \"short_name\": \"string\",\n         \"parties\": \"array\",\n         \"when\": \"float\",\n         \"details\": \"object\",\n         \"id\": \"int\"\n      }\n   ]\n}"
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#data-description",
+    "href": "VAST/VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data description.html#data-description",
+    "title": "MC2 Data description",
+    "section": "",
+    "text": "The data is structured as a timeline. The events are ordered and indicate the operations performed by people, autonomous agents and office systems.\nField meanings: - short_name: The action taken - parties: Which people/agents/systems were involved. - when: Unix timestamp. The challenge occurs in May 2046, and timestamps should be in that month. - details: Additional information about the action taken. The contents vary by the contents of short_name. - id: A unique id for each record."
+  },
+  {
+    "objectID": "VAST/kickstarter.html",
+    "href": "VAST/kickstarter.html",
+    "title": "kickstarter",
+    "section": "",
+    "text": "pacman::p_load(tidyverse, jsonlite)\n\n\nmcl_data&lt;-fromJSON(\"VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/MC1_final_00.json\")"
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html",
+    "href": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html",
+    "title": "MC1 — Multi-Agent Crisis Data",
+    "section": "",
+    "text": "This folder contains the data for the multi-agent LLM crisis for our corporate communications team. There was an exposé, an communications embargo around a company merger, and social media firestorm recently. The data is based on 7 interacting AI agents who communicate across multiple channels and make real-time decisions about what to publish and what not to.\n\n\n\n\n\n\n\n\n\n\n\n\nFile\nDescription\nSize\n\n\n\n\nMC1_final.json\nMC1 dataset containing the two weeks leading up to the release of information\n\n\n\nREADME.md\nThis documentation file\n—\n\n\n\n\nEach JSON file follows this structure.\n{\n  \"rounds\": [\n    {\n      \"hour\": \"2046-05-17 9 AM\",\n      \"environment_context\": {\n        \"event_narrative\": \"...\",\n        \"market_snapshot\": { ... },\n        \"media_events\": [ ... ],\n        \"agents_unavailable\": [ ... ]\n      },\n      \"agent_outputs\": [\n        {\n          \"agent_id\": \"legal_agent\",\n          \"internal_state\": {\n            \"reacting\": \"...\",\n            \"rationalizing\": \"...\",\n            \"deliberating\": \"...\"\n          },\n          \"communications\": [\n            {\n              \"message_id\": \"...\",\n              \"channel\": \"comms_huddle\",\n              \"message_text\": \"...\",\n            }\n          ],\n          \"declared_action\": \"MONITORING\"\n        }\n      ]\n    }\n  ]\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAgent ID\nRole\nLabel\nSeniority\nDescription\n\n\n\n\nlegal_agent\nlegal\nLegal-Agent\nSenior\nGeneral legal counsel.\n\n\nquality_agent\nplatform_trust\nPlatform-Trust\nSenior\nVP of Platform Trust & Safety.\n\n\nsocial_manager_agent\nsocial_manager\nSocial-Manager\nSenior\nManages Social messaging\n\n\npr_agent\npr\nPR-Agent\nSenior\nHead of Communications and Public Relationships\n\n\nintern_agent\nintern\nIntern\nJunior\nGeneral intern.\n\n\npr_intern_agent\npr_intern\nPR-Intern\nJunior\nPR team intern with access to the official TenantThread Flex account.\n\n\njudge_eval_agent\njudge\nJudge\nCompliance officer\nEvaluates risks, mediates conflicts, provides compliance guidance.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nEntity\nDescription\n\n\n\n\nTenantThread\nThe company being acquired whose records are being presented. A proptech platform providing tenant management tools including the controversial “Retention Optimizer” scoring system.\n\n\nCivicLoom\nThe company acquiring TenantThread in the merger. Identity is embargoed until 6:00 PM on the crisis day.\n\n\nProject HarborCrest\nInternal codename for the CivicLoom–TenantThread merger.\n\n\nResidentIQ\nAnother PropTech company being discussed in the SaltWind Journal.\n\n\nSaltWind Journal\nLocal newspaper running stories on the property tech industry.\n\n\nOceanCrunch\nTech media outlet. Sarah Kowalski is a reporter.\n\n\n@HorizonMgmt, @PinnacleResidential\nMajor clients of TennatThread.\n\n\n\n\n\n\n\nAgents have many different communications channels available to them, for agent-to-agent, agent-to-person and agent-to-other-system actions. Agents are also empowered to publish social media post with minimal oversight."
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#overview",
+    "href": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#overview",
+    "title": "MC1 — Multi-Agent Crisis Data",
+    "section": "",
+    "text": "This folder contains the data for the multi-agent LLM crisis for our corporate communications team. There was an exposé, an communications embargo around a company merger, and social media firestorm recently. The data is based on 7 interacting AI agents who communicate across multiple channels and make real-time decisions about what to publish and what not to."
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#files",
+    "href": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#files",
+    "title": "MC1 — Multi-Agent Crisis Data",
+    "section": "",
+    "text": "File\nDescription\nSize\n\n\n\n\nMC1_final.json\nMC1 dataset containing the two weeks leading up to the release of information\n\n\n\nREADME.md\nThis documentation file\n—\n\n\n\n\nEach JSON file follows this structure.\n{\n  \"rounds\": [\n    {\n      \"hour\": \"2046-05-17 9 AM\",\n      \"environment_context\": {\n        \"event_narrative\": \"...\",\n        \"market_snapshot\": { ... },\n        \"media_events\": [ ... ],\n        \"agents_unavailable\": [ ... ]\n      },\n      \"agent_outputs\": [\n        {\n          \"agent_id\": \"legal_agent\",\n          \"internal_state\": {\n            \"reacting\": \"...\",\n            \"rationalizing\": \"...\",\n            \"deliberating\": \"...\"\n          },\n          \"communications\": [\n            {\n              \"message_id\": \"...\",\n              \"channel\": \"comms_huddle\",\n              \"message_text\": \"...\",\n            }\n          ],\n          \"declared_action\": \"MONITORING\"\n        }\n      ]\n    }\n  ]\n}"
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#agents",
+    "href": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#agents",
+    "title": "MC1 — Multi-Agent Crisis Data",
+    "section": "",
+    "text": "Agent ID\nRole\nLabel\nSeniority\nDescription\n\n\n\n\nlegal_agent\nlegal\nLegal-Agent\nSenior\nGeneral legal counsel.\n\n\nquality_agent\nplatform_trust\nPlatform-Trust\nSenior\nVP of Platform Trust & Safety.\n\n\nsocial_manager_agent\nsocial_manager\nSocial-Manager\nSenior\nManages Social messaging\n\n\npr_agent\npr\nPR-Agent\nSenior\nHead of Communications and Public Relationships\n\n\nintern_agent\nintern\nIntern\nJunior\nGeneral intern.\n\n\npr_intern_agent\npr_intern\nPR-Intern\nJunior\nPR team intern with access to the official TenantThread Flex account.\n\n\njudge_eval_agent\njudge\nJudge\nCompliance officer\nEvaluates risks, mediates conflicts, provides compliance guidance."
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#companies-codenames",
+    "href": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#companies-codenames",
+    "title": "MC1 — Multi-Agent Crisis Data",
+    "section": "",
+    "text": "Entity\nDescription\n\n\n\n\nTenantThread\nThe company being acquired whose records are being presented. A proptech platform providing tenant management tools including the controversial “Retention Optimizer” scoring system.\n\n\nCivicLoom\nThe company acquiring TenantThread in the merger. Identity is embargoed until 6:00 PM on the crisis day.\n\n\nProject HarborCrest\nInternal codename for the CivicLoom–TenantThread merger.\n\n\nResidentIQ\nAnother PropTech company being discussed in the SaltWind Journal.\n\n\nSaltWind Journal\nLocal newspaper running stories on the property tech industry.\n\n\nOceanCrunch\nTech media outlet. Sarah Kowalski is a reporter.\n\n\n@HorizonMgmt, @PinnacleResidential\nMajor clients of TennatThread."
+  },
+  {
+    "objectID": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#communication-channels",
+    "href": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html#communication-channels",
+    "title": "MC1 — Multi-Agent Crisis Data",
+    "section": "",
+    "text": "Agents have many different communications channels available to them, for agent-to-agent, agent-to-person and agent-to-other-system actions. Agents are also empowered to publish social media post with minimal oversight."
   }
 ]

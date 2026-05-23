@@ -1,0 +1,12 @@
+---
+title: "kickstarter"
+format: html
+---
+
+```{R}
+pacman::p_load(tidyverse, jsonlite)
+```
+
+```{r}
+mcl_data<-fromJSON("VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/MC1_final_00.json")
+```

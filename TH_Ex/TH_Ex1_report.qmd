@@ -23,8 +23,8 @@ The report is organised in the same reproducible style as the senior reference r
 
 Two analytical definitions are used throughout the report:
 
-- **Profitability** is measured by aggregate `profit = total_premium - total_incurred` and by aggregate `loss_ratio = total_incurred / total_premium`. Lower loss ratio indicates better underwriting profitability before expenses.
-- **Volatility** is measured by claim occurrence, claim frequency, capped individual loss ratio, high-loss policy rate, and upper-tail loss-ratio behaviour.
+-   **Profitability** is measured by aggregate `profit = total_premium - total_incurred` and by aggregate `loss_ratio = total_incurred / total_premium`. Lower loss ratio indicates better underwriting profitability before expenses.
+-   **Volatility** is measured by claim occurrence, claim frequency, capped individual loss ratio, high-loss policy rate, and upper-tail loss-ratio behaviour.
 
 The main question is: *which portfolio segments show weaker profitability or higher volatility, and are those patterns visually and statistically defensible?*
 
@@ -66,13 +66,13 @@ glimpse(motor)
 
 The imported portfolio contains policy-year records from 2022 to 2024. Several analytical variables are derived before plotting:
 
-- `profit`: premium minus incurred loss.
-- `loss_ratio`: incurred loss divided by premium.
-- `loss_ratio_cap`: individual loss ratio capped at the 99th percentile so that plots remain readable.
-- `claim_flag`: whether the policy-year has at least one claim.
-- `claim_frequency`: claim count divided by exposure.
-- `severity`: incurred loss per claim, defined only for claim records.
-- `driver_age_band` and `vehicle_age_band`: age bands for segment-level comparison.
+-   `profit`: premium minus incurred loss.
+-   `loss_ratio`: incurred loss divided by premium.
+-   `loss_ratio_cap`: individual loss ratio capped at the 99th percentile so that plots remain readable.
+-   `claim_flag`: whether the policy-year has at least one claim.
+-   `claim_frequency`: claim count divided by exposure.
+-   `severity`: incurred loss per claim, defined only for claim records.
+-   `driver_age_band` and `vehicle_age_band`: age bands for segment-level comparison.
 
 ```{r}
 portfolio_size <- tibble(
@@ -440,9 +440,9 @@ This bubble chart is a screening tool. Brands in the upper-right area combine hi
 
 The dataset is large and skewed, so visual signals are validated with non-parametric and categorical tests:
 
-- **Kruskal-Wallis tests** check whether capped individual loss ratio differs across segment groups.
-- **Chi-square tests** check whether claim occurrence differs across segment groups.
-- **Spearman correlations** check monotonic relationships between numerical variables and capped loss ratio.
+-   **Kruskal-Wallis tests** check whether capped individual loss ratio differs across segment groups.
+-   **Chi-square tests** check whether claim occurrence differs across segment groups.
+-   **Spearman correlations** check monotonic relationships between numerical variables and capped loss ratio.
 
 ```{r}
 test_vars <- c(
@@ -497,26 +497,26 @@ Most statistical tests are significant because the dataset is large. The practic
 
 ## Key findings
 
-1. **The portfolio is profitable in aggregate but exposed to a claim-driven upper tail.** Most records have no claim, but a minority of claim records strongly affects incurred loss and loss ratio.
-2. **Profitability weakens in 2024.** The year-level loss ratio increases, showing that incurred losses grew faster than premium.
-3. **Policy type is the clearest segmentation signal.** `COMP_N` and `COMP_E` have higher loss ratios than third-party-focused products, suggesting that comprehensive cover requires closer pricing and claim review.
-4. **Bonus score, fuel type, circulation area, and payment frequency show meaningful differences.** These variables help explain portfolio heterogeneity, but each should be interpreted together with exposure and product mix.
-5. **Volatility is concentrated in tails, not medians.** Boxplots, capped loss-ratio charts, and the brand bubble chart show why underwriting decisions should account for high-loss policy-year behaviour.
+1.  **The portfolio is profitable in aggregate but exposed to a claim-driven upper tail.** Most records have no claim, but a minority of claim records strongly affects incurred loss and loss ratio.
+2.  **Profitability weakens in 2024.** The year-level loss ratio increases, showing that incurred losses grew faster than premium.
+3.  **Policy type is the clearest segmentation signal.** `COMP_N` and `COMP_E` have higher loss ratios than third-party-focused products, suggesting that comprehensive cover requires closer pricing and claim review.
+4.  **Bonus score, fuel type, circulation area, and payment frequency show meaningful differences.** These variables help explain portfolio heterogeneity, but each should be interpreted together with exposure and product mix.
+5.  **Volatility is concentrated in tails, not medians.** Boxplots, capped loss-ratio charts, and the brand bubble chart show why underwriting decisions should account for high-loss policy-year behaviour.
 
 ## Recommendations
 
-- Monitor `COMP_N` and `COMP_E` separately from the rest of the portfolio because their loss-ratio and volatility profile differs materially.
-- Use the 2024 deterioration as an early-warning signal and review whether it is caused by exposure growth, claim frequency, severity, or a changing product mix.
-- Treat high-loss brand, fuel, and circulation-area segments as screening candidates for deeper underwriting review rather than as immediate pricing rules.
-- Extend the analysis with external enrichment, such as regional traffic density, weather exposure, or vehicle repair-cost indicators, to better explain the root causes of underperformance.
+-   Monitor `COMP_N` and `COMP_E` separately from the rest of the portfolio because their loss-ratio and volatility profile differs materially.
+-   Use the 2024 deterioration as an early-warning signal and review whether it is caused by exposure growth, claim frequency, severity, or a changing product mix.
+-   Treat high-loss brand, fuel, and circulation-area segments as screening candidates for deeper underwriting review rather than as immediate pricing rules.
+-   Extend the analysis with external enrichment, such as regional traffic density, weather exposure, or vehicle repair-cost indicators, to better explain the root causes of underperformance.
 
 ## References
 
-- ISSS608 Take-home Exercise 1 brief: <https://isss608-ay2025-26apr.netlify.app/th_ex/th_ex1>
-- Motor insurance portfolio data: <https://data.mendeley.com/datasets/sw4jmdb2sm/1>
-- Senior reference examples used for report structure and visual-analytics presentation style:
-  - Kylie Tan Jing Yi: <https://akalestale.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
-  - Toa Zi Ying Janet: <https://janettoaisss608.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
-  - Lew Ying Zhen Serena: <https://isss608-spacebun.netlify.app/take-home_ex/take-home_ex1/take-home_ex1>
-  - Seng Jing Yi: <https://jingyi-vaa.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
-  - Jaya George: <https://isss608-jayageorge.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
+-   ISSS608 Take-home Exercise 1 brief: <https://isss608-ay2025-26apr.netlify.app/th_ex/th_ex1>
+-   Motor insurance portfolio data: <https://data.mendeley.com/datasets/sw4jmdb2sm/1>
+-   Senior reference examples used for report structure and visual-analytics presentation style:
+    -   Kylie Tan Jing Yi: <https://akalestale.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
+    -   Toa Zi Ying Janet: <https://janettoaisss608.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
+    -   Lew Ying Zhen Serena: <https://isss608-spacebun.netlify.app/take-home_ex/take-home_ex1/take-home_ex1>
+    -   Seng Jing Yi: <https://jingyi-vaa.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
+    -   Jaya George: <https://isss608-jayageorge.netlify.app/take-home_ex/take-home_ex01/take-home_ex01>
