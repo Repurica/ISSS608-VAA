@@ -674,7 +674,7 @@
     "href": "VAST/kickstarter.html",
     "title": "kickstarter",
     "section": "",
-    "text": "pacman::p_load(tidyverse, jsonlite)\n\n\nmcl_data&lt;-fromJSON(\"VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/MC1_final_00.json\")"
+    "text": "pacman::p_load(tidyverse, jsonlite)\n\n\nmc1_data&lt;-fromJSON(\"VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/MC1_final_00.json\")\n\n\nwrite_rds(mc1_data,\"Data/MC1/mc1_data.rds\")\n\n\nmc2_data&lt;-fromJSON(\"VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/MC2 data.json\")\norg_chart &lt;- fromJSON(\"VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/org_chart.json\")\n\n\nmc2_df = as.data.frame(mc2_data$events)"
   },
   {
     "objectID": "VAST/VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/mc1 data description.html",
