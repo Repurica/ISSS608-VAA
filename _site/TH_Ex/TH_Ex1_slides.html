@@ -222,9 +222,9 @@ Cao Jinming
 </div>
 </div>
 <ul>
-<li>Source: Mendeley Data motor insurance portfolio.</li>
-<li>Tools: <code>tidyverse</code>, <code>ggplot2</code>, <code>readxl</code>, <code>patchwork</code>.</li>
-<li>Derived measures: profit, loss ratio, claim flag, frequency, severity.</li>
+<li>Data: large policy-year portfolio from Mendeley motor insurance data.</li>
+<li>Measures: profit, loss ratio, claim flag, frequency, and severity.</li>
+<li>Use: discover profitability and volatility patterns across segments.</li>
 </ul>
 <aside class="notes">
 <p>The dataset is large enough for both descriptive and statistical analysis. I use reproducible R code so the results can be regenerated from the raw Mendeley files.</p>
@@ -243,7 +243,11 @@ Cao Jinming
 <section id="portfolio-trend" class="slide level2">
 <h2>Portfolio trend</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="864" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="864" class="r-stretch"><ul>
+<li>Premium and incurred losses both increased over time.</li>
+<li>Incurred loss growth needs to be compared against premium growth.</li>
+</ul>
+<aside class="notes">
 <p>Premium and incurred losses both increase from 2022 to 2024. The key question is whether premium growth is sufficient to absorb the increasing loss burden.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -260,7 +264,11 @@ Cao Jinming
 <section id="loss-ratio-worsened-in-2024" class="slide level2">
 <h2>Loss ratio worsened in 2024</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="768" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="768" class="r-stretch"><ul>
+<li>2024 has a visibly higher aggregate loss ratio.</li>
+<li>This suggests weaker underwriting profitability before expenses.</li>
+</ul>
+<aside class="notes">
 <p>The 2024 loss ratio is visibly higher than 2022 and 2023. This points to declining profitability, assuming expenses are not separately modelled here.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -277,7 +285,11 @@ Cao Jinming
 <section id="univariate-numerical-skewness" class="slide level2">
 <h2>Univariate: numerical skewness</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"><ul>
+<li>Numerical variables are strongly right-skewed.</li>
+<li>Most records have no incurred loss, but a small upper tail is material.</li>
+</ul>
+<aside class="notes">
 <p>The most important univariate pattern is claim zero-inflation and right skewness. Many records have no incurred loss, but a small number of records have very large loss ratios.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -294,7 +306,11 @@ Cao Jinming
 <section id="univariate-categorical-concentration" class="slide level2">
 <h2>Univariate: categorical concentration</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><ul>
+<li>Portfolio mix is concentrated in selected policy and bonus-score categories.</li>
+<li>High loss ratios should be read together with exposure size.</li>
+</ul>
+<aside class="notes">
 <p>Policy mix and bonus-score mix are concentrated. This affects interpretation: a smaller category can have a high loss ratio, but it must be evaluated against exposure size.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -311,7 +327,11 @@ Cao Jinming
 <section id="policy-type-and-profitability" class="slide level2">
 <h2>Policy type and profitability</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="864" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="864" class="r-stretch"><ul>
+<li>Comprehensive products have the highest aggregate loss ratios.</li>
+<li><code>COMP_N</code> is the main policy type requiring closer review.</li>
+</ul>
+<aside class="notes">
 <p>Comprehensive products, especially COMP_N, have the highest aggregate loss ratios. Third-party-only coverage has the lowest ratio in this comparison.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -328,7 +348,11 @@ Cao Jinming
 <section id="volatility-by-policy-type" class="slide level2">
 <h2>Volatility by policy type</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="864" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="864" class="r-stretch"><ul>
+<li>Capped boxplots reveal spread without extreme outliers dominating the view.</li>
+<li>Volatility is mainly driven by right-tail policy-year losses.</li>
+</ul>
+<aside class="notes">
 <p>The boxplot uses capped loss ratio to make the spread visible. The large right tail confirms that volatility is a material feature of this portfolio.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -345,7 +369,11 @@ Cao Jinming
 <section id="other-risk-related-segments" class="slide level2">
 <h2>Other risk-related segments</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"><ul>
+<li>Bonus score, fuel type, and circulation area show visible loss-ratio differences.</li>
+<li>These segments are screening candidates, not final causal conclusions.</li>
+</ul>
+<aside class="notes">
 <p>Bonus score, fuel type, and circulation area all show visible differences in aggregate loss ratio. These are useful candidates for underwriting or pricing review.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -411,6 +439,10 @@ Cao Jinming
 </table>
 </div>
 </div>
+<ul>
+<li>Segment differences are statistically significant in the selected tests.</li>
+<li>Because the dataset is large, practical meaning still depends on visual effect size and exposure.</li>
+</ul>
 <aside class="notes">
 <p>The tests show statistically significant differences across the selected segments. Because the dataset is large, I interpret these results together with visual effect size and exposure.</p>
 <style type="text/css">
@@ -428,7 +460,11 @@ Cao Jinming
 <section id="brand-level-screen" class="slide level2">
 <h2>Brand-level screen</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="864" class="r-stretch"><aside class="notes">
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="864" class="r-stretch"><ul>
+<li>Upper-right brands combine higher claim frequency and higher loss ratio.</li>
+<li>Larger bubbles should be prioritised because they represent more exposure.</li>
+</ul>
+<aside class="notes">
 <p>The brand chart is exploratory. It helps identify candidates for follow-up analysis, but it should not be treated as a final causal conclusion.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {

@@ -188,6 +188,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
   </li>
   <li class="nav-item">
+    <a class="nav-link" href="../VAST/kickstarter.html"> 
+<span class="menu-text">VAST</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
@@ -400,7 +404,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 22, 2026</p>
+      <p class="date-modified">May 23, 2026</p>
     </div>
   </div>
     
@@ -601,7 +605,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </table>
 </div>
 </div>
-<p>The portfolio is profitable in aggregate before expenses, but the aggregate result can hide segment-level volatility. The rest of the report therefore focuses on distributions, outliers, and segment comparisons rather than only aggregate totals.</p>
+<ul>
+<li>Portfolio is profitable in aggregate before expenses.</li>
+<li>Aggregate totals can hide segment-level volatility.</li>
+<li>The remaining analysis focuses on distributions, outliers, and segment comparisons.</li>
+</ul>
 </section>
 <section id="data-quality-checks" class="level3" data-number="2.4">
 <h3 data-number="2.4" class="anchored" data-anchor-id="data-quality-checks"><span class="header-section-number">2.4</span> Data quality checks</h3>
@@ -673,7 +681,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </table>
 </div>
 </div>
-<p>Most core premium and incurred-loss variables are complete. The largest missing count is <code>severity</code>, which is expected because severity is only defined when claims exist. Missing <code>fuel_type</code>, <code>vehicle_value</code>, <code>vehicle_age</code>, and <code>age_driving_licence</code> records are retained instead of deleted because deletion would unnecessarily reduce exposure and distort portfolio totals.</p>
+<ul>
+<li>Core premium and incurred-loss variables are mostly complete.</li>
+<li><code>severity</code> has many missing values because it is defined only for claim records.</li>
+<li>Missing <code>fuel_type</code>, <code>vehicle_value</code>, <code>vehicle_age</code>, and <code>age_driving_licence</code> records are retained to avoid distorting exposure totals.</li>
+</ul>
 </section>
 </section>
 <section id="task-1-univariate-visual-analytics" class="level2" data-number="3">
@@ -844,6 +856,10 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </table>
 </div>
 </div>
+<ul>
+<li>Numerical profiles show large gaps between medians, means, upper percentiles, and maximum values.</li>
+<li>This confirms that distributional plots are needed before comparing portfolio segments.</li>
+</ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>motor <span class="sc">|&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(driver_age, vehicle_age, vehicle_value,</span>
@@ -866,7 +882,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>The numerical distributions are strongly skewed. Incurred loss and individual loss ratio are especially zero-inflated because most policy-year records have no claim. For this reason, medians, percentiles, and capped distributions are more informative than means alone.</p>
+<ul>
+<li>Numerical variables are strongly right-skewed.</li>
+<li>Incurred loss and individual loss ratio are zero-inflated because most records have no claim.</li>
+<li>Medians, percentiles, and capped distributions are more reliable than means alone.</li>
+</ul>
 </section>
 <section id="claim-count-distribution" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="claim-count-distribution"><span class="header-section-number">3.2</span> Claim count distribution</h3>
@@ -897,7 +917,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>The claim-count distribution confirms that volatility comes from a minority of claim records. This is typical for insurance portfolios: a small upper tail can strongly affect aggregate profitability.</p>
+<ul>
+<li>Most policy-year records have zero claims.</li>
+<li>Portfolio volatility comes from a small minority of claim records.</li>
+<li>The upper tail can materially affect aggregate profitability.</li>
+</ul>
 </section>
 <section id="categorical-variables" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="categorical-variables"><span class="header-section-number">3.3</span> Categorical variables</h3>
@@ -936,7 +960,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>The portfolio is not evenly distributed across categories. Some policy types, payment frequencies, and bonus-score classes dominate record count and exposure. This matters for interpretation: a small segment with a high loss ratio may be operationally important, but it must be judged together with exposure size and claim count.</p>
+<ul>
+<li>Portfolio records are concentrated in selected categories.</li>
+<li>Policy type, payment frequency, and bonus score dominate much of the exposure.</li>
+<li>Small high-loss-ratio segments should be interpreted together with exposure size and claim count.</li>
+</ul>
 </section>
 </section>
 <section id="task-2-bivariate-visual-analytics-and-validation" class="level2" data-number="4">
@@ -1031,6 +1059,10 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </table>
 </div>
 </div>
+<ul>
+<li>The year-level table summarises exposure, premium, incurred loss, profit, and loss ratio.</li>
+<li>It provides the numeric baseline for the temporal trend plot.</li>
+</ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>trend_amount <span class="ot">&lt;-</span> yearly <span class="sc">|&gt;</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, <span class="at">Premium =</span> premium, <span class="at">Incurred =</span> incurred, <span class="at">Profit =</span> profit) <span class="sc">|&gt;</span></span>
@@ -1065,7 +1097,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>Premium and incurred losses both increase over time, but incurred losses grow faster in 2024. The year-level loss ratio therefore rises in 2024, indicating weaker profitability even though the overall portfolio remains profitable before expenses.</p>
+<ul>
+<li>Premium and incurred losses both increase over time.</li>
+<li>Incurred losses grow faster in 2024.</li>
+<li>The 2024 loss-ratio rise indicates weaker profitability despite positive aggregate profit.</li>
+</ul>
 </section>
 <section id="policy-type-comprehensive-covers-carry-higher-risk" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="policy-type-comprehensive-covers-carry-higher-risk"><span class="header-section-number">4.2</span> Policy type: comprehensive covers carry higher risk</h3>
@@ -1188,6 +1224,10 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </table>
 </div>
 </div>
+<ul>
+<li>The policy-type table ranks products by aggregate loss ratio.</li>
+<li>It separates product profitability from individual policy-year spread.</li>
+</ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>policy_lr <span class="ot">&lt;-</span> policy_tbl <span class="sc">|&gt;</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">policy_type =</span> <span class="fu">fct_reorder</span>(policy_type, loss_ratio)) <span class="sc">|&gt;</span></span>
@@ -1225,7 +1265,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p><code>COMP_N</code> has the weakest aggregate profitability among policy types, followed by <code>COMP_E</code>. The boxplot shows that the typical policy-year still has a zero or low loss ratio, so the adverse result is driven by claim frequency and the upper tail rather than by every policy in the segment performing poorly.</p>
+<ul>
+<li><code>COMP_N</code> has the weakest aggregate profitability, followed by <code>COMP_E</code>.</li>
+<li>Most policy-year records still have zero or low individual loss ratios.</li>
+<li>Weak segment performance is driven by claim frequency and upper-tail losses, not by every policy performing poorly.</li>
+</ul>
 </section>
 <section id="segment-scan-bonus-score-fuel-type-and-circulation-area" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="segment-scan-bonus-score-fuel-type-and-circulation-area"><span class="header-section-number">4.3</span> Segment scan: bonus score, fuel type, and circulation area</h3>
@@ -1262,7 +1306,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>Non-good bonus scores, diesel vehicles, urban circulation, and non-annual payment frequencies show higher loss ratios. These signals are useful for underwriting review, but they should not be treated as causal by themselves because product mix, exposure, and vehicle profile can differ across the same segments.</p>
+<ul>
+<li>Non-good bonus scores, diesel vehicles, urban circulation, and non-annual payment frequencies show higher loss ratios.</li>
+<li>These segments are useful screening candidates for underwriting review.</li>
+<li>The visual signals are not causal by themselves because exposure, product mix, and vehicle profiles can differ.</li>
+</ul>
 </section>
 <section id="driver-and-vehicle-age-bands" class="level3" data-number="4.4">
 <h3 data-number="4.4" class="anchored" data-anchor-id="driver-and-vehicle-age-bands"><span class="header-section-number">4.4</span> Driver and vehicle age bands</h3>
@@ -1293,7 +1341,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>Age effects are visible but not perfectly monotonic. Driver age and vehicle age should therefore be interpreted as segmentation variables rather than as standalone explanations of risk.</p>
+<ul>
+<li>Driver-age and vehicle-age bands show visible differences in loss ratio.</li>
+<li>The patterns are not perfectly monotonic.</li>
+<li>Age bands are useful segmentation variables, but not standalone explanations of risk.</li>
+</ul>
 </section>
 <section id="policy-type-by-year-heatmap" class="level3" data-number="4.5">
 <h3 data-number="4.5" class="anchored" data-anchor-id="policy-type-by-year-heatmap"><span class="header-section-number">4.5</span> Policy type by year heatmap</h3>
@@ -1326,7 +1378,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>The heatmap connects the temporal and policy-type analyses. It helps identify whether a weak policy segment is persistent or concentrated in a specific calendar year.</p>
+<ul>
+<li>The heatmap links year-level deterioration with policy-type differences.</li>
+<li>Darker cells flag policy-year combinations needing closer monitoring.</li>
+<li>The view helps separate persistent segment weakness from one-year deterioration.</li>
+</ul>
 </section>
 <section id="brand-level-volatility-screen" class="level3" data-number="4.6">
 <h3 data-number="4.6" class="anchored" data-anchor-id="brand-level-volatility-screen"><span class="header-section-number">4.6</span> Brand-level volatility screen</h3>
@@ -1374,7 +1430,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </div>
 </div>
 </div>
-<p>This bubble chart is a screening tool. Brands in the upper-right area combine higher claim frequency and higher loss ratio. They should be prioritised for deeper investigation, especially when the exposure bubble is large.</p>
+<ul>
+<li>The bubble chart screens brands by claim frequency, loss ratio, and exposure.</li>
+<li>Upper-right brands combine higher claim frequency and higher loss ratio.</li>
+<li>Large upper-right bubbles should be prioritised for deeper investigation.</li>
+</ul>
 </section>
 <section id="statistical-validation" class="level3" data-number="4.7">
 <h3 data-number="4.7" class="anchored" data-anchor-id="statistical-validation"><span class="header-section-number">4.7</span> Statistical validation</h3>
@@ -1526,6 +1586,10 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </table>
 </div>
 </div>
+<ul>
+<li>Group-difference tests provide statistical support for the visual segment comparisons.</li>
+<li>The p-values should be interpreted with exposure and practical effect size because the dataset is large.</li>
+</ul>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>corr_tbl <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"driver_age"</span>, <span class="st">"vehicle_age"</span>, <span class="st">"age_driving_licence"</span>, <span class="st">"vehicle_value"</span>,</span>
@@ -1589,7 +1653,11 @@ $ vehicle_age_band            &lt;fct&gt; 21+, 21+, 21+, 21+, 21+, 21+, 21+, 8-1
 </table>
 </div>
 </div>
-<p>Most statistical tests are significant because the dataset is large. The practical interpretation should therefore come from the combination of visual difference, exposure, effect direction, and business relevance. The strongest numerical monotonic relationship is with total premium, while most demographic and vehicle correlations are small.</p>
+<ul>
+<li>Most tests are statistically significant because the dataset is large.</li>
+<li>Practical interpretation should combine visual difference, exposure, effect direction, and business relevance.</li>
+<li>Total premium has the strongest monotonic relationship with capped loss ratio; most demographic and vehicle correlations are small.</li>
+</ul>
 </section>
 </section>
 <section id="key-findings" class="level2" data-number="5">

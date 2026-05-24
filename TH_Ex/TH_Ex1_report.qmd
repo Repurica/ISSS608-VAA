@@ -103,7 +103,9 @@ portfolio_size <- tibble(
 kable(portfolio_size)
 ```
 
-The portfolio is profitable in aggregate before expenses, but the aggregate result can hide segment-level volatility. The rest of the report therefore focuses on distributions, outliers, and segment comparisons rather than only aggregate totals.
+-   Portfolio is profitable in aggregate before expenses.
+-   Aggregate totals can hide segment-level volatility.
+-   The remaining analysis focuses on distributions, outliers, and segment comparisons.
 
 ### Data quality checks
 
@@ -118,7 +120,9 @@ missing_tbl <- motor |>
 kable(missing_tbl, digits = 4)
 ```
 
-Most core premium and incurred-loss variables are complete. The largest missing count is `severity`, which is expected because severity is only defined when claims exist. Missing `fuel_type`, `vehicle_value`, `vehicle_age`, and `age_driving_licence` records are retained instead of deleted because deletion would unnecessarily reduce exposure and distort portfolio totals.
+-   Core premium and incurred-loss variables are mostly complete.
+-   `severity` has many missing values because it is defined only for claim records.
+-   Missing `fuel_type`, `vehicle_value`, `vehicle_age`, and `age_driving_licence` records are retained to avoid distorting exposure totals.
 
 ## Task 1: Univariate visual analytics
 
@@ -152,6 +156,9 @@ num_profile <- motor |>
 kable(num_profile, digits = 2)
 ```
 
+-   Numerical profiles show large gaps between medians, means, upper percentiles, and maximum values.
+-   This confirms that distributional plots are needed before comparing portfolio segments.
+
 ```{r, fig.width=11, fig.height=7}
 motor |>
   select(driver_age, vehicle_age, vehicle_value,
@@ -168,7 +175,9 @@ motor |>
   )
 ```
 
-The numerical distributions are strongly skewed. Incurred loss and individual loss ratio are especially zero-inflated because most policy-year records have no claim. For this reason, medians, percentiles, and capped distributions are more informative than means alone.
+-   Numerical variables are strongly right-skewed.
+-   Incurred loss and individual loss ratio are zero-inflated because most records have no claim.
+-   Medians, percentiles, and capped distributions are more reliable than means alone.
 
 ### Claim count distribution
 
@@ -193,7 +202,9 @@ motor |>
   )
 ```
 
-The claim-count distribution confirms that volatility comes from a minority of claim records. This is typical for insurance portfolios: a small upper tail can strongly affect aggregate profitability.
+-   Most policy-year records have zero claims.
+-   Portfolio volatility comes from a small minority of claim records.
+-   The upper tail can materially affect aggregate profitability.
 
 ### Categorical variables
 
@@ -226,7 +237,9 @@ motor |>
   )
 ```
 
-The portfolio is not evenly distributed across categories. Some policy types, payment frequencies, and bonus-score classes dominate record count and exposure. This matters for interpretation: a small segment with a high loss ratio may be operationally important, but it must be judged together with exposure size and claim count.
+-   Portfolio records are concentrated in selected categories.
+-   Policy type, payment frequency, and bonus score dominate much of the exposure.
+-   Small high-loss-ratio segments should be interpreted together with exposure size and claim count.
 
 ## Task 2: Bivariate visual analytics and validation
 
@@ -238,6 +251,9 @@ Bivariate analysis compares profitability and volatility across time and major r
 yearly <- portfolio_summary(motor, year)
 kable(yearly, digits = 3)
 ```
+
+-   The year-level table summarises exposure, premium, incurred loss, profit, and loss ratio.
+-   It provides the numeric baseline for the temporal trend plot.
 
 ```{r, fig.width=11, fig.height=5}
 trend_amount <- yearly |>
@@ -267,7 +283,9 @@ trend_lr <- yearly |>
 trend_amount + trend_lr + plot_layout(widths = c(1.4, 1))
 ```
 
-Premium and incurred losses both increase over time, but incurred losses grow faster in 2024. The year-level loss ratio therefore rises in 2024, indicating weaker profitability even though the overall portfolio remains profitable before expenses.
+-   Premium and incurred losses both increase over time.
+-   Incurred losses grow faster in 2024.
+-   The 2024 loss-ratio rise indicates weaker profitability despite positive aggregate profit.
 
 ### Policy type: comprehensive covers carry higher risk
 
@@ -277,6 +295,9 @@ policy_tbl <- portfolio_summary(motor, policy_type) |>
 
 kable(policy_tbl, digits = 3)
 ```
+
+-   The policy-type table ranks products by aggregate loss ratio.
+-   It separates product profitability from individual policy-year spread.
 
 ```{r, fig.width=11, fig.height=6}
 policy_lr <- policy_tbl |>
@@ -309,7 +330,9 @@ policy_box <- motor |>
 policy_lr + policy_box
 ```
 
-`COMP_N` has the weakest aggregate profitability among policy types, followed by `COMP_E`. The boxplot shows that the typical policy-year still has a zero or low loss ratio, so the adverse result is driven by claim frequency and the upper tail rather than by every policy in the segment performing poorly.
+-   `COMP_N` has the weakest aggregate profitability, followed by `COMP_E`.
+-   Most policy-year records still have zero or low individual loss ratios.
+-   Weak segment performance is driven by claim frequency and upper-tail losses, not by every policy performing poorly.
 
 ### Segment scan: bonus score, fuel type, and circulation area
 
@@ -340,7 +363,9 @@ seg_long |>
   )
 ```
 
-Non-good bonus scores, diesel vehicles, urban circulation, and non-annual payment frequencies show higher loss ratios. These signals are useful for underwriting review, but they should not be treated as causal by themselves because product mix, exposure, and vehicle profile can differ across the same segments.
+-   Non-good bonus scores, diesel vehicles, urban circulation, and non-annual payment frequencies show higher loss ratios.
+-   These segments are useful screening candidates for underwriting review.
+-   The visual signals are not causal by themselves because exposure, product mix, and vehicle profiles can differ.
 
 ### Driver and vehicle age bands
 
@@ -365,7 +390,9 @@ bind_rows(age_driver, age_vehicle) |>
   theme(legend.position = "none")
 ```
 
-Age effects are visible but not perfectly monotonic. Driver age and vehicle age should therefore be interpreted as segmentation variables rather than as standalone explanations of risk.
+-   Driver-age and vehicle-age bands show visible differences in loss ratio.
+-   The patterns are not perfectly monotonic.
+-   Age bands are useful segmentation variables, but not standalone explanations of risk.
 
 ### Policy type by year heatmap
 
@@ -392,7 +419,9 @@ motor |>
   )
 ```
 
-The heatmap connects the temporal and policy-type analyses. It helps identify whether a weak policy segment is persistent or concentrated in a specific calendar year.
+-   The heatmap links year-level deterioration with policy-type differences.
+-   Darker cells flag policy-year combinations needing closer monitoring.
+-   The view helps separate persistent segment weakness from one-year deterioration.
 
 ### Brand-level volatility screen
 
@@ -434,7 +463,9 @@ brand_tbl |>
   )
 ```
 
-This bubble chart is a screening tool. Brands in the upper-right area combine higher claim frequency and higher loss ratio. They should be prioritised for deeper investigation, especially when the exposure bubble is large.
+-   The bubble chart screens brands by claim frequency, loss ratio, and exposure.
+-   Upper-right brands combine higher claim frequency and higher loss ratio.
+-   Large upper-right bubbles should be prioritised for deeper investigation.
 
 ### Statistical validation
 
@@ -477,6 +508,9 @@ validation_tbl <- bind_rows(kw_tbl, chi_tbl) |>
 kable(validation_tbl, digits = 2)
 ```
 
+-   Group-difference tests provide statistical support for the visual segment comparisons.
+-   The p-values should be interpreted with exposure and practical effect size because the dataset is large.
+
 ```{r}
 corr_tbl <- map_dfr(
   c("driver_age", "vehicle_age", "age_driving_licence", "vehicle_value",
@@ -493,7 +527,9 @@ corr_tbl <- map_dfr(
 kable(corr_tbl |> select(variable, spearman_rho, p_value_label), digits = 3)
 ```
 
-Most statistical tests are significant because the dataset is large. The practical interpretation should therefore come from the combination of visual difference, exposure, effect direction, and business relevance. The strongest numerical monotonic relationship is with total premium, while most demographic and vehicle correlations are small.
+-   Most tests are statistically significant because the dataset is large.
+-   Practical interpretation should combine visual difference, exposure, effect direction, and business relevance.
+-   Total premium has the strongest monotonic relationship with capped loss ratio; most demographic and vehicle correlations are small.
 
 ## Key findings
 
