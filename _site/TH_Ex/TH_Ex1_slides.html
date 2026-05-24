@@ -6,11 +6,11 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.25">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
 
   <meta name="author" content="Cao Jinming">
-  <meta name="dcterms.date" content="2026-05-24">
+  <meta name="dcterms.date" content="2026-05-20">
   <title>ISSS608-VAA – Take-home Exercise 1</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,6 +18,9 @@
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -30,7 +33,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-0fde88a82f0356838740f155f1088782.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto-0427d8d92a431aa6a6430e53ec02a470.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -124,6 +127,48 @@
       margin-right: 0; 
     }
   </style>
+  <style>
+  .reveal {
+    font-size: 30px;
+  }
+
+  .reveal h1.title {
+    font-size: 1.55em;
+  }
+
+  .reveal h2 {
+    font-size: 1.18em;
+    margin-bottom: 0.32em;
+  }
+
+  .reveal p,
+  .reveal li {
+    font-size: 0.78em;
+    line-height: 1.16;
+  }
+
+  .reveal ul,
+  .reveal ol {
+    margin-top: 0.28em;
+    margin-bottom: 0.28em;
+  }
+
+  .reveal table {
+    font-size: 0.62em;
+  }
+
+  .reveal .cell-output-display,
+  .reveal figure {
+    margin: 0.12em auto 0.26em;
+  }
+
+  .reveal .cell-output-display img {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 70vh !important;
+    object-fit: contain;
+  }
+  </style>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -141,42 +186,18 @@ Cao Jinming
 </div>
 </div>
 
-  <p class="date">2026-05-24</p>
+  <p class="date">2026-05-20</p>
 </section>
-<section id="contents" class="slide level2">
-<h2>Contents</h2>
-<ol type="1">
-<li>Analytical objective</li>
-<li>Data and derived measures</li>
-<li>Univariate discovery</li>
-<li>Bivariate findings</li>
-<li>Statistical validation</li>
-<li>Implications and next steps</li>
-</ol>
-<aside class="notes">
-<p>This presentation summarises the technical report. The focus is not only on dashboard-style reporting, but on using visual analytics to discover distributional patterns and potential drivers of profitability and volatility.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="analytical-objective" class="slide level2">
-<h2>Analytical objective</h2>
+<section id="project-objective" class="slide level2">
+<h2>Project objective</h2>
+<p><strong>Main question:</strong> Which motor insurance portfolio segments show weaker profitability or higher volatility, and are those patterns visually and statistically defensible?</p>
 <ul>
-<li>Explore numerical and categorical distributions.</li>
-<li>Investigate factors associated with profitability.</li>
-<li>Use visual evidence and statistical validation together.</li>
-<li>Treat extreme losses as part of volatility, not noise to ignore.</li>
+<li><strong>Profitability:</strong> <code>profit = total_premium - total_incurred</code>; <code>loss_ratio = total_incurred / total_premium</code>.</li>
+<li><strong>Volatility:</strong> claim occurrence, claim frequency, capped individual loss ratio, high-loss rate, and upper-tail behaviour.</li>
+<li><strong>Approach:</strong> combine univariate distribution checks, bivariate segment comparisons, and statistical validation.</li>
 </ul>
 <aside class="notes">
-<p>The assignment asks for both univariate and bivariate visual analytics. I define profitability through profit and loss ratio, and volatility through spread, claim occurrence, and extreme incurred-loss behaviour.</p>
+<p>This deck is aligned with the technical report objective. The goal is not only to describe the portfolio, but to identify where profitability and volatility risks are concentrated.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -189,9 +210,9 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="data-and-sandbox" class="slide level2">
-<h2>Data and sandbox</h2>
-<div class="cell">
+<section id="data-and-analytical-setup" class="slide level2">
+<h2>Data and analytical setup</h2>
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
@@ -202,32 +223,51 @@ Cao Jinming
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Records</td>
-<td style="text-align: left;">354140</td>
+<td style="text-align: left;">Policy-year records</td>
+<td style="text-align: left;">354,140</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Distinct insured IDs</td>
-<td style="text-align: left;">185678</td>
+<td style="text-align: left;">185,678</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Period</td>
-<td style="text-align: left;">2022-2023-2024</td>
+<td style="text-align: left;">Calendar years</td>
+<td style="text-align: left;">2022, 2023, 2024</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Original variables</td>
-<td style="text-align: left;">47</td>
+<td style="text-align: left;">Variables after derivation</td>
+<td style="text-align: left;">55</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Aggregate premium</td>
+<td style="text-align: left;">€105,079,669</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aggregate incurred loss</td>
+<td style="text-align: left;">€73,864,811</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Aggregate profit</td>
+<td style="text-align: left;">€31,214,859</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aggregate loss ratio</td>
+<td style="text-align: left;">70.3%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Claim-record share</td>
+<td style="text-align: left;">14.3%</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <ul>
-<li>Data: large policy-year portfolio from Mendeley motor insurance data.</li>
-<li>Measures: profit, loss ratio, claim flag, frequency, and severity.</li>
-<li>Use: discover profitability and volatility patterns across segments.</li>
+<li>The portfolio is profitable overall before expenses.</li>
+<li>Segment-level analysis is still needed because aggregate totals can hide volatility.</li>
 </ul>
 <aside class="notes">
-<p>The dataset is large enough for both descriptive and statistical analysis. I use reproducible R code so the results can be regenerated from the raw Mendeley files.</p>
+<p>The dataset is a large policy-year motor portfolio from the Mendeley source. Reusable R helper functions are shared with the report.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -240,15 +280,15 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="portfolio-trend" class="slide level2">
-<h2>Portfolio trend</h2>
+<section id="finding-1-profitability-weakened-in-2024" class="slide level2">
+<h2>Finding 1: profitability weakened in 2024</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-3-1.png" width="864" class="r-stretch"><ul>
-<li>Premium and incurred losses both increased over time.</li>
-<li>Incurred loss growth needs to be compared against premium growth.</li>
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-2-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><ul>
+<li>Loss ratio rises from about <strong>65.6%</strong> in 2022 to <strong>74.7%</strong> in 2024.</li>
+<li>This is an early-warning signal: incurred losses are growing faster than premium.</li>
 </ul>
 <aside class="notes">
-<p>Premium and incurred losses both increase from 2022 to 2024. The key question is whether premium growth is sufficient to absorb the increasing loss burden.</p>
+<p>The key message is not that the portfolio is loss-making. It remains profitable before expenses, but the margin is weakening in 2024.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -261,15 +301,16 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="loss-ratio-worsened-in-2024" class="slide level2">
-<h2>Loss ratio worsened in 2024</h2>
+<section id="finding-2-volatility-is-tail-driven" class="slide level2">
+<h2>Finding 2: volatility is tail-driven</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="768" class="r-stretch"><ul>
-<li>2024 has a visibly higher aggregate loss ratio.</li>
-<li>This suggests weaker underwriting profitability before expenses.</li>
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-3-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><ul>
+<li>Most policy-year records have no claims.</li>
+<li>A smaller positive-claim tail drives incurred loss and volatility.</li>
+<li>This justifies using capped loss ratio, claim frequency, and high-loss indicators.</li>
 </ul>
 <aside class="notes">
-<p>The 2024 loss ratio is visibly higher than 2022 and 2023. This points to declining profitability, assuming expenses are not separately modelled here.</p>
+<p>The univariate view supports the report’s focus on volatility: averages alone hide the small but material claim-producing tail.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -282,15 +323,16 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="univariate-numerical-skewness" class="slide level2">
-<h2>Univariate: numerical skewness</h2>
+<section id="finding-3-policy-type-is-the-strongest-signal" class="slide level2">
+<h2>Finding 3: policy type is the strongest signal</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"><ul>
-<li>Numerical variables are strongly right-skewed.</li>
-<li>Most records have no incurred loss, but a small upper tail is material.</li>
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-4-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><ul>
+<li><code>COMP_N</code> has the highest aggregate loss ratio, about <strong>93.9%</strong>.</li>
+<li><code>COMP_E</code> follows at about <strong>73.8%</strong>, and both comprehensive covers need separate monitoring.</li>
+<li>Most policy-year records remain low-loss; weak performance is concentrated in claim frequency and upper-tail outcomes.</li>
 </ul>
 <aside class="notes">
-<p>The most important univariate pattern is claim zero-inflation and right skewness. Many records have no incurred loss, but a small number of records have very large loss ratios.</p>
+<p>The blue line is the overall portfolio loss ratio. The red dashed line is the 100% break-even line before expenses.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -303,15 +345,15 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="univariate-categorical-concentration" class="slide level2">
-<h2>Univariate: categorical concentration</h2>
+<section id="finding-4-2024-comp_n-is-the-clearest-hotspot" class="slide level2">
+<h2>Finding 4: 2024 <code>COMP_N</code> is the clearest hotspot</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"><ul>
-<li>Portfolio mix is concentrated in selected policy and bonus-score categories.</li>
-<li>High loss ratios should be read together with exposure size.</li>
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-5-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><ul>
+<li><code>COMP_N</code> worsens across the period and reaches about <strong>102.4%</strong> in 2024.</li>
+<li><code>COMP_E</code> also rises in 2024, reinforcing separate comprehensive-cover monitoring.</li>
 </ul>
 <aside class="notes">
-<p>Policy mix and bonus-score mix are concentrated. This affects interpretation: a smaller category can have a high loss ratio, but it must be evaluated against exposure size.</p>
+<p>The heatmap makes the recommendation more specific: review comprehensive-cover performance, especially COMP_N in 2024.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -324,15 +366,15 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="policy-type-and-profitability" class="slide level2">
-<h2>Policy type and profitability</h2>
+<section id="finding-5-secondary-segment-signals" class="slide level2">
+<h2>Finding 5: secondary segment signals</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-7-1.png" width="864" class="r-stretch"><ul>
-<li>Comprehensive products have the highest aggregate loss ratios.</li>
-<li><code>COMP_N</code> is the main policy type requiring closer review.</li>
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-6-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><ul>
+<li>Non-good bonus scores, diesel vehicles, urban circulation, and shorter payment frequencies show weaker experience.</li>
+<li>These are screening variables, not standalone causal conclusions.</li>
 </ul>
 <aside class="notes">
-<p>Comprehensive products, especially COMP_N, have the highest aggregate loss ratios. Third-party-only coverage has the lowest ratio in this comparison.</p>
+<p>Exposure labels are important because segment materiality depends on both loss ratio and portfolio size.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -345,36 +387,16 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="volatility-by-policy-type" class="slide level2">
-<h2>Volatility by policy type</h2>
+<section id="finding-6-brand-level-volatility-screen" class="slide level2">
+<h2>Finding 6: brand-level volatility screen</h2>
 
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-8-1.png" width="864" class="r-stretch"><ul>
-<li>Capped boxplots reveal spread without extreme outliers dominating the view.</li>
-<li>Volatility is mainly driven by right-tail policy-year losses.</li>
+<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-7-1.png" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"><ul>
+<li>Upper-right brands combine higher claim frequency and higher loss ratio.</li>
+<li>Mitsubishi and Mazda have the highest aggregate loss ratios among brands with exposure at least 1,000.</li>
+<li>Large upper-right bubbles should be prioritised because they combine impact with enough exposure to matter.</li>
 </ul>
 <aside class="notes">
-<p>The boxplot uses capped loss ratio to make the spread visible. The large right tail confirms that volatility is a material feature of this portfolio.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="other-risk-related-segments" class="slide level2">
-<h2>Other risk-related segments</h2>
-
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-9-1.png" width="960" class="r-stretch"><ul>
-<li>Bonus score, fuel type, and circulation area show visible loss-ratio differences.</li>
-<li>These segments are screening candidates, not final causal conclusions.</li>
-</ul>
-<aside class="notes">
-<p>Bonus score, fuel type, and circulation area all show visible differences in aggregate loss ratio. These are useful candidates for underwriting or pricing review.</p>
+<p>This is an exploratory screen. It supports deeper investigation rather than immediate brand-level pricing action.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -389,13 +411,13 @@ Cao Jinming
 </section>
 <section id="statistical-validation" class="slide level2">
 <h2>Statistical validation</h2>
-<div class="cell">
+<div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <table class="caption-top">
 <thead>
 <tr class="header">
 <th style="text-align: left;">variable</th>
-<th style="text-align: left;">Kruskal</th>
+<th style="text-align: left;">Kruskal-Wallis</th>
 <th style="text-align: left;">Chi-square</th>
 </tr>
 </thead>
@@ -431,6 +453,11 @@ Cao Jinming
 <td style="text-align: left;">&lt;2e-16</td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;">payment_frequency</td>
+<td style="text-align: left;">&lt;2e-16</td>
+<td style="text-align: left;">&lt;2e-16</td>
+</tr>
+<tr class="even">
 <td style="text-align: left;">year</td>
 <td style="text-align: left;">&lt;2e-16</td>
 <td style="text-align: left;">&lt;2e-16</td>
@@ -440,11 +467,11 @@ Cao Jinming
 </div>
 </div>
 <ul>
-<li>Segment differences are statistically significant in the selected tests.</li>
-<li>Because the dataset is large, practical meaning still depends on visual effect size and exposure.</li>
+<li><code>policy_type</code> is the strongest validation signal across both tests.</li>
+<li>P-values support the visuals, but large-sample significance is not causal evidence.</li>
 </ul>
 <aside class="notes">
-<p>The tests show statistically significant differences across the selected segments. Because the dataset is large, I interpret these results together with visual effect size and exposure.</p>
+<p>The tests support group differences, but the report avoids treating p-values as sufficient evidence for pricing action.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -457,15 +484,18 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="brand-level-screen" class="slide level2">
-<h2>Brand-level screen</h2>
-
-<img data-src="TH_Ex1_slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="864" class="r-stretch"><ul>
-<li>Upper-right brands combine higher claim frequency and higher loss ratio.</li>
-<li>Larger bubbles should be prioritised because they represent more exposure.</li>
-</ul>
+<section id="key-findings" class="slide level2">
+<h2>Key findings</h2>
+<ol type="1">
+<li>The portfolio is profitable overall, but the margin is exposed to a small claim-producing tail.</li>
+<li>Profitability deteriorates in 2024: aggregate loss ratio rises from <strong>65.6%</strong> to <strong>74.7%</strong>.</li>
+<li>Policy type is the strongest signal; <code>COMP_N</code> reaches <strong>93.9%</strong> overall and <strong>102.4%</strong> in 2024.</li>
+<li>Bonus score, fuel type, circulation area, and payment frequency explain where weaker experience concentrates.</li>
+<li>Volatility is concentrated in claim frequency and upper-tail outcomes, not the typical record.</li>
+<li>Statistical tests support the visual signals, but the evidence remains observational and non-causal.</li>
+</ol>
 <aside class="notes">
-<p>The brand chart is exploratory. It helps identify candidates for follow-up analysis, but it should not be treated as a final causal conclusion.</p>
+<p>This slide condenses the report’s key findings and keeps them tied to the project objective: profitability and volatility discovery.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -478,17 +508,40 @@ Cao Jinming
           display:block!important;
       }</style></aside>
 </section>
-<section id="implications" class="slide level2">
-<h2>Implications</h2>
+<section id="recommendations" class="slide level2">
+<h2>Recommendations</h2>
 <ul>
-<li>Review premium adequacy for comprehensive products.</li>
-<li>Investigate 2024 deterioration in loss ratio.</li>
-<li>Use bonus score, fuel type, and circulation area as segmentation checks.</li>
-<li>Examine extreme losses separately from typical-policy behaviour.</li>
-<li>Validate any pricing action with exposure and mix-adjusted modelling.</li>
+<li><strong>Prioritise comprehensive-cover review:</strong> monitor <code>COMP_N</code> and <code>COMP_E</code>, especially 2024 <code>COMP_N</code>, before broad pricing changes.</li>
+<li><strong>Use 2024 as an early-warning trigger:</strong> build year-by-segment loss-ratio monitoring across product and risk groups.</li>
+<li><strong>Apply segment screening, not automatic repricing:</strong> validate brand, diesel, urban, non-good bonus-score, and short-payment signals with controls.</li>
+<li><strong>Strengthen volatility management:</strong> track high-loss rate, claim frequency, severity, and capped loss ratio alongside aggregate loss ratio.</li>
+<li><strong>Enrich portfolio data before final underwriting action:</strong> add geography, traffic, weather, theft-risk, and repair-cost indicators.</li>
 </ul>
 <aside class="notes">
-<p>The visual analytics process identifies where to investigate next. It does not replace actuarial modelling, but it provides a clear evidence trail for prioritising portfolio questions.</p>
+<p>The recommendations are practical next steps, not automatic repricing rules. They preserve the distinction between visual discovery and confirmatory underwriting analysis.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="closing-message" class="slide level2">
+<h2>Closing message</h2>
+<p><strong>Visual analytics identifies where the portfolio needs attention:</strong></p>
+<ul>
+<li>2024 deterioration is the main time-based warning.</li>
+<li>Comprehensive cover is the main product-based warning.</li>
+<li>Tail-risk metrics are needed because portfolio averages hide claim volatility.</li>
+<li>The evidence should guide investigation and enrichment before pricing action.</li>
+</ul>
+<aside class="notes">
+<p>The closing message links the report evidence back to the project objective and explains how visual analytics supports underwriting decision-making.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;

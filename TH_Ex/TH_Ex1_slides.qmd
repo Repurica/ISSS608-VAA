@@ -2,7 +2,7 @@
 title: "Take-home Exercise 1"
 subtitle: "Visual Analytics for Motor Insurance Portfolio Discovery"
 author: "Cao Jinming"
-date: "24 May 2026"
+date: "20 May 2026"
 execute:
   echo: false
   warning: false
@@ -14,275 +14,428 @@ format:
     slide-number: true
     chalkboard: true
     preview-links: auto
+    include-in-header:
+      text: |
+        <style>
+        .reveal {
+          font-size: 30px;
+        }
+
+        .reveal h1.title {
+          font-size: 1.55em;
+        }
+
+        .reveal h2 {
+          font-size: 1.18em;
+          margin-bottom: 0.32em;
+        }
+
+        .reveal p,
+        .reveal li {
+          font-size: 0.78em;
+          line-height: 1.16;
+        }
+
+        .reveal ul,
+        .reveal ol {
+          margin-top: 0.28em;
+          margin-bottom: 0.28em;
+        }
+
+        .reveal table {
+          font-size: 0.62em;
+        }
+
+        .reveal .cell-output-display,
+        .reveal figure {
+          margin: 0.12em auto 0.26em;
+        }
+
+        .reveal .cell-output-display img {
+          width: 100% !important;
+          max-width: 100% !important;
+          max-height: 70vh !important;
+          object-fit: contain;
+        }
+        </style>
 ---
 
-```{r}
+```{r setup}
 library(tidyverse)
 library(readxl)
 library(scales)
 library(patchwork)
+library(ggrepel)
+library(knitr)
+
+knitr::opts_chunk$set(
+  fig.align = "center",
+  out.width = "100%",
+  dpi = 144
+)
+
 if (file.exists("TH_Ex/th_ex1_common.R")) {
   source("TH_Ex/th_ex1_common.R")
 } else {
   source("th_ex1_common.R")
 }
+
+theme_set(theme_minimal(base_size = 11))
+
 motor <- load_th1_motor()
 yearly <- portfolio_summary(motor, year)
 policy_tbl <- portfolio_summary(motor, policy_type) |> arrange(desc(loss_ratio))
+overall_loss_ratio <- sum(motor$total_incurred, na.rm = TRUE) / sum(motor$total_premium, na.rm = TRUE)
+
+seg_long <- bind_rows(
+  portfolio_summary(motor, bonus_score) |>
+    mutate(segment = "Bonus score", category = as.character(bonus_score)),
+  portfolio_summary(motor, fuel_type) |>
+    mutate(segment = "Fuel type", category = fct_na_value_to_level(as.factor(fuel_type), "Missing") |> as.character()),
+  portfolio_summary(motor, circulation_area) |>
+    mutate(segment = "Circulation area", category = as.character(circulation_area)),
+  portfolio_summary(motor, payment_frequency) |>
+    mutate(segment = "Payment frequency", category = as.character(payment_frequency))
+)
+
+brand_tbl <- motor |>
+  group_by(vehicle_brand) |>
+  summarise(
+    records = n(),
+    exposure = sum(total_exposure, na.rm = TRUE),
+    premium = sum(total_premium, na.rm = TRUE),
+    incurred = sum(total_incurred, na.rm = TRUE),
+    claims = sum(total_claims, na.rm = TRUE),
+    loss_ratio = incurred / premium,
+    claim_frequency = claims / exposure,
+    high_loss_rate = mean(loss_ratio > 1, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  filter(exposure >= 1000)
 ```
 
-## Contents
+## Project objective
 
-1. Analytical objective
-2. Data and derived measures
-3. Univariate discovery
-4. Bivariate findings
-5. Statistical validation
-6. Implications and next steps
+**Main question:** Which motor insurance portfolio segments show weaker profitability or higher volatility, and are those patterns visually and statistically defensible?
 
-::: {.notes}
-This presentation summarises the technical report. The focus is not only on dashboard-style reporting, but on using visual analytics to discover distributional patterns and potential drivers of profitability and volatility.
+-   **Profitability:** `profit = total_premium - total_incurred`; `loss_ratio = total_incurred / total_premium`.
+-   **Volatility:** claim occurrence, claim frequency, capped individual loss ratio, high-loss rate, and upper-tail behaviour.
+-   **Approach:** combine univariate distribution checks, bivariate segment comparisons, and statistical validation.
+
+::: notes
+This deck is aligned with the technical report objective. The goal is not only to describe the portfolio, but to identify where profitability and volatility risks are concentrated.
 :::
 
-## Analytical objective
-
-- Explore numerical and categorical distributions.
-- Investigate factors associated with profitability.
-- Use visual evidence and statistical validation together.
-- Treat extreme losses as part of volatility, not noise to ignore.
-
-::: {.notes}
-The assignment asks for both univariate and bivariate visual analytics. I define profitability through profit and loss ratio, and volatility through spread, claim occurrence, and extreme incurred-loss behaviour.
-:::
-
-## Data and sandbox
+## Data and analytical setup
 
 ```{r}
 tibble(
-  measure = c("Records", "Distinct insured IDs", "Period", "Original variables"),
-  value = c(nrow(motor), n_distinct(motor$insured_id), paste(levels(motor$year), collapse = "-"), 47)
-) |> knitr::kable()
+  measure = c(
+    "Policy-year records", "Distinct insured IDs", "Calendar years",
+    "Variables after derivation", "Aggregate premium", "Aggregate incurred loss", "Aggregate profit",
+    "Aggregate loss ratio", "Claim-record share"
+  ),
+  value = c(
+    comma(nrow(motor)),
+    comma(n_distinct(motor$insured_id)),
+    paste(levels(motor$year), collapse = ", "),
+    comma(ncol(motor)),
+    money(sum(motor$total_premium, na.rm = TRUE)),
+    money(sum(motor$total_incurred, na.rm = TRUE)),
+    money(sum(motor$profit, na.rm = TRUE)),
+    pct(overall_loss_ratio),
+    pct(mean(motor$claim_flag, na.rm = TRUE))
+  )
+) |>
+  kable()
 ```
 
-- Data: large policy-year portfolio from Mendeley motor insurance data.
-- Measures: profit, loss ratio, claim flag, frequency, and severity.
-- Use: discover profitability and volatility patterns across segments.
+-   The portfolio is profitable overall before expenses.
+-   Segment-level analysis is still needed because aggregate totals can hide volatility.
 
-::: {.notes}
-The dataset is large enough for both descriptive and statistical analysis. I use reproducible R code so the results can be regenerated from the raw Mendeley files.
+::: notes
+The dataset is a large policy-year motor portfolio from the Mendeley source. Reusable R helper functions are shared with the report.
 :::
 
-## Portfolio trend
+## Finding 1: profitability weakened in 2024
 
-```{r, fig.width=9, fig.height=4.8}
-yearly |>
-  select(year, premium, incurred, profit) |>
+```{r, fig.width=11, fig.height=5}
+trend_amount <- yearly |>
+  select(year, Premium = premium, Incurred = incurred, Profit = profit) |>
   pivot_longer(-year, names_to = "measure", values_to = "amount") |>
-  ggplot(aes(year, amount, colour = measure, group = measure)) +
+  ggplot(aes(x = year, y = amount, colour = measure, group = measure)) +
   geom_line(linewidth = 1) +
   geom_point(size = 2) +
   scale_y_continuous(labels = money) +
-  labs(x = NULL, y = "Aggregate amount", title = "Premium and incurred losses both increased") +
-  theme_minimal()
-```
+  labs(title = "Premium, incurred loss, and profit by year", x = NULL, y = "Aggregate amount")
 
-- Premium and incurred losses both increased over time.
-- Incurred loss growth needs to be compared against premium growth.
-
-::: {.notes}
-Premium and incurred losses both increase from 2022 to 2024. The key question is whether premium growth is sufficient to absorb the increasing loss burden.
-:::
-
-## Loss ratio worsened in 2024
-
-```{r, fig.width=8, fig.height=4.8}
-yearly |>
-  ggplot(aes(year, loss_ratio, group = 1)) +
+trend_lr <- yearly |>
+  ggplot(aes(x = year, y = loss_ratio, group = 1)) +
   geom_line(linewidth = 1, colour = "#d95f0e") +
   geom_point(size = 3, colour = "#d95f0e") +
   scale_y_continuous(labels = pct) +
-  labs(x = NULL, y = "Aggregate loss ratio", title = "Aggregate loss ratio rose in 2024") +
-  theme_minimal()
+  labs(title = "Aggregate loss ratio", x = NULL, y = "Loss ratio")
+
+trend_amount + trend_lr + plot_layout(widths = c(0.58, 0.42))
 ```
 
-- 2024 has a visibly higher aggregate loss ratio.
-- This suggests weaker underwriting profitability before expenses.
+-   Loss ratio rises from about **65.6%** in 2022 to **74.7%** in 2024.
+-   This is an early-warning signal: incurred losses are growing faster than premium.
 
-::: {.notes}
-The 2024 loss ratio is visibly higher than 2022 and 2023. This points to declining profitability, assuming expenses are not separately modelled here.
+::: notes
+The key message is not that the portfolio is loss-making. It remains profitable before expenses, but the margin is weakening in 2024.
 :::
 
-## Univariate: numerical skewness
+## Finding 2: volatility is tail-driven
 
 ```{r, fig.width=10, fig.height=5.6}
 motor |>
-  select(driver_age, vehicle_age, total_premium, total_incurred, loss_ratio_cap) |>
+  select(total_premium, total_incurred, total_claims, loss_ratio_cap, claim_frequency) |>
   pivot_longer(everything(), names_to = "variable", values_to = "value") |>
   ggplot(aes(value)) +
   geom_histogram(bins = 35, colour = "white", fill = "#2c7fb8") +
   facet_wrap(~ variable, scales = "free", ncol = 3) +
-  labs(x = NULL, y = "Records", title = "Numerical variables show strong skewness") +
-  theme_minimal()
+  labs(title = "Loss and claim variables are skewed and zero-inflated", x = NULL, y = "Records")
 ```
 
-- Numerical variables are strongly right-skewed.
-- Most records have no incurred loss, but a small upper tail is material.
+-   Most policy-year records have no claims.
+-   A smaller positive-claim tail drives incurred loss and volatility.
+-   This justifies using capped loss ratio, claim frequency, and high-loss indicators.
 
-::: {.notes}
-The most important univariate pattern is claim zero-inflation and right skewness. Many records have no incurred loss, but a small number of records have very large loss ratios.
+::: notes
+The univariate view supports the report's focus on volatility: averages alone hide the small but material claim-producing tail.
 :::
 
-## Univariate: categorical concentration
+## Finding 3: policy type is the strongest signal
 
-```{r, fig.width=10, fig.height=5.8}
-motor |>
-  select(policy_type, payment_frequency, bonus_score, circulation_area) |>
-  pivot_longer(everything(), names_to = "variable", values_to = "category") |>
-  mutate(category = fct_explicit_na(as.factor(category), "Missing")) |>
-  count(variable, category) |>
-  group_by(variable) |>
-  mutate(pct_share = n / sum(n), category = fct_reorder(category, pct_share)) |>
-  ungroup() |>
-  ggplot(aes(category, pct_share)) +
-  geom_col(fill = "#41ab5d") +
-  coord_flip() +
-  scale_y_continuous(labels = pct) +
-  facet_wrap(~ variable, scales = "free_y") +
-  labs(x = NULL, y = "Share", title = "Portfolio mix is concentrated in selected categories") +
-  theme_minimal()
-```
+```{r, fig.width=12, fig.height=5.8}
+policy_lr <- policy_tbl |>
+  mutate(
+    policy_type = fct_reorder(policy_type, loss_ratio),
+    label = paste0(pct(loss_ratio), " | exp ", comma(round(exposure)))
+  ) |>
+  ggplot(aes(x = loss_ratio, y = policy_type)) +
+  geom_vline(xintercept = overall_loss_ratio, linewidth = 0.8, colour = "#08519c") +
+  geom_vline(xintercept = 1, linetype = "dashed", linewidth = 0.8, colour = "red") +
+  geom_segment(aes(x = overall_loss_ratio, xend = loss_ratio, yend = policy_type), colour = "grey75") +
+  geom_point(aes(size = exposure), colour = "#08519c", alpha = 0.82) +
+  geom_text(aes(label = label), hjust = -0.08, size = 3.1) +
+  scale_x_continuous(
+    labels = pct,
+    limits = c(0, max(policy_tbl$loss_ratio, overall_loss_ratio, 1, na.rm = TRUE) * 1.28)
+  ) +
+  scale_size_continuous(labels = comma, range = c(3, 8)) +
+  coord_cartesian(clip = "off") +
+  labs(
+    title = "Aggregate loss ratio by policy type",
+    subtitle = "Blue = portfolio loss ratio; red dashed = 100% break-even.",
+    x = "Aggregate loss ratio",
+    y = NULL,
+    size = "Exposure"
+  ) +
+  theme(
+    plot.margin = margin(5.5, 35, 5.5, 5.5),
+    plot.title = element_text(size = 10),
+    plot.subtitle = element_text(size = 7.5)
+  )
 
-- Portfolio mix is concentrated in selected policy and bonus-score categories.
-- High loss ratios should be read together with exposure size.
-
-::: {.notes}
-Policy mix and bonus-score mix are concentrated. This affects interpretation: a smaller category can have a high loss ratio, but it must be evaluated against exposure size.
-:::
-
-## Policy type and profitability
-
-```{r, fig.width=9, fig.height=5}
-policy_tbl |>
-  mutate(policy_type = fct_reorder(policy_type, loss_ratio)) |>
-  ggplot(aes(policy_type, loss_ratio, fill = policy_type)) +
-  geom_col(show.legend = FALSE) +
-  geom_hline(yintercept = 1, linetype = "dashed", colour = "red") +
-  coord_flip() +
-  scale_y_continuous(labels = pct) +
-  labs(x = NULL, y = "Aggregate loss ratio", title = "Comprehensive products have higher loss ratios") +
-  theme_minimal()
-```
-
-- Comprehensive products have the highest aggregate loss ratios.
-- `COMP_N` is the main policy type requiring closer review.
-
-::: {.notes}
-Comprehensive products, especially COMP_N, have the highest aggregate loss ratios. Third-party-only coverage has the lowest ratio in this comparison.
-:::
-
-## Volatility by policy type
-
-```{r, fig.width=9, fig.height=5}
-motor |>
+policy_box <- motor |>
   filter(!is.na(policy_type), !is.na(loss_ratio_cap)) |>
-  ggplot(aes(fct_reorder(policy_type, loss_ratio_cap, .fun = median), loss_ratio_cap)) +
-  geom_boxplot(fill = "#9ecae1", outlier.alpha = 0.08) +
+  ggplot(aes(x = fct_reorder(policy_type, loss_ratio_cap, .fun = median), y = loss_ratio_cap)) +
+  geom_boxplot(fill = "#9ecae1", outlier.alpha = 0.06) +
   coord_flip() +
   scale_y_continuous(labels = pct) +
-  labs(x = NULL, y = "Capped individual loss ratio", title = "Volatility is driven by right-tail losses") +
-  theme_minimal()
+  labs(
+    title = "Spread of capped individual loss ratio",
+    subtitle = "Capping exposes group spread without extreme outliers dominating.",
+    x = NULL,
+    y = "Capped individual loss ratio"
+  ) +
+  theme(
+    plot.title = element_text(size = 10),
+    plot.subtitle = element_text(size = 7.5)
+  )
+
+policy_lr + policy_box
 ```
 
-- Capped boxplots reveal spread without extreme outliers dominating the view.
-- Volatility is mainly driven by right-tail policy-year losses.
+-   `COMP_N` has the highest aggregate loss ratio, about **93.9%**.
+-   `COMP_E` follows at about **73.8%**, and both comprehensive covers need separate monitoring.
+-   Most policy-year records remain low-loss; weak performance is concentrated in claim frequency and upper-tail outcomes.
 
-::: {.notes}
-The boxplot uses capped loss ratio to make the spread visible. The large right tail confirms that volatility is a material feature of this portfolio.
+::: notes
+The blue line is the overall portfolio loss ratio. The red dashed line is the 100% break-even line before expenses.
 :::
 
-## Other risk-related segments
+## Finding 4: 2024 `COMP_N` is the clearest hotspot
 
-```{r, fig.width=10, fig.height=5.6}
-seg_long <- bind_rows(
-  portfolio_summary(motor, bonus_score) |> mutate(segment = "Bonus score", category = as.character(bonus_score)),
-  portfolio_summary(motor, fuel_type) |> mutate(segment = "Fuel type", category = fct_explicit_na(as.factor(fuel_type), "Missing") |> as.character()),
-  portfolio_summary(motor, circulation_area) |> mutate(segment = "Circulation", category = as.character(circulation_area))
-)
-seg_long |>
-  mutate(category = fct_reorder(category, loss_ratio)) |>
-  ggplot(aes(category, loss_ratio)) +
-  geom_col(fill = "#756bb1") +
-  coord_flip() +
-  scale_y_continuous(labels = pct) +
-  facet_wrap(~ segment, scales = "free_y") +
-  labs(x = NULL, y = "Aggregate loss ratio", title = "Loss ratio varies across selected segments") +
-  theme_minimal()
+```{r, fig.width=9.5, fig.height=5.2}
+motor |>
+  group_by(year, policy_type) |>
+  summarise(
+    exposure = sum(total_exposure, na.rm = TRUE),
+    premium = sum(total_premium, na.rm = TRUE),
+    incurred = sum(total_incurred, na.rm = TRUE),
+    loss_ratio = incurred / premium,
+    .groups = "drop"
+  ) |>
+  ggplot(aes(x = year, y = policy_type, fill = loss_ratio)) +
+  geom_tile(colour = "white") +
+  geom_text(aes(label = pct(loss_ratio)), colour = "white", fontface = "bold") +
+  scale_fill_gradient(low = "#2c7fb8", high = "#d7301f", labels = pct) +
+  labs(
+    title = "Loss-ratio heatmap by year and policy type",
+    subtitle = "Darker red cells identify combinations needing closer monitoring.",
+    x = NULL,
+    y = NULL,
+    fill = "Loss ratio"
+  )
 ```
 
-- Bonus score, fuel type, and circulation area show visible loss-ratio differences.
-- These segments are screening candidates, not final causal conclusions.
+-   `COMP_N` worsens across the period and reaches about **102.4%** in 2024.
+-   `COMP_E` also rises in 2024, reinforcing separate comprehensive-cover monitoring.
 
-::: {.notes}
-Bonus score, fuel type, and circulation area all show visible differences in aggregate loss ratio. These are useful candidates for underwriting or pricing review.
+::: notes
+The heatmap makes the recommendation more specific: review comprehensive-cover performance, especially COMP_N in 2024.
+:::
+
+## Finding 5: secondary segment signals
+
+```{r, fig.width=11, fig.height=6}
+seg_long |>
+  mutate(
+    category = fct_reorder(category, loss_ratio),
+    label = paste0(pct(loss_ratio), " | exp ", comma(round(exposure)))
+  ) |>
+  ggplot(aes(x = loss_ratio, y = category)) +
+  geom_vline(xintercept = overall_loss_ratio, linewidth = 0.8, colour = "#08519c") +
+  geom_vline(xintercept = 1, linetype = "dashed", linewidth = 0.8, colour = "red") +
+  geom_segment(aes(x = overall_loss_ratio, xend = loss_ratio, yend = category), colour = "grey75") +
+  geom_point(aes(size = exposure, colour = segment), alpha = 0.82, show.legend = FALSE) +
+  geom_text(aes(label = label), hjust = -0.05, size = 2.7, show.legend = FALSE) +
+  scale_x_continuous(
+    labels = pct,
+    limits = c(0, max(seg_long$loss_ratio, overall_loss_ratio, 1, na.rm = TRUE) * 1.30)
+  ) +
+  scale_size_continuous(labels = comma, range = c(2.8, 7.5)) +
+  facet_wrap(~ segment, scales = "free_y") +
+  coord_cartesian(clip = "off") +
+  labs(
+    title = "Loss ratio differs across risk-related categories",
+    subtitle = "Blue line marks the overall portfolio loss ratio; red dashed line marks 100% break-even before expenses.",
+    x = "Aggregate loss ratio",
+    y = NULL,
+    size = "Exposure"
+  ) +
+  theme(plot.margin = margin(5.5, 55, 5.5, 5.5))
+```
+
+-   Non-good bonus scores, diesel vehicles, urban circulation, and shorter payment frequencies show weaker experience.
+-   These are screening variables, not standalone causal conclusions.
+
+::: notes
+Exposure labels are important because segment materiality depends on both loss ratio and portfolio size.
+:::
+
+## Finding 6: brand-level volatility screen
+
+```{r, fig.width=10, fig.height=5.5}
+brand_tbl |>
+  ggplot(aes(x = claim_frequency, y = loss_ratio, size = exposure)) +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "red") +
+  geom_point(alpha = 0.65, colour = "#08519c") +
+  geom_text_repel(
+    data = brand_tbl |> slice_max(loss_ratio, n = 8),
+    aes(label = vehicle_brand),
+    size = 3,
+    max.overlaps = 20
+  ) +
+  scale_x_continuous(labels = number_format(accuracy = 0.01)) +
+  scale_y_continuous(labels = pct) +
+  scale_size_continuous(labels = comma, range = c(2, 12)) +
+  labs(
+    title = "Brand-level screen for high loss ratio and claim frequency",
+    subtitle = "Only brands with exposure >= 1,000 are shown.",
+    x = "Claim frequency",
+    y = "Aggregate loss ratio",
+    size = "Exposure"
+  )
+```
+
+-   Upper-right brands combine higher claim frequency and higher loss ratio.
+-   Mitsubishi and Mazda have the highest aggregate loss ratios among brands with exposure at least 1,000.
+-   Large upper-right bubbles should be prioritised because they combine impact with enough exposure to matter.
+
+::: notes
+This is an exploratory screen. It supports deeper investigation rather than immediate brand-level pricing action.
 :::
 
 ## Statistical validation
 
 ```{r}
-test_vars <- c("policy_type", "bonus_score", "driver_age_band", "vehicle_age_band", "fuel_type", "circulation_area", "year")
+test_vars <- c(
+  "policy_type", "bonus_score", "driver_age_band", "vehicle_age_band",
+  "fuel_type", "circulation_area", "payment_frequency", "year"
+)
+
 kw_tbl <- map_dfr(test_vars, \(v) {
   kt <- kruskal.test(as.formula(paste("loss_ratio_cap ~", v)), data = motor)
-  tibble(variable = v, test = "Kruskal", p_value = kt$p.value)
+  tibble(test = "Kruskal-Wallis", variable = v, statistic = unname(kt$statistic), p_value = kt$p.value)
 })
+
 chi_tbl <- map_dfr(test_vars, \(v) {
   ct <- chisq.test(table(motor[[v]], motor$claim_flag))
-  tibble(variable = v, test = "Chi-square", p_value = ct$p.value)
+  tibble(test = "Chi-square", variable = v, statistic = unname(ct$statistic), p_value = ct$p.value)
 })
+
 bind_rows(kw_tbl, chi_tbl) |>
   mutate(p_value = format.pval(p_value, digits = 3)) |>
+  select(test, variable, p_value) |>
   pivot_wider(names_from = test, values_from = p_value) |>
-  knitr::kable()
+  kable()
 ```
 
-- Segment differences are statistically significant in the selected tests.
-- Because the dataset is large, practical meaning still depends on visual effect size and exposure.
+-   `policy_type` is the strongest validation signal across both tests.
+-   P-values support the visuals, but large-sample significance is not causal evidence.
 
-::: {.notes}
-The tests show statistically significant differences across the selected segments. Because the dataset is large, I interpret these results together with visual effect size and exposure.
+::: notes
+The tests support group differences, but the report avoids treating p-values as sufficient evidence for pricing action.
 :::
 
-## Brand-level screen
+## Key findings
 
-```{r, fig.width=9, fig.height=5.2}
-brand_tbl <- motor |>
-  group_by(vehicle_brand) |>
-  summarise(exposure = sum(total_exposure), premium = sum(total_premium), incurred = sum(total_incurred), claims = sum(total_claims), loss_ratio = incurred / premium, claim_frequency = claims / exposure, .groups = "drop") |>
-  filter(exposure >= 1000)
-brand_tbl |>
-  ggplot(aes(claim_frequency, loss_ratio, size = exposure)) +
-  geom_hline(yintercept = 1, linetype = "dashed", colour = "red") +
-  geom_point(alpha = 0.65, colour = "#08519c") +
-  geom_text(data = brand_tbl |> slice_max(loss_ratio, n = 8), aes(label = vehicle_brand), vjust = -0.8, size = 3, check_overlap = TRUE) +
-  scale_y_continuous(labels = pct) +
-  labs(x = "Claim frequency", y = "Loss ratio", size = "Exposure", title = "Brand screen highlights candidates for deeper review") +
-  theme_minimal()
-```
+1.  The portfolio is profitable overall, but the margin is exposed to a small claim-producing tail.
+2.  Profitability deteriorates in 2024: aggregate loss ratio rises from **65.6%** to **74.7%**.
+3.  Policy type is the strongest signal; `COMP_N` reaches **93.9%** overall and **102.4%** in 2024.
+4.  Bonus score, fuel type, circulation area, and payment frequency explain where weaker experience concentrates.
+5.  Volatility is concentrated in claim frequency and upper-tail outcomes, not the typical record.
+6.  Statistical tests support the visual signals, but the evidence remains observational and non-causal.
 
-- Upper-right brands combine higher claim frequency and higher loss ratio.
-- Larger bubbles should be prioritised because they represent more exposure.
-
-::: {.notes}
-The brand chart is exploratory. It helps identify candidates for follow-up analysis, but it should not be treated as a final causal conclusion.
+::: notes
+This slide condenses the report's key findings and keeps them tied to the project objective: profitability and volatility discovery.
 :::
 
-## Implications
+## Recommendations
 
-- Review premium adequacy for comprehensive products.
-- Investigate 2024 deterioration in loss ratio.
-- Use bonus score, fuel type, and circulation area as segmentation checks.
-- Examine extreme losses separately from typical-policy behaviour.
-- Validate any pricing action with exposure and mix-adjusted modelling.
+-   **Prioritise comprehensive-cover review:** monitor `COMP_N` and `COMP_E`, especially 2024 `COMP_N`, before broad pricing changes.
+-   **Use 2024 as an early-warning trigger:** build year-by-segment loss-ratio monitoring across product and risk groups.
+-   **Apply segment screening, not automatic repricing:** validate brand, diesel, urban, non-good bonus-score, and short-payment signals with controls.
+-   **Strengthen volatility management:** track high-loss rate, claim frequency, severity, and capped loss ratio alongside aggregate loss ratio.
+-   **Enrich portfolio data before final underwriting action:** add geography, traffic, weather, theft-risk, and repair-cost indicators.
 
-::: {.notes}
-The visual analytics process identifies where to investigate next. It does not replace actuarial modelling, but it provides a clear evidence trail for prioritising portfolio questions.
+::: notes
+The recommendations are practical next steps, not automatic repricing rules. They preserve the distinction between visual discovery and confirmatory underwriting analysis.
+:::
+
+## Closing message
+
+**Visual analytics identifies where the portfolio needs attention:**
+
+-   2024 deterioration is the main time-based warning.
+-   Comprehensive cover is the main product-based warning.
+-   Tail-risk metrics are needed because portfolio averages hide claim volatility.
+-   The evidence should guide investigation and enrichment before pricing action.
+
+::: notes
+The closing message links the report evidence back to the project objective and explains how visual analytics supports underwriting decision-making.
 :::
