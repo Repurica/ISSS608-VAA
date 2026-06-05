@@ -27,6 +27,8 @@ website:
             text: "Hands-on Exercise 5.4"
           - href: HO_Ex/HO_Ex5.5.qmd
             text: "Hands-on Exercise 5.5"
+          - href: HO_Ex/HO_Ex7.qmd
+            text: "Hands-on Exercise 7"
       - text: "TH_Ex"
         menu:
           - href: TH_Ex/TH_Ex1.qmd
@@ -60,6 +62,8 @@ website:
             text: "Hands-on Exercise 5.4"
           - href: HO_Ex/HO_Ex5.5.qmd
             text: "Hands-on Exercise 5.5"
+          - href: HO_Ex/HO_Ex7.qmd
+            text: "Hands-on Exercise 7"
       - section: "TH_Ex"
         contents:
           - section: "Take-home Exercise 1"
