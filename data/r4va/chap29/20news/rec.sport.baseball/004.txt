@@ -1,0 +1,5 @@
+From: learner4@example.com
+Subject: sample rec.sport.baseball message 4
+
+baseball league player team game score stadium season.
+baseball league player team game score stadium season.
