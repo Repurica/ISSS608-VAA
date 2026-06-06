@@ -1,0 +1,17 @@
+---
+title: "Take-home Exercise 2"
+author: "Cao Jinming"
+date: "06 June 2026"
+date-modified: "last-modified"
+format: html
+---
+
+This page groups the materials for Take-home Exercise 2.
+
+## Exercise materials
+
+- [Technical report](TH_Ex2_report.qmd)
+
+## Data source
+
+- VAST Challenge 2026 Mini-Challenge 1 data copied into `TH_Ex/data/th_ex2/raw/`.
