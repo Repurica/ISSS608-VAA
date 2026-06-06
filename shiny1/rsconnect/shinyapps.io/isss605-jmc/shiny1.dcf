@@ -1,0 +1,12 @@
+name: shiny1
+title: shiny1
+username: isss605-jmc
+account: isss605-jmc
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 17408256
+bundleId: 12030754
+url: https://isss605-jmc.shinyapps.io/shiny1/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

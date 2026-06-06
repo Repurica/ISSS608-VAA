@@ -9,7 +9,7 @@
 
 library(shiny)
 library(tidyverse)
-exam <- read_csv("../data/wk1/Exam_data.csv")
+exam <- read_csv("data/Exam_data.csv")
 print(exam)
 ui <- fluidPage(
   titlePanel("Pupils Exam Result Dashboard"),
