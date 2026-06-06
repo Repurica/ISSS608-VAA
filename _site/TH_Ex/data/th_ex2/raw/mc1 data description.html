@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Cao Jinming">
-<meta name="dcterms.date" content="2026-06-06">
 
-<title>Take-home Exercise 2 – ISSS608-VAA</title>
+<title>mc1-data-description – ISSS608-VAA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -22,27 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-43081d808c96cc46af55a3a816ae9eed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-43081d808c96cc46af55a3a816ae9eed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -72,7 +105,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../../../styles.css">
 </head>
 
 <body class="nav-sidebar docked nav-fixed quarto-light">
@@ -82,9 +115,9 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <a href="../../../../index.html" class="navbar-brand navbar-brand-logo">
     </a>
-    <a class="navbar-brand" href="../index.html">
+    <a class="navbar-brand" href="../../../../index.html">
     <span class="navbar-title">ISSS608-VAA</span>
     </a>
   </div>
@@ -95,7 +128,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../index.html" aria-current="page"> 
+    <a class="nav-link active" href="../../../../index.html" aria-current="page"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -104,47 +137,47 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-ho_ex">    
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex1.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex1.html">
  <span class="dropdown-text">Hands-on Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex1_submission.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex1_submission.html">
  <span class="dropdown-text">Hands-on Exercise 1 Submission</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex2.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex2.html">
  <span class="dropdown-text">Hands-on Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex3.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex3.html">
  <span class="dropdown-text">Hands-on Exercise 3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex4.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex4.html">
  <span class="dropdown-text">Hands-on Exercise 4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex5.1.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex5.1.html">
  <span class="dropdown-text">Hands-on Exercise 5.1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex5.2.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex5.2.html">
  <span class="dropdown-text">Hands-on Exercise 5.2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex5.3.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex5.3.html">
  <span class="dropdown-text">Hands-on Exercise 5.3</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex5.4.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex5.4.html">
  <span class="dropdown-text">Hands-on Exercise 5.4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex5.5.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex5.5.html">
  <span class="dropdown-text">Hands-on Exercise 5.5</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../HO_Ex/HO_Ex7.html">
+    <a class="dropdown-item" href="../../../../HO_Ex/HO_Ex7.html">
  <span class="dropdown-text">Hands-on Exercise 7</span></a>
   </li>  
     </ul>
@@ -155,33 +188,33 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-th_ex">    
         <li>
-    <a class="dropdown-item" href="../TH_Ex/TH_Ex1.html">
+    <a class="dropdown-item" href="../../../../TH_Ex/TH_Ex1.html">
  <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../TH_Ex/TH_Ex1_report.html">
+    <a class="dropdown-item" href="../../../../TH_Ex/TH_Ex1_report.html">
  <span class="dropdown-text">Take-home Exercise 1 Report</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../TH_Ex/TH_Ex1_slides.html">
+    <a class="dropdown-item" href="../../../../TH_Ex/TH_Ex1_slides.html">
  <span class="dropdown-text">Take-home Exercise 1 Slides</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../TH_Ex/TH_Ex2.html">
+    <a class="dropdown-item" href="../../../../TH_Ex/TH_Ex2.html">
  <span class="dropdown-text">Take-home Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../TH_Ex/TH_Ex2_report.html">
+    <a class="dropdown-item" href="../../../../TH_Ex/TH_Ex2_report.html">
  <span class="dropdown-text">Take-home Exercise 2 Report</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="../VAST/kickstarter.html"> 
+    <a class="nav-link" href="../../../../VAST/kickstarter.html"> 
 <span class="menu-text">VAST</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../about.html"> 
+    <a class="nav-link" href="../../../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
@@ -195,7 +228,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">TH_Ex</li><li class="breadcrumb-item"><a href="../TH_Ex/TH_Ex2.html">Take-home Exercise 2</a></li><li class="breadcrumb-item"><a href="../TH_Ex/TH_Ex2.html">Overview</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -209,7 +242,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="../index.html" class="sidebar-logo-link">
+      <a href="../../../../index.html" class="sidebar-logo-link">
       </a>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -230,67 +263,67 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex1.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex1_submission.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex1_submission.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 1 Submission</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex2.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex3.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex4.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex4.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex5.1.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex5.1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 5.1</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex5.2.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex5.2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 5.2</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex5.3.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex5.3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 5.3</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex5.4.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex5.4.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 5.4</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex5.5.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex5.5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 5.5</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../HO_Ex/HO_Ex7.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../HO_Ex/HO_Ex7.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hands-on Exercise 7</span></a>
   </div>
 </li>
@@ -316,19 +349,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../TH_Ex/TH_Ex1.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../TH_Ex/TH_Ex1.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../TH_Ex/TH_Ex1_report.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../TH_Ex/TH_Ex1_report.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Report</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../TH_Ex/TH_Ex1_slides.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../TH_Ex/TH_Ex1_slides.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Slides</span></a>
   </div>
 </li>
@@ -336,22 +369,22 @@ ul.task-list li input[type="checkbox"] {
   </li>
           <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
  <span class="menu-text">Take-home Exercise 2</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 show">  
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../TH_Ex/TH_Ex2.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../../../TH_Ex/TH_Ex2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../TH_Ex/TH_Ex2_report.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../TH_Ex/TH_Ex2_report.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Report</span></a>
   </div>
 </li>
@@ -369,65 +402,218 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#exercise-materials" id="toc-exercise-materials" class="nav-link active" data-scroll-target="#exercise-materials">Exercise materials</a></li>
-  <li><a href="#data-source" id="toc-data-source" class="nav-link" data-scroll-target="#data-source">Data source</a></li>
+  <li><a href="#mc1-multi-agent-crisis-data" id="toc-mc1-multi-agent-crisis-data" class="nav-link active" data-scroll-target="#mc1-multi-agent-crisis-data">MC1 — Multi-Agent Crisis Data</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#files" id="toc-files" class="nav-link" data-scroll-target="#files">Files</a></li>
+  <li><a href="#agents" id="toc-agents" class="nav-link" data-scroll-target="#agents">Agents</a></li>
+  <li><a href="#companies-codenames" id="toc-companies-codenames" class="nav-link" data-scroll-target="#companies-codenames">Companies &amp; Codenames</a></li>
+  <li><a href="#communication-channels" id="toc-communication-channels" class="nav-link" data-scroll-target="#communication-channels">Communication Channels</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">TH_Ex</li><li class="breadcrumb-item"><a href="../TH_Ex/TH_Ex2.html">Take-home Exercise 2</a></li><li class="breadcrumb-item"><a href="../TH_Ex/TH_Ex2.html">Overview</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">Take-home Exercise 2</h1>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Cao Jinming </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">June 6, 2026</p>
-    </div>
-  </div>
-  
-    <div>
-    <div class="quarto-title-meta-heading">Modified</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 6, 2026</p>
-    </div>
-  </div>
-    
-  </div>
-  
-
-
-</header>
-
-
-<p>This page groups the materials for Take-home Exercise 2.</p>
-<section id="exercise-materials" class="level2">
-<h2 class="anchored" data-anchor-id="exercise-materials">Exercise materials</h2>
-<ul>
-<li><a href="../TH_Ex/TH_Ex2_report.html">Technical report</a></li>
-</ul>
+<section id="mc1-multi-agent-crisis-data" class="level1">
+<h1>MC1 — Multi-Agent Crisis Data</h1>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This folder contains the data for the <strong>multi-agent LLM crisis</strong> for our corporate communications team. There was an exposé, an communications embargo around a company merger, and social media firestorm recently. The data is based on 7 interacting AI agents who communicate across multiple channels and make real-time decisions about what to publish and what not to.</p>
+<hr>
 </section>
-<section id="data-source" class="level2">
-<h2 class="anchored" data-anchor-id="data-source">Data source</h2>
-<ul>
-<li>VAST Challenge 2026 Mini-Challenge 1 data copied into <code>TH_Ex/data/th_ex2/raw/</code>.</li>
-</ul>
+<section id="files" class="level2">
+<h2 class="anchored" data-anchor-id="files">Files</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 75%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Description</th>
+<th>Size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MC1_final.json</code></td>
+<td>MC1 dataset containing the two weeks leading up to the release of information</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>README.md</code></td>
+<td>This documentation file</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Each JSON file follows this structure.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">"rounds"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"hour"</span><span class="fu">:</span> <span class="st">"2046-05-17 9 AM"</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"environment_context"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"event_narrative"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"market_snapshot"</span><span class="fu">:</span> <span class="fu">{</span> <span class="er">...</span> <span class="fu">},</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"media_events"</span><span class="fu">:</span> <span class="ot">[</span> <span class="er">...</span> <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"agents_unavailable"</span><span class="fu">:</span> <span class="ot">[</span> <span class="er">...</span> <span class="ot">]</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">},</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">"agent_outputs"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="fu">{</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"agent_id"</span><span class="fu">:</span> <span class="st">"legal_agent"</span><span class="fu">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"internal_state"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"reacting"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"rationalizing"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"deliberating"</span><span class="fu">:</span> <span class="st">"..."</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>          <span class="fu">},</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"communications"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>            <span class="fu">{</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"message_id"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"channel"</span><span class="fu">:</span> <span class="st">"comms_huddle"</span><span class="fu">,</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>              <span class="dt">"message_text"</span><span class="fu">:</span> <span class="st">"..."</span><span class="fu">,</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">}</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>          <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>          <span class="dt">"declared_action"</span><span class="fu">:</span> <span class="st">"MONITORING"</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>      <span class="ot">]</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<hr>
+</section>
+<section id="agents" class="level2">
+<h2 class="anchored" data-anchor-id="agents">Agents</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 64%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Agent ID</th>
+<th>Role</th>
+<th>Label</th>
+<th>Seniority</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>legal_agent</code></td>
+<td>legal</td>
+<td>Legal-Agent</td>
+<td>Senior</td>
+<td>General legal counsel.</td>
+</tr>
+<tr class="even">
+<td><code>quality_agent</code></td>
+<td>platform_trust</td>
+<td>Platform-Trust</td>
+<td>Senior</td>
+<td>VP of Platform Trust &amp; Safety.</td>
+</tr>
+<tr class="odd">
+<td><code>social_manager_agent</code></td>
+<td>social_manager</td>
+<td>Social-Manager</td>
+<td>Senior</td>
+<td>Manages Social messaging</td>
+</tr>
+<tr class="even">
+<td><code>pr_agent</code></td>
+<td>pr</td>
+<td>PR-Agent</td>
+<td>Senior</td>
+<td>Head of Communications and Public Relationships</td>
+</tr>
+<tr class="odd">
+<td><code>intern_agent</code></td>
+<td>intern</td>
+<td>Intern</td>
+<td>Junior</td>
+<td>General intern.</td>
+</tr>
+<tr class="even">
+<td><code>pr_intern_agent</code></td>
+<td>pr_intern</td>
+<td>PR-Intern</td>
+<td>Junior</td>
+<td>PR team intern with access to the official TenantThread Flex account.</td>
+</tr>
+<tr class="odd">
+<td><code>judge_eval_agent</code></td>
+<td>judge</td>
+<td>Judge</td>
+<td>Compliance officer</td>
+<td>Evaluates risks, mediates conflicts, provides compliance guidance.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="companies-codenames" class="level2">
+<h2 class="anchored" data-anchor-id="companies-codenames">Companies &amp; Codenames</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 82%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entity</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>TenantThread</strong></td>
+<td>The company being acquired whose records are being presented. A proptech platform providing tenant management tools including the controversial “Retention Optimizer” scoring system.</td>
+</tr>
+<tr class="even">
+<td><strong>CivicLoom</strong></td>
+<td>The company acquiring TenantThread in the merger. Identity is embargoed until 6:00 PM on the crisis day.</td>
+</tr>
+<tr class="odd">
+<td><strong>Project HarborCrest</strong></td>
+<td>Internal codename for the CivicLoom–TenantThread merger.</td>
+</tr>
+<tr class="even">
+<td><strong>ResidentIQ</strong></td>
+<td>Another PropTech company being discussed in the SaltWind Journal.</td>
+</tr>
+<tr class="odd">
+<td><strong>SaltWind Journal</strong></td>
+<td>Local newspaper running stories on the property tech industry.</td>
+</tr>
+<tr class="even">
+<td><strong>OceanCrunch</strong></td>
+<td>Tech media outlet. Sarah Kowalski is a reporter.</td>
+</tr>
+<tr class="odd">
+<td><strong><span class="citation" data-cites="HorizonMgmt">@HorizonMgmt</span>, <span class="citation" data-cites="PinnacleResidential">@PinnacleResidential</span></strong></td>
+<td>Major clients of TennatThread.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="communication-channels" class="level2">
+<h2 class="anchored" data-anchor-id="communication-channels">Communication Channels</h2>
+<p>Agents have many different communications channels available to them, for agent-to-agent, agent-to-person and agent-to-other-system actions. Agents are also empowered to publish social media post with minimal oversight.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

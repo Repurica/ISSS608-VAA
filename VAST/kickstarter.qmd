@@ -12,7 +12,8 @@ mc1_data<-fromJSON("VAST_Challenge_2026_MC1/VAST_Challenge_2026_MC1/MC1_final_00
 ```
 
 ```{r}
-write_rds(mc1_data,"Data/MC1/mc1_data.rds")
+dir.create("Data/MC1", recursive = TRUE, showWarnings = FALSE)
+write_rds(mc1_data, "Data/MC1/mc1_data.rds")
 ```
 
 ```{r}
@@ -22,5 +23,6 @@ org_chart <- fromJSON("VAST_Challenge_2026_MC2/VAST_Challenge_2026_MC2/org_chart
 
 ```{r}
 mc2_df = as.data.frame(mc2_data$events)
-write_rds(mc2_df,"Data/MC2/mc2_data.rds")
+dir.create("Data/MC2", recursive = TRUE, showWarnings = FALSE)
+write_rds(mc2_df, "Data/MC2/mc2_data.rds")
 ```

@@ -11,6 +11,8 @@ website:
         menu:
           - href: HO_Ex/HO_Ex1.qmd
             text: "Hands-on Exercise 1"
+          - href: HO_Ex/HO_Ex1_submission.qmd
+            text: "Hands-on Exercise 1 Submission"
           - href: HO_Ex/HO_Ex2.qmd
             text: "Hands-on Exercise 2"
           - href: HO_Ex/HO_Ex3.qmd
@@ -33,8 +35,14 @@ website:
         menu:
           - href: TH_Ex/TH_Ex1.qmd
             text: "Take-home Exercise 1"
+          - href: TH_Ex/TH_Ex1_report.qmd
+            text: "Take-home Exercise 1 Report"
+          - href: TH_Ex/TH_Ex1_slides.qmd
+            text: "Take-home Exercise 1 Slides"
           - href: TH_Ex/TH_Ex2.qmd
             text: "Take-home Exercise 2"
+          - href: TH_Ex/TH_Ex2_report.qmd
+            text: "Take-home Exercise 2 Report"
       - text: "VAST"
         href: VAST/kickstarter.qmd
       - href: about.qmd
@@ -48,6 +56,8 @@ website:
         contents:
           - href: HO_Ex/HO_Ex1.qmd
             text: "Hands-on Exercise 1"
+          - href: HO_Ex/HO_Ex1_submission.qmd
+            text: "Hands-on Exercise 1 Submission"
           - href: HO_Ex/HO_Ex2.qmd
             text: "Hands-on Exercise 2"
           - href: HO_Ex/HO_Ex3.qmd
