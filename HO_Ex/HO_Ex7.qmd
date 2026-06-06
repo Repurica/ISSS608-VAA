@@ -1,0 +1,786 @@
+---
+title: "Hands-on Exercise 7: Network and Text Visualisation with R"
+author: "Cao Jinming"
+date: "05 June 2026"
+date-modified: "last-modified"
+execute:
+  eval: false
+  echo: true
+  warning: false
+format: html
+---
+
+## Overview
+
+This hands-on exercise covers two related visual analytics workflows:
+
+- **Network data analysis**: model email communication as a graph, calculate network measures, and visualise relationships between actors.
+- **Text data analysis**: clean text documents, tokenise words and bigrams, calculate word importance, and visualise word relationships.
+
+The code is written as a reproducible workflow. If the data files are stored in a different folder, update the path variables at the start of each section.
+
+## Part 1: Network data with `tidygraph`, `ggraph`, and `visNetwork`
+
+This section uses the GAStech email data. The nodes file contains employee information, while the edges file contains email communication records.
+
+### 1.1 Load R packages
+
+```{r}
+pacman::p_load(
+  igraph, tidygraph, ggraph,
+  visNetwork, lubridate, clock,
+  tidyverse, graphlayouts,
+  concaveman, ggforce
+)
+```
+
+The main packages are:
+
+- `tidygraph` for creating and manipulating graph objects.
+- `ggraph` for static network visualisation.
+- `visNetwork` for interactive network visualisation.
+- `lubridate` for handling dates.
+
+### 1.2 Import network data
+
+```{r}
+network_data_dir <- "../data/r4va/chap27"
+
+GAStech_nodes <- read_csv(file.path(network_data_dir, "GAStech_email_node.csv"))
+GAStech_edges <- read_csv(file.path(network_data_dir, "GAStech_email_edge-v2.csv"))
+```
+
+The nodes table describes the employees. The edges table records who sent email to whom, together with the date, time, subject, and email labels.
+
+```{r}
+glimpse(GAStech_edges)
+```
+
+The first check is to inspect the data structure. In the raw data, `SentDate` is usually imported as character, so it must be converted before weekday analysis.
+
+### 1.3 Prepare date and weekday fields
+
+```{r}
+GAStech_edges <- GAStech_edges %>%
+  mutate(SendDate = dmy(SentDate)) %>%
+  mutate(Weekday = wday(
+    SentDate,
+    label = TRUE,
+    abbr = FALSE
+  ))
+```
+
+`dmy()` converts the date string into a proper date. `wday()` extracts the weekday so that email patterns can be compared across days.
+
+### 1.4 Aggregate email links
+
+```{r}
+GAStech_edges_aggregated <- GAStech_edges %>%
+  filter(MainSubject == "Work related") %>%
+  group_by(source, target, Weekday) %>%
+  summarise(Weight = n(), .groups = "drop") %>%
+  filter(source != target) %>%
+  filter(Weight > 1)
+```
+
+The raw edge data contains one row per email. For network visualisation, the emails are aggregated by sender, receiver, and weekday. `Weight` shows how many emails were sent for each relationship.
+
+### 1.5 Create a `tidygraph` object
+
+```{r}
+GAStech_graph <- tbl_graph(
+  nodes = GAStech_nodes,
+  edges = GAStech_edges_aggregated,
+  directed = TRUE
+)
+
+GAStech_graph
+```
+
+A `tbl_graph` stores the node table and edge table together. Since email has a sender and receiver, the graph is directed.
+
+```{r}
+GAStech_graph %>%
+  activate(edges) %>%
+  arrange(desc(Weight))
+```
+
+Sorting the edges by `Weight` helps identify stronger communication links.
+
+### 1.6 Basic static network graph
+
+```{r}
+ggraph(GAStech_graph) +
+  geom_edge_link() +
+  geom_node_point()
+```
+
+This first graph shows the basic network structure. The layout is simple and is mainly used to check whether the graph has been created correctly.
+
+```{r}
+g <- ggraph(GAStech_graph) +
+  geom_edge_link(aes()) +
+  geom_node_point(aes())
+
+g + theme_graph()
+```
+
+`theme_graph()` removes unnecessary chart elements and gives the network plot a cleaner appearance.
+
+```{r}
+g <- ggraph(GAStech_graph) +
+  geom_edge_link(aes(colour = "grey50")) +
+  geom_node_point(aes(colour = "grey40"))
+
+g + theme_graph(
+  background = "grey10",
+  text_colour = "white"
+)
+```
+
+The colour and background can be adjusted to improve contrast.
+
+### 1.7 Improve layout and visual encoding
+
+```{r}
+g <- ggraph(GAStech_graph, layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes())
+
+g + theme_graph()
+```
+
+The Fruchterman-Reingold layout places connected nodes closer together.
+
+```{r}
+g <- ggraph(GAStech_graph, layout = "nicely") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes(
+    colour = Department,
+    size = 3
+  ))
+
+g + theme_graph()
+```
+
+Colouring nodes by department makes it easier to see whether communication is concentrated within or across departments.
+
+```{r}
+g <- ggraph(GAStech_graph, layout = "nicely") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(
+    aes(colour = Department),
+    size = 3
+  )
+
+g + theme_graph()
+```
+
+Edge width is mapped to email frequency. Thicker edges represent stronger communication links.
+
+### 1.8 Facet network graphs
+
+```{r}
+set_graph_style()
+
+g <- ggraph(GAStech_graph, layout = "nicely") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(
+    aes(colour = Department),
+    size = 2
+  )
+
+g + facet_edges(~Weekday)
+```
+
+Faceting by weekday allows daily communication patterns to be compared.
+
+```{r}
+set_graph_style()
+
+g <- ggraph(GAStech_graph, layout = "nicely") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(
+    aes(colour = Department),
+    size = 2
+  ) +
+  theme(legend.position = "bottom")
+
+g + facet_edges(~Weekday)
+```
+
+Moving the legend to the bottom makes the small multiples easier to read.
+
+```{r}
+set_graph_style()
+
+g <- ggraph(GAStech_graph, layout = "nicely") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(
+    aes(colour = Department),
+    size = 2
+  )
+
+g + facet_edges(~Weekday) +
+  th_foreground(
+    foreground = "grey80",
+    border = TRUE
+  ) +
+  theme(legend.position = "bottom")
+```
+
+The foreground panel border makes each weekday panel clearer.
+
+```{r}
+set_graph_style()
+
+g <- ggraph(GAStech_graph, layout = "nicely") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(
+    aes(colour = Department),
+    size = 2
+  )
+
+g + facet_nodes(~Department) +
+  th_foreground(
+    foreground = "grey80",
+    border = TRUE
+  ) +
+  theme(legend.position = "bottom")
+```
+
+Faceting by department separates the employees into groups and helps identify department-level communication patterns.
+
+### 1.9 Add network measures
+
+```{r}
+g <- GAStech_graph %>%
+  mutate(betweenness_centrality = centrality_betweenness()) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(
+    colour = Department,
+    size = betweenness_centrality
+  ))
+
+g + theme_graph()
+```
+
+Betweenness centrality highlights employees who sit between other employees in the communication network. Larger nodes are more important connectors.
+
+```{r}
+g <- GAStech_graph %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(
+    colour = Department,
+    size = centrality_betweenness()
+  ))
+
+g + theme_graph()
+```
+
+The same measure can also be calculated directly inside the plot aesthetic.
+
+### 1.10 Detect communities
+
+```{r}
+g <- GAStech_graph %>%
+  mutate(community = as.factor(
+    group_edge_betweenness(
+      weights = Weight,
+      directed = TRUE
+    )
+  )) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = community))
+
+g + theme_graph()
+```
+
+Community detection groups employees who are more closely connected to each other.
+
+```{r}
+g <- GAStech_graph %>%
+  activate(nodes) %>%
+  mutate(
+    community = as.factor(group_optimal(weights = Weight)),
+    betweenness_measure = centrality_betweenness()
+  ) %>%
+  ggraph(layout = "fr") +
+  geom_mark_hull(
+    aes(
+      x, y,
+      group = community,
+      fill = community
+    ),
+    alpha = 0.2,
+    expand = unit(0.3, "cm"),
+    radius = unit(0.3, "cm")
+  ) +
+  geom_edge_link(
+    aes(width = Weight),
+    alpha = 0.2
+  ) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(
+    aes(
+      fill = Department,
+      size = betweenness_measure
+    ),
+    color = "black",
+    shape = 21
+  )
+
+g + theme_graph()
+```
+
+The hulls show the detected communities. Node size still represents betweenness centrality.
+
+### 1.11 Create an interactive network
+
+`visNetwork` uses different edge column names. The edge table is rebuilt with `from`, `to`, and `weight`.
+
+```{r}
+GAStech_edges_vis <- GAStech_edges %>%
+  left_join(GAStech_nodes, by = c("sourceLabel" = "label")) %>%
+  rename(from = id) %>%
+  left_join(GAStech_nodes, by = c("targetLabel" = "label")) %>%
+  rename(to = id) %>%
+  filter(MainSubject == "Work related") %>%
+  group_by(from, to) %>%
+  summarise(weight = n(), .groups = "drop") %>%
+  filter(from != to) %>%
+  filter(weight > 1)
+```
+
+```{r}
+visNetwork(GAStech_nodes, GAStech_edges_vis)
+```
+
+This creates a basic interactive graph.
+
+```{r}
+visNetwork(GAStech_nodes, GAStech_edges_vis) %>%
+  visIgraphLayout(layout = "layout_with_fr")
+```
+
+The layout can be improved by using an `igraph` layout algorithm.
+
+```{r}
+GAStech_nodes_vis <- GAStech_nodes %>%
+  rename(group = Department)
+
+visNetwork(GAStech_nodes_vis, GAStech_edges_vis) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
+```
+
+The `group` column controls node colour, and the legend explains the department colours.
+
+```{r}
+visNetwork(GAStech_nodes_vis, GAStech_edges_vis) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(
+    arrows = "to",
+    smooth = list(
+      enabled = TRUE,
+      type = "curvedCW"
+    )
+  ) %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
+```
+
+Arrows show the direction of emails.
+
+```{r}
+visNetwork(GAStech_nodes_vis, GAStech_edges_vis) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visOptions(
+    highlightNearest = TRUE,
+    nodesIdSelection = TRUE
+  ) %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
+```
+
+`highlightNearest` and `nodesIdSelection` make the graph easier to explore interactively.
+
+## Part 2: Text data with `tidytext`
+
+This section uses text documents from the 20 Newsgroups dataset. The workflow imports many text files, cleans the text, tokenises words, calculates TF-IDF, and builds a bigram network.
+
+### 2.1 Load R packages
+
+```{r}
+pacman::p_load(
+  tidytext, widyr, wordcloud, DT, ggwordcloud,
+  textplot, lubridate, hms, tidyverse,
+  tidygraph, ggraph, igraph
+)
+```
+
+### 2.2 Import many text files
+
+```{r}
+news20 <- "../data/r4va/chap29/20news/"
+```
+
+The folder should contain one subfolder per newsgroup. Each subfolder contains individual text files.
+
+```{r}
+read_folder <- function(infolder) {
+  tibble(file = dir(infolder, full.names = TRUE)) %>%
+    mutate(text = map(file, read_lines)) %>%
+    transmute(
+      id = basename(file),
+      text
+    ) %>%
+    unnest(text)
+}
+```
+
+This helper function reads all files in one folder and returns a tidy data frame.
+
+```{r}
+raw_text <- tibble(folder = dir(news20, full.names = TRUE)) %>%
+  mutate(folder_out = map(folder, read_folder)) %>%
+  unnest(cols = c(folder_out)) %>%
+  transmute(
+    newsgroup = basename(folder),
+    id,
+    text
+  )
+
+write_rds(raw_text, "../data/r4va/news20.rds")
+```
+
+The result has one row per line of text. The `newsgroup` column records which group the message belongs to.
+
+### 2.3 Explore message counts
+
+```{r}
+raw_text %>%
+  group_by(newsgroup) %>%
+  summarise(messages = n_distinct(id), .groups = "drop") %>%
+  ggplot(aes(messages, newsgroup)) +
+  geom_col(fill = "lightblue") +
+  labs(
+    x = "Number of messages",
+    y = NULL
+  )
+```
+
+This bar chart checks whether the groups have similar or different numbers of messages.
+
+### 2.4 Clean the text
+
+```{r}
+cleaned_text <- raw_text %>%
+  group_by(newsgroup, id) %>%
+  filter(
+    cumsum(text == "") > 0,
+    cumsum(str_detect(text, "^--")) == 0
+  ) %>%
+  ungroup()
+```
+
+This step removes email headers and lines after automated signatures.
+
+```{r}
+cleaned_text <- cleaned_text %>%
+  filter(
+    str_detect(text, "^[^>]+[A-Za-z\\d]") | text == "",
+    !str_detect(text, "writes(:|\\.\\.\\.)$"),
+    !str_detect(text, "^In article <")
+  )
+```
+
+This step removes quoted replies and other repeated email text.
+
+### 2.5 Tokenise words
+
+```{r}
+usenet_words <- cleaned_text %>%
+  unnest_tokens(word, text) %>%
+  filter(
+    str_detect(word, "[a-z']$"),
+    !word %in% stop_words$word
+  )
+```
+
+`unnest_tokens()` splits text into one word per row. Stop words such as common articles and connectors are removed.
+
+```{r}
+usenet_words %>%
+  count(word, sort = TRUE)
+```
+
+This count shows the most frequent remaining words.
+
+### 2.6 Visualise words
+
+```{r}
+words_by_newsgroup <- usenet_words %>%
+  count(newsgroup, word, sort = TRUE) %>%
+  ungroup()
+```
+
+```{r}
+wordcloud(
+  words_by_newsgroup$word,
+  words_by_newsgroup$n,
+  max.words = 300
+)
+```
+
+The word cloud gives a quick overview of frequent words.
+
+```{r}
+set.seed(1234)
+
+words_by_newsgroup %>%
+  filter(n > 0) %>%
+  ggplot(aes(
+    label = word,
+    size = n
+  )) +
+  geom_text_wordcloud() +
+  theme_minimal() +
+  facet_wrap(~newsgroup)
+```
+
+Faceting the word cloud by newsgroup makes group-level differences easier to compare.
+
+### 2.7 Calculate TF-IDF
+
+```{r}
+tf_idf <- words_by_newsgroup %>%
+  bind_tf_idf(word, newsgroup, n) %>%
+  arrange(desc(tf_idf))
+```
+
+TF-IDF gives higher scores to words that are common in one newsgroup but less common in others.
+
+```{r}
+DT::datatable(tf_idf, filter = "top") %>%
+  formatRound(
+    columns = c("tf", "idf", "tf_idf"),
+    digits = 3
+  ) %>%
+  formatStyle(
+    0,
+    target = "row",
+    lineHeight = "25%"
+  )
+```
+
+An interactive table is useful for searching and checking TF-IDF values.
+
+```{r}
+tf_idf %>%
+  filter(str_detect(newsgroup, "^sci\\.")) %>%
+  group_by(newsgroup) %>%
+  slice_max(tf_idf, n = 12) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(
+    tf_idf,
+    word,
+    fill = newsgroup
+  )) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(
+    ~newsgroup,
+    scales = "free"
+  ) +
+  labs(
+    x = "tf-idf",
+    y = NULL
+  )
+```
+
+This plot highlights the most distinctive terms in science-related newsgroups.
+
+### 2.8 Correlate words across groups
+
+```{r}
+newsgroup_cors <- words_by_newsgroup %>%
+  pairwise_cor(
+    newsgroup,
+    word,
+    n,
+    sort = TRUE
+  )
+```
+
+Word correlation shows which newsgroups use similar vocabularies.
+
+```{r}
+set.seed(2017)
+
+newsgroup_cors %>%
+  filter(correlation > 0.025) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(
+    alpha = correlation,
+    width = correlation
+  )) +
+  geom_node_point(
+    size = 6,
+    color = "lightblue"
+  ) +
+  geom_node_text(
+    aes(label = name),
+    color = "red",
+    repel = TRUE
+  ) +
+  theme_void()
+```
+
+The graph connects newsgroups with similar word usage.
+
+### 2.9 Work with bigrams
+
+```{r}
+bigrams <- cleaned_text %>%
+  unnest_tokens(
+    bigram,
+    text,
+    token = "ngrams",
+    n = 2
+  )
+
+bigrams
+```
+
+A bigram is a pair of consecutive words. Bigrams help show common phrases, not just single words.
+
+```{r}
+bigrams_count <- bigrams %>%
+  filter(bigram != "NA") %>%
+  count(bigram, sort = TRUE)
+
+bigrams_count
+```
+
+This identifies the most common word pairs.
+
+```{r}
+bigrams_separated <- bigrams %>%
+  filter(bigram != "NA") %>%
+  separate(
+    bigram,
+    c("word1", "word2"),
+    sep = " "
+  )
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+
+bigrams_filtered
+```
+
+The bigram is split into two columns so that stop words can be removed from both positions.
+
+### 2.10 Build a bigram network
+
+```{r}
+bigram_counts <- bigrams_filtered %>%
+  count(word1, word2, sort = TRUE)
+```
+
+```{r}
+bigram_graph <- bigram_counts %>%
+  filter(n > 3) %>%
+  graph_from_data_frame()
+
+bigram_graph
+```
+
+The bigram graph treats words as nodes and common word pairs as directed edges.
+
+```{r}
+set.seed(1234)
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link() +
+  geom_node_point() +
+  geom_node_text(
+    aes(label = name),
+    vjust = 1,
+    hjust = 1
+  )
+```
+
+This first network shows the basic bigram structure.
+
+```{r}
+set.seed(1234)
+
+a <- grid::arrow(
+  type = "closed",
+  length = unit(0.15, "inches")
+)
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(
+    aes(edge_alpha = n),
+    show.legend = FALSE,
+    arrow = a,
+    end_cap = circle(0.07, "inches")
+  ) +
+  geom_node_point(
+    color = "lightblue",
+    size = 5
+  ) +
+  geom_node_text(
+    aes(label = name),
+    vjust = 1,
+    hjust = 1
+  ) +
+  theme_void()
+```
+
+Arrows show word order, and edge transparency shows how frequently each bigram appears.
+
+## Summary
+
+This exercise demonstrates two important visual analytics workflows. Network analysis is useful when the main task is to understand relationships between actors. Text analysis is useful when the main task is to extract important terms, compare documents, and visualise word relationships.
