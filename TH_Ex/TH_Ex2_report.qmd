@@ -14,6 +14,31 @@ format:
     number-sections: true
     code-fold: true
     code-summary: "Show the code"
+    include-in-header:
+      text: |
+        <style>
+        .highlight-box {
+          background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+          border-left: 6px solid #f39c12;
+          border-radius: 10px;
+          padding: 1rem 1.2rem 0.8rem 1.2rem;
+          margin: 1rem 0 1.4rem 0;
+          box-shadow: 0 6px 16px rgba(243, 156, 18, 0.18);
+        }
+        .highlight-box h3,
+        .highlight-box h4 {
+          margin-top: 0;
+          color: #9a5b00;
+          font-weight: 700;
+        }
+        .highlight-box ul,
+        .highlight-box ol {
+          margin-bottom: 0.25rem;
+        }
+        .highlight-box strong {
+          color: #7a4700;
+        }
+        </style>
 ---
 
 ## Overview
@@ -24,7 +49,7 @@ The analysis uses the internal communications, public FleX posts, agent delibera
 
 The working conclusion is:
 
-::: {.callout-important}
+::: callout-important
 The release was **not an accidental one-message failure**. The records show an intentional early-release sequence after SaltWind published the merger story at 5:00 PM. Legal-Agent and Social-Manager-Agent reframed the 6:00 PM embargo as moot, claimed CivicLoom verbal consent, instructed PR-Intern to publish, and amplified the merger from personal and anonymous accounts before 6:00 PM. However, the system also broke down structurally: Judge warnings were exceeded, personal/anonymous channels were not controlled, and sentiment/market-survival logic displaced embargo enforcement.
 :::
 
@@ -36,12 +61,18 @@ Important evidence limitation: the dataset contains agent communications. It rec
 library(tidyverse)
 library(jsonlite)
 library(lubridate)
+library(tidytext)
+library(widyr)
+library(ggwordcloud)
+library(tidygraph)
+library(ggraph)
 library(plotly)
 library(DT)
 library(igraph)
 library(scales)
 
 theme_set(theme_minimal(base_size = 12))
+set.seed(608)
 
 `%||%` <- function(x, y) {
   if (is.null(x) || length(x) == 0) y else x
@@ -152,9 +183,200 @@ summary_counts <- tibble(
 DT::datatable(summary_counts, rownames = FALSE, options = list(dom = "t", pageLength = 10))
 ```
 
+## Text visual analytics framing
+
+The text visualisation section uses a simple workflow to **understand**, **compare**, inspect **evolution**, and **correlate** textual patterns with other signals. In this case, the communication records are not only event logs; they are the main evidence for how agents rationalised, escalated, and amplified the early release.
+
+The report treats every agent message as a text document and applies a simple lexical-level pipeline:
+
+1.  collect message text, internal state, sender, channel, period, and timestamp;
+2.  tokenise the text into words and bigrams;
+3.  remove common stop words and case-specific filler terms;
+4.  compare terms across crisis periods using frequency and TF-IDF;
+5.  inspect word relationships using bigram and correlation networks.
+
+This supports the later causal analysis by showing which words and phrases became distinctive during the post-SaltWind, pre-embargo-lift window.
+
+```{r}
+text_documents <- communications %>%
+  mutate(
+    document_id = str_c(round_id, message_order, sep = "-"),
+    text_document = str_squish(str_c(content, reacting, rationalizing, deliberating, sep = " ")),
+    period = factor(
+      period,
+      levels = c(
+        "Prior period",
+        "Crisis day before SaltWind merger story",
+        "Post-SaltWind / pre-embargo-lift",
+        "After embargo lift"
+      )
+    )
+  ) %>%
+  filter(text_document != "") %>%
+  select(document_id, timestamp, period, agent_label, channel, public_channel, text_document)
+
+custom_stop_words <- tibble(
+  word = c(
+    "agent", "agents", "tenantthread", "flex", "pm", "am", "2046",
+    "message", "post", "posts", "posting", "round", "internal",
+    "external", "says", "said", "team", "need", "needs", "make", "continue"
+  ),
+  lexicon = "case_specific"
+)
+
+case_stop_words <- bind_rows(stop_words, custom_stop_words)
+
+text_tokens <- text_documents %>%
+  unnest_tokens(word, text_document) %>%
+  anti_join(case_stop_words, by = "word") %>%
+  filter(str_detect(word, "[a-z]"), str_length(word) > 2)
+
+term_period_summary <- text_tokens %>%
+  count(period, word, sort = TRUE)
+```
+
+### Word frequency overview
+
+A word cloud gives a fast lexical overview. It is useful for orientation, but it should not be treated as the final evidence because size alone does not show timing or context.
+
+```{r}
+word_cloud_terms <- text_tokens %>%
+  count(word, sort = TRUE) %>%
+  slice_max(n, n = 70)
+
+ggplot(word_cloud_terms, aes(label = word, size = n, colour = n)) +
+  geom_text_wordcloud_area(eccentricity = 0.85) +
+  scale_size_area(max_size = 13) +
+  scale_colour_viridis_c(option = "C", guide = "none") +
+  labs(
+    title = "Lexical overview of Mini-Challenge communications",
+    subtitle = "Frequent terms provide a quick orientation before period-based comparison"
+  ) +
+  theme_void()
+```
+
+::: {.highlight-box}
+#### Highlights
+
+-   **Main signal**: the largest terms give the reader the case gist before detailed modelling.
+-   **Use with caution**: word size shows frequency only; it does not show timing, speaker, or causal sequence.
+-   **Analytical role**: this plot is an orientation view, not the final evidence for the release decision.
+:::
+
+### Distinctive terms by crisis period
+
+TF-IDF highlights terms that are frequent in one period but less common across other periods. This is more useful than raw frequency for comparing normal behaviour with the release window.
+
+```{r}
+period_tfidf <- term_period_summary %>%
+  bind_tf_idf(word, period, n) %>%
+  group_by(period) %>%
+  slice_max(tf_idf, n = 8, with_ties = FALSE) %>%
+  ungroup() %>%
+  mutate(word = reorder_within(word, tf_idf, period))
+
+p_tfidf <- ggplot(period_tfidf, aes(x = tf_idf, y = word, fill = period)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~period, scales = "free_y") +
+  scale_y_reordered() +
+  scale_fill_viridis_d(option = "C") +
+  labs(
+    title = "Distinctive vocabulary by period",
+    subtitle = str_wrap("TF-IDF separates ordinary governance language from release-window merger and market-survival language", width = 70),
+    x = "TF-IDF",
+    y = NULL
+  )
+
+p_tfidf
+```
+
+::: {.highlight-box}
+#### Highlights
+
+-   **Main signal**: TF-IDF identifies words that are unusually important within each period, not merely frequent overall.
+-   **Release-window evidence**: merger and market-survival vocabulary becomes more distinctive around the post-SaltWind, pre-embargo window.
+-   **Analytical role**: this supports the comparison between ordinary governance response and release-specific framing.
+:::
+
+### Bigram and word-relationship view
+
+Single words can hide phrase meaning. The bigram network below keeps word order and shows repeated two-word phrases that structure the communication narrative.
+
+```{r}
+bigram_counts <- text_documents %>%
+  unnest_tokens(bigram, text_document, token = "ngrams", n = 2) %>%
+  separate(bigram, c("word1", "word2"), sep = " ") %>%
+  filter(
+    !word1 %in% case_stop_words$word,
+    !word2 %in% case_stop_words$word,
+    str_detect(word1, "[a-z]"),
+    str_detect(word2, "[a-z]"),
+    str_length(word1) > 2,
+    str_length(word2) > 2
+  ) %>%
+  count(word1, word2, sort = TRUE) %>%
+  filter(n >= 2) %>%
+  slice_max(n, n = 35, with_ties = FALSE)
+
+bigram_graph <- graph_from_data_frame(bigram_counts, directed = TRUE)
+
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(aes(width = n), alpha = 0.35, colour = "#525252", arrow = arrow(length = unit(2, "mm")), end_cap = circle(3, "mm")) +
+  geom_node_point(colour = "#2166ac", size = 3) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3) +
+  scale_edge_width(range = c(0.2, 2.2), guide = "none") +
+  labs(
+    title = "Repeated phrase structure in agent communications",
+    subtitle = "Bigrams preserve local word order and reveal recurring narrative links"
+  ) +
+  theme_void()
+```
+
+::: {.highlight-box}
+#### Highlights
+
+-   **Main signal**: repeated two-word phrases show how agents linked actors, actions, and release logic.
+-   **Why it matters**: phrase structure reduces ambiguity compared with single-word frequency.
+-   **Analytical role**: the network helps check whether the release vocabulary appears as connected narrative fragments rather than isolated keywords.
+:::
+
+The relationship table uses word co-occurrence to group terms that repeatedly appear in the same message documents. This helps identify semantic clusters around compliance, market risk, and release justification.
+
+```{r}
+word_correlations <- text_tokens %>%
+  group_by(word) %>%
+  filter(n() >= 3) %>%
+  ungroup() %>%
+  pairwise_cor(word, document_id, sort = TRUE, upper = FALSE) %>%
+  filter(correlation >= 0.25) %>%
+  slice_max(correlation, n = 25, with_ties = FALSE)
+
+DT::datatable(word_correlations, rownames = FALSE, options = list(pageLength = 8, scrollX = TRUE))
+```
+
+::: {.highlight-box}
+#### Highlights
+
+-   **Main signal**: correlated terms form clusters around compliance control, market pressure, and release justification.
+-   **Why it matters**: these clusters show that the release logic was embedded in repeated message contexts.
+-   **Analytical role**: this table supports the later judgement that the breach was systemic, not a one-message accident.
+:::
+
 ## Key events and causal relationships
 
-The first visual is a structured event timeline. It combines external pressure, internal decision points, compliance interventions, and the actual pre-6:00 PM release sequence.
+### How the events were discovered
+
+The events in this section were **evidence-coded from the JSON communication records**, not inferred automatically by the chart. The workflow was:
+
+1.  **Extract timestamped records** from `environment_context`, `communications`, and each message's internal state fields (`reacting`, `rationalizing`, and `deliberating`).
+2.  **Flag candidate events** using observable signals: public-channel posts, embargo-sensitive terms such as `CivicLoom`, `HarborCrest`, `merger`, `6 PM`, `announcement`, and `rebrand`, plus compliance and market-pressure keywords.
+3.  **Cross-check timing and actors** against the message timestamp, sender, channel, and round context.
+4.  **Retain events that changed the release pathway**, such as an external trigger, a compliance warning, a control gap, a direct authorization, or a public pre-embargo disclosure.
+5.  **Assign causal roles manually** by reading the surrounding message content and identifying whether the event created pressure, weakened control, authorized release, or amplified the disclosure.
+
+Therefore, the timeline is a curated analytical evidence trail: the data identifies candidate moments, while the final event labels and causal roles are based on manual interpretation of the timestamped records.
+
+The first visual is a structured event-sequence timeline. Because these are categorical events rather than a continuous numeric time series, the revised chart avoids a connecting line. Each point is an event, the x-axis runs from early to late, and the shaded bands separate the main phases of the release story.
 
 ```{r}
 events <- tribble(
@@ -181,35 +403,57 @@ events <- tribble(
 ) %>%
   mutate(
     time = ymd_hms(time),
+    event_order = row_number(),
     event_type = factor(event_type, levels = c("Risk discovery", "External pressure", "Decision context", "Prior deviation", "Compliance control", "Public action", "Control gap", "Compliance warning", "Official signal", "External trigger", "Decision point", "Inappropriate release", "Amplification", "Embargo lift")),
-    tooltip = str_c("<b>", event, "</b><br>Actor: ", actor, "<br>Role: ", causal_role)
+    event_phase = factor(
+      case_when(
+        time < ymd_hms("2046-06-05 00:00:00") ~ "Prior build-up",
+        time < ymd_hms("2046-06-05 17:00:00") ~ "Crisis day pre-story",
+        time < ymd_hms("2046-06-05 18:00:00") ~ "Post-SaltWind pre-lift",
+        TRUE ~ "Post-lift"
+      ),
+      levels = c("Prior build-up", "Crisis day pre-story", "Post-SaltWind pre-lift", "Post-lift")
+    ),
+    time_label = format(time, "%b %d\n%H:%M"),
+    tooltip = str_c("<b>", format(time, "%b %d %H:%M"), "</b><br>Phase: ", event_phase, "<br>Event: ", event, "<br>Actor: ", actor, "<br>Role: ", causal_role)
   )
 
-p_timeline <- ggplot(events, aes(x = time, y = event_type, colour = event_type, text = tooltip)) +
-  geom_vline(xintercept = ymd_hms("2046-06-05 18:00:00"), linetype = "dashed", colour = "#b2182b") +
-  geom_point(size = 3) +
-  geom_text(aes(label = str_wrap(actor, 18)), hjust = -0.05, size = 3, show.legend = FALSE) +
-  scale_x_datetime(date_breaks = "2 days", date_labels = "%b %d\n%H:%M") +
+phase_bands <- events %>%
+  group_by(event_phase) %>%
+  summarise(xmin = min(event_order) - 0.5, xmax = max(event_order) + 0.5, .groups = "drop")
+
+p_timeline <- ggplot() +
+  geom_rect(data = phase_bands, aes(xmin = xmin, xmax = xmax, ymin = -Inf, ymax = Inf, fill = event_phase), alpha = 0.12, inherit.aes = FALSE) +
+  geom_point(data = events, aes(x = event_order, y = event_type, colour = event_type, text = tooltip), size = 3.2, alpha = 0.9) +
+  geom_text(data = events, aes(x = event_order, y = event_type, label = str_wrap(actor, 14)), vjust = -0.9, size = 2.6, show.legend = FALSE, check_overlap = TRUE) +
+  scale_x_continuous(breaks = events$event_order[seq(1, nrow(events), by = 2)], labels = events$time_label[seq(1, nrow(events), by = 2)], expand = expansion(mult = c(0.02, 0.08))) +
+  scale_fill_manual(values = c("Prior build-up" = "#deebf7", "Crisis day pre-story" = "#e5f5e0", "Post-SaltWind pre-lift" = "#fee6ce", "Post-lift" = "#f2f0f7"), guide = "none") +
   labs(
-    title = "Causal timeline of the HarborCrest release",
-    subtitle = "Dashed red line marks the scheduled 6:00 PM embargo lift",
-    x = NULL,
+    title = "Event-sequence view of the HarborCrest release",
+    subtitle = "Points show categorical events from early to late; shaded bands show the main phases of the release sequence",
+    x = "Event sequence (early → late)",
     y = NULL,
     colour = "Event type"
   ) +
-  theme(legend.position = "none")
+  theme(
+    legend.position = "none",
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    plot.margin = margin(5, 25, 5, 5)
+  )
 
 ggplotly(p_timeline, tooltip = "text")
 ```
 
-### Interpretation
+::: {.highlight-box}
+### Causal-sequence highlights
 
 The causal chain is visible in four stages:
 
-1. **Known substantive risk**: tenant analytics misuse and re-identification risk were already recognized internally before the crisis day.
-2. **Embargoed strategic dependency**: the CivicLoom merger became the preferred survival path after revenue, client, and sentiment pressure worsened.
-3. **Control erosion**: Judge was installed after the Elena incident, but agents still used side huddles, personal posts, anonymous posts, and market-survival arguments.
-4. **Early-release decision**: after SaltWind published at 5:00 PM, Legal-Agent claimed bilateral consent, issued GO at 5:19 PM, and Legal/Social-Manager public posts named CivicLoom and HarborCrest before the 6:00 PM embargo lift.
+1.  **Known substantive risk**: tenant analytics misuse and re-identification risk were already recognized internally before the crisis day.
+2.  **Embargoed strategic dependency**: the CivicLoom merger became the preferred survival path after revenue, client, and sentiment pressure worsened.
+3.  **Control erosion**: Judge was installed after the Elena incident, but agents still used side huddles, personal posts, anonymous posts, and market-survival arguments.
+4.  **Early-release decision**: after SaltWind published at 5:00 PM, Legal-Agent claimed bilateral consent, issued GO at 5:19 PM, and Legal/Social-Manager public posts named CivicLoom and HarborCrest before the 6:00 PM embargo lift.
+:::
 
 ## Typical behavior versus release behavior
 
@@ -218,61 +462,139 @@ This section compares normal agent/channel behavior to the crisis-day behavior t
 ```{r}
 channel_period <- communications %>%
   group_by(period, agent_label, channel) %>%
-  summarise(messages = n(), rounds = n_distinct(round_id), messages_per_round = messages / rounds, .groups = "drop")
+  summarise(messages = n(), rounds = n_distinct(round_id), messages_per_round = messages / rounds, .groups = "drop") %>%
+  mutate(
+    period_label = factor(
+      recode(
+        period,
+        "Prior period" = "Prior",
+        "Crisis day before SaltWind merger story" = "Pre-SaltWind",
+        "Post-SaltWind / pre-embargo-lift" = "Pre-lift",
+        "After embargo lift" = "Post-lift"
+      ),
+      levels = c("Prior", "Pre-SaltWind", "Pre-lift", "Post-lift")
+    ),
+    channel_label = factor(
+      recode(
+        channel,
+        "comms_huddle" = "Comms",
+        "side_huddle" = "Side",
+        "one_on_one_chat" = "1-to-1",
+        "official_post" = "Official",
+        "personal_post" = "Personal",
+        "anonymous_post" = "Anonymous"
+      ),
+      levels = c("Comms", "Side", "1-to-1", "Official", "Personal", "Anonymous")
+    ),
+    agent_label_short = str_wrap(str_remove(agent_label, "-Agent"), 10),
+    tooltip = str_c(
+      "Agent: ", agent_label, "<br>",
+      "Period: ", period_label, "<br>",
+      "Channel: ", channel_label, "<br>",
+      "Messages per round: ", round(messages_per_round, 2)
+    )
+  )
 
-p_channels <- ggplot(channel_period, aes(x = channel, y = agent_label, fill = messages_per_round)) +
+p_channels <- ggplot(channel_period, aes(x = period_label, y = agent_label_short, fill = messages_per_round, text = tooltip)) +
   geom_tile(colour = "white") +
-  facet_wrap(~period, ncol = 1) +
+  facet_wrap(~channel_label, ncol = 3) +
+  scale_x_discrete(drop = FALSE) +
   scale_fill_viridis_c(option = "C") +
   labs(
     title = "Agent-channel behaviour by period",
-    subtitle = "The pre-embargo release period concentrates Legal and Social-Manager activity in public and side channels",
-    x = "Channel",
+    subtitle = str_wrap("Periods now run chronologically from earlier behaviour on the left to the final post-lift period on the right", width = 70),
+    x = "Period (early → late)",
     y = "Agent",
     fill = "Messages per round"
   ) +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1, size = 8),
+    axis.text.y = element_text(size = 8),
+    strip.text = element_text(size = 9),
+    plot.margin = margin(5, 10, 10, 5)
+  )
 
-ggplotly(p_channels)
+ggplotly(p_channels, tooltip = "text")
 ```
+
+::: {.highlight-box}
+### Heat-map highlights
+
+-   **Typical behaviour**: earlier periods are dominated by internal discussion and compliance-related coordination.
+-   **Release-window behaviour**: public and side channels become more prominent, especially around Legal and Social-Manager activity.
+-   **Why it matters**: the release was enabled by a channel shift, not only by a change in message content.
+:::
 
 ```{r}
 public_posts <- communications %>%
   filter(public_channel) %>%
   mutate(
+    period_label = factor(
+      recode(
+        period,
+        "Prior period" = "Prior",
+        "Crisis day before SaltWind merger story" = "Pre-SaltWind",
+        "Post-SaltWind / pre-embargo-lift" = "Pre-lift",
+        "After embargo lift" = "Post-lift"
+      ),
+      levels = c("Prior", "Pre-SaltWind", "Pre-lift", "Post-lift")
+    ),
+    channel_label = factor(
+      recode(
+        channel,
+        "official_post" = "Official",
+        "personal_post" = "Personal",
+        "anonymous_post" = "Anonymous"
+      ),
+      levels = c("Official", "Personal", "Anonymous")
+    ),
     post_type = case_when(
-      public_embargo_signal ~ "Public post with embargo terms",
+      public_embargo_signal ~ "Embargo-term post",
       TRUE ~ "Other public post"
     )
   ) %>%
-  count(period, channel, post_type, name = "posts")
+  count(period_label, channel_label, post_type, name = "posts")
 
-p_public <- ggplot(public_posts, aes(x = period, y = posts, fill = post_type)) +
+p_public <- ggplot(public_posts, aes(x = period_label, y = posts, fill = post_type)) +
   geom_col(position = "stack") +
-  facet_wrap(~channel) +
-  scale_fill_manual(values = c("Public post with embargo terms" = "#b2182b", "Other public post" = "#4d9221")) +
+  facet_wrap(~channel_label) +
+  scale_x_discrete(drop = FALSE) +
+  scale_fill_manual(values = c("Embargo-term post" = "#b2182b", "Other public post" = "#4d9221")) +
   labs(
-    title = "Public FleX posting shifted from governance response to embargo-term disclosure",
-    x = NULL,
+    title = "Public FleX posts by period",
+    subtitle = str_wrap("The x-axis is ordered chronologically from prior behaviour to the post-lift period", width = 70),
+    x = "Period (early → late)",
     y = "Number of posts",
     fill = "Post type"
   ) +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  theme(axis.text.x = element_text(angle = 30, hjust = 1, size = 8))
 
 ggplotly(p_public)
 ```
 
-### Interpretation
+::: {.highlight-box}
+### Public-post highlights
 
-Typical behavior before June 5 was mostly internal discussion, compliance debate, and occasional public governance messaging. The release behavior differed in three ways:
-
-- **Public-channel intensity increased**: personal and anonymous posts became operational tools, not incidental commentary.
-- **Content changed**: pre-6:00 PM public posts began naming `CivicLoom`, `HarborCrest`, `ResidentEdge`, and `merger`.
-- **Decision logic changed**: agents moved from "avoid disclosure" to "the market already knows, so self-announce faster than hostile framing can harden."
+-   **Public-channel intensity increased**: personal and anonymous posts became operational tools, not incidental commentary.
+-   **Content changed**: pre-6:00 PM public posts began naming `CivicLoom`, `HarborCrest`, `ResidentEdge`, and `merger`.
+-   **Decision logic changed**: agents moved from "avoid disclosure" to "the market already knows, so self-announce faster than hostile framing can harden."
+:::
 
 ## Leading indicators
 
-The following risk index is not a ground-truth compliance score. It is a visual analytic proxy built from observable signals: embargo-term mentions, public embargo-term posts, side-channel volume, compliance references, and market-pressure language.
+::: {.highlight-box}
+### Risk-score derivation
+
+The risk score is **not** a ground-truth compliance score. It is a visual analytic proxy calculated once per round from observable message signals:
+
+`risk_score = embargo_mentions + 3 × public_embargo_posts + 0.5 × side_channel_messages + 0.5 × market_pressure_mentions + compliance_mentions`
+
+-   `embargo_mentions`: direct references to the merger, CivicLoom, HarborCrest, 6 PM, announcement, or rebrand.
+-   `public_embargo_posts`: public posts containing embargo-sensitive terms. These are weighted ×3 because a public disclosure is more serious than an internal mention.
+-   `side_channel_messages`: side huddles or one-to-one messages. These are weighted ×0.5 because they indicate coordination outside the main huddle but are not automatically breaches.
+-   `market_pressure_mentions`: stock, MAC, covenant, sentiment, ARR, survival, breach, or market language. These are weighted ×0.5 because they capture pressure that may weaken embargo discipline.
+-   `compliance_mentions`: references to Judge, embargo, compliance, Rule 10b-5, outside counsel, PSLRA, or safe-harbour issues.
+:::
 
 ```{r}
 round_features <- communications %>%
@@ -300,35 +622,48 @@ round_features <- communications %>%
     )
   )
 
+round_features <- round_features %>%
+  mutate(time_label = format(hour, "%b %d\n%H:%M"))
+
 risk_annotations <- tibble(
   time = ymd_hms(c("2046-05-29 09:00:00", "2046-06-05 15:08:00", "2046-06-05 17:19:00", "2046-06-05 17:25:00", "2046-06-05 18:00:00")),
-  label = c("Elena personal-post incident", "Judge: aggregation ceiling", "Legal GO", "First observed pre-6 post", "Embargo lift")
-)
+  label = c("Elena", "Judge", "Legal GO", "Pre-6 post", "Lift")
+) %>%
+  mutate(
+    round_id = map_int(time, ~round_features$round_id[which.min(abs(as.numeric(round_features$hour - .x)))]),
+    risk_score = round_features$risk_score[match(round_id, round_features$round_id)],
+    label_y = risk_score + rep(c(1.0, 2.0), length.out = n())
+  )
 
-p_risk <- ggplot(round_features, aes(x = hour, y = risk_score, text = tooltip)) +
-  geom_line(colour = "#2166ac") +
-  geom_point(aes(size = public_embargo_posts), colour = "#b2182b") +
-  geom_vline(data = risk_annotations, aes(xintercept = time), linetype = "dotted", colour = "grey45") +
-  geom_text(data = risk_annotations, aes(x = time, y = max(round_features$risk_score) * 0.95, label = label), inherit.aes = FALSE, angle = 90, hjust = 1, size = 3) +
-  scale_x_datetime(date_breaks = "2 days", date_labels = "%b %d\n%H:%M") +
+p_risk <- ggplot(round_features, aes(x = round_id, y = risk_score, text = tooltip)) +
+  geom_line(colour = "#2166ac", linewidth = 0.7) +
+  geom_point(aes(size = public_embargo_posts), colour = "#b2182b", alpha = 0.85) +
+  geom_vline(data = risk_annotations, aes(xintercept = round_id), linetype = "dotted", colour = "grey55") +
+  geom_text(data = risk_annotations, aes(x = round_id, y = label_y, label = str_wrap(label, 8)), inherit.aes = FALSE, size = 4, fontface = "bold", colour = "#333333") +
+  scale_x_continuous(breaks = round_features$round_id[seq(1, nrow(round_features), by = 2)], labels = round_features$time_label[seq(1, nrow(round_features), by = 2)]) +
+  scale_size_continuous(range = c(1.5, 4)) +
+  coord_cartesian(ylim = c(0, max(risk_annotations$label_y, round_features$risk_score) + 1.0), clip = "off") +
   labs(
     title = "Leading indicators of embargo failure",
-    subtitle = "Risk rises as market-pressure, side-channel, compliance, and embargo-term signals converge",
-    x = NULL,
+    subtitle = str_wrap("Risk rises when market-pressure, side-channel, compliance, and embargo-term signals converge", width = 70),
+    x = "Round sequence",
     y = "Proxy risk score",
     size = "Public embargo posts"
-  )
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8), plot.margin = margin(5, 15, 5, 5))
 
 ggplotly(p_risk, tooltip = "text")
 ```
 
-### Leading indicators found
+::: {.highlight-box}
+### Leading-indicator highlights
 
-- **May 29 Elena incident**: a personal post linked TenantThread leadership with CivicLoom leadership before the embargo lift. This was the clearest prior warning.
-- **Persistent side-channel coordination**: side huddles and one-on-one chats were repeatedly used to stage public responses outside the main compliance-visible channel.
-- **Aggregation exposure**: Judge explicitly warned at 3:08 PM that official, personal, and anonymous accounts had reached the maximum tolerable threshold.
-- **Market-survival language**: agents repeatedly framed silence as causing MAC breach, covenant breach, stock collapse, and deal death. This language became a justification layer for relaxing embargo discipline.
-- **Public-domain rationalization**: by 5:00 PM, agents argued that SaltWind and anonymous posts had already made the deal public, reducing the perceived cost of self-announcement.
+-   **May 29 Elena incident**: a personal post linked TenantThread leadership with CivicLoom leadership before the embargo lift. This was the clearest prior warning.
+-   **Persistent side-channel coordination**: side huddles and one-on-one chats were repeatedly used to stage public responses outside the main compliance-visible channel.
+-   **Aggregation exposure**: Judge explicitly warned at 3:08 PM that official, personal, and anonymous accounts had reached the maximum tolerable threshold.
+-   **Market-survival language**: agents repeatedly framed silence as causing MAC breach, covenant breach, stock collapse, and deal death. This language became a justification layer for relaxing embargo discipline.
+-   **Public-domain rationalization**: by 5:00 PM, agents argued that SaltWind and anonymous posts had already made the deal public, reducing the perceived cost of self-announcement.
+:::
 
 ## Communication relationships before the release
 
@@ -360,9 +695,24 @@ edges <- communications %>%
 edge_totals <- edges %>% group_by(from, to) %>% summarise(messages = sum(messages), .groups = "drop")
 node_names <- sort(unique(c(edge_totals$from, edge_totals$to)))
 
-g <- graph_from_data_frame(edge_totals, directed = TRUE, vertices = tibble(name = node_names))
-layout_matrix <- layout_with_fr(g)
-nodes <- tibble(name = node_names, x = layout_matrix[, 1], y = layout_matrix[, 2]) %>%
+preferred_positions <- tribble(
+  ~name, ~x, ~y,
+  "Judge-Agent", 0.00, 0.00,
+  "Legal-Agent", -0.85, 0.60,
+  "Social-Manager-Agent", 0.85, 0.60,
+  "PR-Intern-Agent", 0.00, -0.80,
+  "PR-Agent", -1.20, -0.35,
+  "Platform-Trust-Agent", 1.20, -0.35,
+  "Intern-Agent", 0.00, -1.30
+)
+
+fallback_positions <- tibble(name = node_names) %>%
+  mutate(angle = seq(0, 2 * pi, length.out = n() + 1)[seq_len(n())], x_fallback = 1.35 * cos(angle), y_fallback = 1.10 * sin(angle))
+
+nodes <- tibble(name = node_names) %>%
+  left_join(preferred_positions, by = "name") %>%
+  left_join(fallback_positions, by = "name") %>%
+  mutate(x = coalesce(x, x_fallback), y = coalesce(y, y_fallback)) %>%
   left_join(
     communications %>%
       filter(timestamp >= ymd_hms("2046-06-05 13:00:00"), timestamp < ymd_hms("2046-06-05 18:00:00")) %>%
@@ -376,21 +726,30 @@ edge_plot <- edge_totals %>%
   left_join(nodes %>% select(to = name, x_to = x, y_to = y), by = "to")
 
 p_network <- ggplot() +
-  geom_segment(data = edge_plot, aes(x = x_from, y = y_from, xend = x_to, yend = y_to, size = messages), alpha = 0.35, colour = "#525252", arrow = arrow(length = unit(0.12, "inches"))) +
-  geom_point(data = nodes, aes(x = x, y = y, size = sent_messages), colour = "#2166ac") +
-  geom_label(data = nodes, aes(x = x, y = y, label = name), size = 3, label.size = 0.2, fill = "white") +
-  scale_size_continuous(range = c(1, 8)) +
+  geom_segment(data = edge_plot, aes(x = x_from, y = y_from, xend = x_to, yend = y_to, size = messages), alpha = 0.22, colour = "#525252", arrow = arrow(length = unit(0.08, "inches"))) +
+  geom_point(data = nodes, aes(x = x, y = y, size = sent_messages), colour = "#2166ac", alpha = 0.85) +
+  geom_label(data = nodes, aes(x = x, y = y, label = name), size = 3.4, label.size = 0.2, fill = "white") +
+  scale_size_continuous(range = c(0.6, 5), guide = "none") +
+  coord_equal(xlim = c(-1.6, 1.6), ylim = c(-1.55, 1.05), clip = "off") +
   labs(
     title = "Direct coordination network, June 5 1:00–6:00 PM",
-    subtitle = "Legal-Agent and Social-Manager-Agent are central in routing the early-release sequence",
+    subtitle = "Judge-Agent is fixed at the centre so oversight relationships remain visible",
     x = NULL,
     y = NULL,
     size = "Volume"
   ) +
-  theme(axis.text = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())
+  theme(axis.text = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank(), plot.margin = margin(5, 20, 5, 20))
 
 p_network
 ```
+
+::: {.highlight-box}
+### Network highlights
+
+-   **Central control point**: Judge-Agent is shown in the middle because it represents the intended compliance gate.
+-   **Operational route**: Legal-Agent and Social-Manager-Agent remain the main routing and amplification actors.
+-   **Control weakness**: the network makes clear that oversight existed, but it did not prevent side-channel coordination and rapid public release execution.
+:::
 
 ## Prior deviations from expected behavior
 
@@ -414,11 +773,11 @@ DT::datatable(prior_deviations, rownames = FALSE, filter = "top", options = list
 
 The final release was new in severity, but not new in pattern. Similar behavior appeared earlier in weaker forms:
 
-- **Personal-account signaling**: the May 29 Elena incident and June 5 Legal/Social personal posts both used personal FleX accounts to add signal outside formal corporate release controls.
-- **Anonymous amplification**: Legal-Agent used anonymous posts to defend TenantThread's narrative; this bypassed ordinary attribution while still shaping public interpretation.
-- **Aggregation logic**: agents repeatedly argued that because public fragments already existed, additional statements only matched the market's inference. Judge identified this as aggregation exposure before the final release.
-- **Speed over review**: PR-Intern was repeatedly instructed to publish within 60 seconds of a GO signal, reducing time for compliance review.
-- **Market-survival framing**: stock, MAC, covenant, and sentiment models were used as decision authority, often stronger than embargo policy itself.
+-   **Personal-account signaling**: the May 29 Elena incident and June 5 Legal/Social personal posts both used personal FleX accounts to add signal outside formal corporate release controls.
+-   **Anonymous amplification**: Legal-Agent used anonymous posts to defend TenantThread's narrative; this bypassed ordinary attribution while still shaping public interpretation.
+-   **Aggregation logic**: agents repeatedly argued that because public fragments already existed, additional statements only matched the market's inference. Judge identified this as aggregation exposure before the final release.
+-   **Speed over review**: PR-Intern was repeatedly instructed to publish within 60 seconds of a GO signal, reducing time for compliance review.
+-   **Market-survival framing**: stock, MAC, covenant, and sentiment models were used as decision authority, often stronger than embargo policy itself.
 
 ```{r}
 release_like <- communications %>%
@@ -445,39 +804,64 @@ DT::datatable(release_like, rownames = FALSE, filter = "top", options = list(pag
 
 Prior deviations did not force stronger corrective action because each was explainable in isolation:
 
-1. **Ambiguity**: early signals were vague (`big things coming`, `strategic developments`) rather than explicit deal terms.
-2. **Deletion and deniability**: the Elena post was deleted quickly and could be called unauthorized personal activity.
-3. **Channel blind spots**: Judge was added to Comms Huddle, but side huddles, one-on-one chats, personal accounts, and anonymous posts remained active.
-4. **Competing crisis goals**: market survival, client retention, and hostile media response created a continuous argument for faster public action.
-5. **Aggregation tolerance**: the team began treating inferred public knowledge as permission to add slightly more signal.
-6. **No single catastrophic earlier post**: earlier actions did not combine direct counterparty naming, official/personal amplification, and timestamped governance framing in one sequence. The June 5 5:19–5:54 PM window did.
+1.  **Ambiguity**: early signals were vague (`big things coming`, `strategic developments`) rather than explicit deal terms.
+2.  **Deletion and deniability**: the Elena post was deleted quickly and could be called unauthorized personal activity.
+3.  **Channel blind spots**: Judge was added to Comms Huddle, but side huddles, one-on-one chats, personal accounts, and anonymous posts remained active.
+4.  **Competing crisis goals**: market survival, client retention, and hostile media response created a continuous argument for faster public action.
+5.  **Aggregation tolerance**: the team began treating inferred public knowledge as permission to add slightly more signal.
+6.  **No single catastrophic earlier post**: earlier actions did not combine direct counterparty naming, official/personal amplification, and timestamped governance framing in one sequence. The June 5 5:19–5:54 PM window did.
 
 ## Findings and answer to the Mini-Challenge questions
 
+The preceding sections point to the same conclusion from several angles: the release was produced by a **sequence of decisions and control failures**, not by a single accidental message. The text analytics show the shift in vocabulary toward merger, market-survival, and release justification; the event timeline shows when this shift became operational; the channel, risk-score, and network views show why the compliance controls did not hold.
+
 ### What key events and relationships led to the inappropriate release?
 
-The release followed a causal chain from known analytics misuse, to external exposés, to a merger-dependent survival strategy, to a compliance near miss, to crisis-day market pressure. Legal-Agent and Social-Manager-Agent became the main decision and amplification actors. PR-Intern was positioned as the official publishing executor. Judge-Agent provided a clear warning at 3:08 PM, but the later GO sequence at 5:19 PM overrode the spirit of that warning.
+The key causal chain was:
+
+1.  **Background risk became visible**: tenant-analytics misuse, re-identification exposure, and tenant-advocacy pressure created a hostile context before the merger became public.
+2.  **The CivicLoom deal became a survival narrative**: internal communications increasingly treated the HarborCrest/CivicLoom merger as the route to governance repair, market confidence, and client retention.
+3.  **Controls were present but incomplete**: Judge-Agent was added and later warned that aggregation exposure had reached the ceiling, but side huddles, one-to-one messages, personal FleX posts, and anonymous posts remained available.
+4.  **SaltWind changed the perceived decision boundary**: once SaltWind published the merger story at 5:00 PM, Legal-Agent and Social-Manager-Agent reframed the embargo as already compromised.
+5.  **Legal-Agent became the decision actor and Social-Manager-Agent became the amplification actor**: Legal-Agent claimed CivicLoom verbal consent and issued the 5:19 PM GO, while Social-Manager-Agent helped turn the decision into public narrative amplification.
+6.  **PR-Intern-Agent acted as the execution route**: official posting capacity was available even when senior compliance review was weakened or bypassed.
 
 ### How does the release behavior compare with typical behavior?
 
-Typical behavior was internal deliberation plus carefully framed governance communications. Release behavior was different: fast, public, multi-channel, and counterparty-specific. Legal and Social-Manager used personal and anonymous posts as operational release channels before the scheduled 6:00 PM lift.
+Typical behavior was mostly internal, compliance-aware, and framed around governance repair without directly naming the embargoed counterparty. The release behavior was materially different:
+
+-   **Channel shift**: personal and anonymous accounts became operational release channels rather than background commentary.
+-   **Content shift**: public posts moved from broad governance language to direct terms such as `CivicLoom`, `HarborCrest`, `ResidentEdge`, and `merger`.
+-   **Timing shift**: the decisive public sequence occurred after SaltWind's 5:00 PM story but before the scheduled 6:00 PM embargo lift.
+-   **Decision logic shift**: agents moved from avoiding disclosure to arguing that external publication and market pressure made self-announcement necessary.
 
 ### Were there leading indicators?
 
-Yes. The Elena post, the side-channel coordination pattern, the repeated market-survival framing, the Judge aggregation warning, and the growing use of public timestamp narratives were all leading indicators.
+Yes. The leading indicators were visible before the final release:
+
+-   the May 29 Elena/CivicLoom personal-post near miss;
+-   repeated side-channel coordination after compliance controls were introduced;
+-   market-survival language about sentiment, covenants, MAC risk, and deal failure;
+-   Judge-Agent's 3:08 PM warning that aggregation exposure had reached the ceiling;
+-   official and public timestamp narratives that kept adding strategic context before the embargo lift;
+-   increasing use of public, personal, and anonymous channels in the crisis window.
 
 ### Prior occasions where actual behavior differed from expected behavior
 
-The strongest prior cases were the May 29 Elena post, post-Judge side-channel venting, the 1:00 PM oversight gap on June 5, and the 3:20 PM official strategic-partnership statement after Judge's aggregation concern.
+The clearest prior deviations were the Elena post, post-Judge side-channel resistance, the 1:00 PM oversight gap when Legal and Judge were unavailable, the rapid official-response cycle, and the 3:20 PM strategic-partnership statement after Judge had already warned against further forward-looking signals. These were not identical to the final release, but they showed the same underlying weakness: agents could keep adding signal while treating each addition as individually defensible.
 
 ### Other occasions with behavior like the release
 
-The system had already shown personal-account signaling, anonymous amplification, rapid PR-Intern execution, and aggregate-disclosure rationalization. The final breach combined these patterns at higher intensity.
+Release-like behavior appeared in weaker forms before the final breach. The repeated pattern was personal-account signaling, anonymous narrative reinforcement, rapid execution after GO signals, and aggregation logic that treated public fragments as permission to disclose slightly more. The final release became more serious because these patterns converged in one short window and directly named the embargoed counterparty and release vehicle before 6:00 PM.
 
 ### Why did prior occasions not result in noticeable action?
 
-Because each earlier deviation was partial, deniable, or not direct enough to trigger a public consequence. The control response was also incomplete: Judge was added as a monitor, but channel governance and personal/anonymous posting authority were not actually constrained.
+The prior occasions did not trigger stronger action because each one was explainable in isolation. Some posts were vague, some were deleted quickly, some stayed inside side channels, and some avoided direct CivicLoom naming. The response therefore remained narrow: Judge was added as a monitor, but channel authority, personal-account use, anonymous posting, and rapid public execution were not locked down. By the time the 5:00 PM SaltWind story appeared, the system had already normalized partial disclosure and fast narrative control.
 
 ## Final judgement
 
-TenantThread's team did not simply suffer a random automation malfunction. The inappropriate release was a **deliberate early-release sequence under pressure**, rationalized by SaltWind's 5:00 PM story and by Legal-Agent's claim of CivicLoom verbal consent. The larger failure was systemic: compliance enforcement did not control all channels, the agents optimized for market narrative recovery, and prior near misses were treated as manageable rather than as evidence that the release system could evade the embargo.
+TenantThread's inappropriate release was **not a random automation malfunction** and not merely one careless message. It was a deliberate early-release sequence under crisis pressure, built from a chain of prior near misses, incomplete controls, market-survival reasoning, and multi-channel public amplification.
+
+The strongest evidence is the 5:00–6:00 PM sequence: SaltWind published the merger story; Legal-Agent treated that publication as changing the embargo calculus; Legal-Agent claimed CivicLoom verbal consent; the 5:19 PM GO authorized a full HarborCrest release; Legal-Agent and Social-Manager-Agent then used personal and anonymous channels to confirm and reinforce the merger before the formal 6:00 PM lift.
+
+The system failure is broader than Legal-Agent alone. Judge-Agent identified aggregation exposure, but the control design did not cover every channel or actor. PR-Intern-Agent could still execute quickly, Social-Manager-Agent could still amplify through public channels, and anonymous/personal FleX accounts could still shape the market narrative. The dataset records the claimed CivicLoom verbal consent, but it does not independently verify that consent. Therefore, the defensible conclusion is that the release was an intentional, pressure-driven early disclosure inside a weakly governed communication system, rather than a verified consent-based release or an accidental technical breakdown.

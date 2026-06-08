@@ -6,12 +6,12 @@ date-modified: "last-modified"
 format: html
 ---
 
-This page groups the materials for Take-home Exercise 2.
+This page groups the materials for Take-home Exercise 2. The report presents a VAST Mini-Challenge 1 analysis using text visualisation concepts and a tidytext workflow.
 
 ## Exercise materials
 
-- [Technical report](TH_Ex2_report.qmd)
+-   [Technical report](TH_Ex2_report.qmd)
 
 ## Data source
 
-- VAST Challenge 2026 Mini-Challenge 1 data copied into `TH_Ex/data/th_ex2/raw/`.
+-   VAST Challenge 2026 Mini-Challenge 1 data copied into `TH_Ex/data/th_ex2/raw/`.
